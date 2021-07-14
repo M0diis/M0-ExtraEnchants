@@ -1,0 +1,44 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+group 'me.m0dii'
+version '1.1'
+sourceCompatibility = '8'
+
+archivesBaseName = 'M0-ExtraEnchants'
+
+shadowJar {
+    relocate 'org.bstats', 'me.m0dii.ExtraEnchants'
+    minimize()
+
+    archiveFileName = "M0-ExtraEnchants-${version}.jar"
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+
+    flatDir {
+        dirs 'libs'
+    }
+
+    maven {
+        url = 'https://papermc.io/repo/repository/maven-public/'
+    }
+
+    maven {
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+}
+
+dependencies {
+
+    implementation "org.bstats:bstats-bukkit:2.2.1"
+    compileOnly 'com.destroystokyo.paper:paper-api:1.16.4-R0.1-SNAPSHOT'
+    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    compileOnly name: 'Residence4.9.2.2'
+}
+
+compileJava.options.encoding = 'UTF-8'
