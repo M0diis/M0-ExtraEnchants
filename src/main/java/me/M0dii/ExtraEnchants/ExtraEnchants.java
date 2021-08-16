@@ -103,6 +103,7 @@ public class ExtraEnchants extends JavaPlugin
         this.pm.registerEvents(new OnTill(), this);
         this.pm.registerEvents(new OnSmelt(this), this);
         this.pm.registerEvents(new AnvilCombine(this), this);
+        this.pm.registerEvents(new ItemDrop(this), this);
     }
     
     private void registerCommands()

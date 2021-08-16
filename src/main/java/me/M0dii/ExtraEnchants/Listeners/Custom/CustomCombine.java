@@ -29,6 +29,10 @@ public class CustomCombine implements org.bukkit.event.Listener
             "DIAMOND_HOE", "IRON_HOE", "GOLDEN_HOE", "STONE_HOE", "WOODEN_HOE"
     );
     
+    private final List<String> boots = Arrays.asList(
+            "NETHERITE_BOOTS", "DIAMOND_BOOTS", "GOLD_BOOTS",
+            "IRON_BOOTS", "LEATHER_BOOTS");
+    
     private final List<String> hoes = Arrays.asList(
             "NETHERITE_HOE", "DIAMOND_HOE", "IRON_HOE",
             "GOLDEN_HOE", "STONE_HOE", "WOODEN_HOE");
@@ -36,20 +40,60 @@ public class CustomCombine implements org.bukkit.event.Listener
     @EventHandler
     public void onCustomCombine(CombineEvent event)
     {
-        ItemStack curr = event.breakEvent().getCurrentItem();
+        ItemStack curr = event.clickEvent().getCurrentItem();
         
         if(curr == null)
             return;
     
-        if(event.getEnchantString().equalsIgnoreCase("smelt"))
+        String enchName = event.getEnchantString();
+        ItemMeta meta = curr.getItemMeta();
+        
+        if(enchName.equalsIgnoreCase("bonded"))
+        {
+            if((curr.hasItemMeta()) && (meta.hasEnchant(CustomEnchants.BONDED)))
+                return;
+        
+            event.clickEvent().setCancelled(true);
+        
+            ItemStack tool = new ItemStack(curr.getType());
+            List<String> lore = new ArrayList<>();
+        
+            lore.add(ChatColor.GRAY + "Bonded I");
+        
+            if(combine(event, curr, CustomEnchants.BONDED, tool, lore))
+                return;
+        }
+    
+        if(enchName.equalsIgnoreCase("lava_walker")
+        || enchName.equalsIgnoreCase("lavawalker"))
+        {
+            if(!boots.contains(curr.getType().toString()))
+                return;
+        
+            if((curr.hasItemMeta()) && (meta.hasEnchant(CustomEnchants.LAVA_WALKER)))
+                return;
+        
+            event.clickEvent().setCancelled(true);
+        
+            ItemStack tool = new ItemStack(curr.getType());
+        
+            List<String> lore = new ArrayList<>();
+        
+            lore.add(ChatColor.GRAY + "Lava Walker I");
+        
+            if(combine(event, curr, CustomEnchants.LAVA_WALKER, tool, lore))
+                return;
+        }
+    
+        if(enchName.equalsIgnoreCase("smelt"))
         {
             if(!tools.contains(curr.getType().toString()))
                 return;
         
-            if((curr.hasItemMeta()) && (curr.getItemMeta().hasEnchant(CustomEnchants.SMELT)))
+            if((curr.hasItemMeta()) && (meta.hasEnchant(CustomEnchants.SMELT)))
                 return;
         
-            event.breakEvent().setCancelled(true);
+            event.clickEvent().setCancelled(true);
         
             ItemStack tool = new ItemStack(curr.getType());
         
@@ -60,15 +104,16 @@ public class CustomCombine implements org.bukkit.event.Listener
             if(combine(event, curr, CustomEnchants.SMELT, tool, lore))
                 return;
         }
-        else if(event.getEnchantString().equalsIgnoreCase("telepathy"))
+        
+        if(enchName.equalsIgnoreCase("telepathy"))
         {
             if(!tools.contains(curr.getType().toString()))
                 return;
             
-            if((curr.hasItemMeta()) && (curr.getItemMeta().hasEnchant(CustomEnchants.TELEPATHY)))
+            if((curr.hasItemMeta()) && (meta.hasEnchant(CustomEnchants.TELEPATHY)))
                 return;
 
-            event.breakEvent().setCancelled(true);
+            event.clickEvent().setCancelled(true);
             
             ItemStack tool = new ItemStack(curr.getType());
             
@@ -79,15 +124,16 @@ public class CustomCombine implements org.bukkit.event.Listener
             if(combine(event, curr, CustomEnchants.TELEPATHY, tool, lore))
                 return;
         }
-        else
+    
+        if(enchName.equalsIgnoreCase("plow"))
         {
             if(!hoes.contains(curr.getType().toString()))
                 return;
             
-            if((curr.hasItemMeta()) && (curr.getItemMeta().hasEnchant(CustomEnchants.PLOW)))
+            if((curr.hasItemMeta()) && (meta.hasEnchant(CustomEnchants.PLOW)))
                 return;
             
-            event.breakEvent().setCancelled(true);
+            event.clickEvent().setCancelled(true);
             
             ItemStack tool = new ItemStack(curr.getType());
             List<String> lore = new ArrayList<>();
@@ -98,7 +144,7 @@ public class CustomCombine implements org.bukkit.event.Listener
                 return;
         }
         
-        event.breakEvent().setCursor(null);
+        event.clickEvent().setCursor(null);
     }
     
     private boolean combine(CombineEvent event, ItemStack curr,
@@ -107,24 +153,23 @@ public class CustomCombine implements org.bukkit.event.Listener
         ItemMeta meta = curr.getItemMeta();
         
         if(meta.getLore() != null)
-        {
             for(String l : meta.getLore())
                 lore.add(this.plugin.format(l));
-        }
         
         meta.setLore(lore);
         tool.setItemMeta(meta);
+        
         tool.addUnsafeEnchantment(ench, 1);
         
         if(curr.getAmount() > 1)
         {
             curr.setAmount(curr.getAmount() - 1);
-            event.breakEvent().setCursor(tool);
+            event.clickEvent().setCursor(tool);
     
             return true;
         }
         
-        event.breakEvent().setCurrentItem(tool);
+        event.clickEvent().setCurrentItem(tool);
         
         return false;
     }

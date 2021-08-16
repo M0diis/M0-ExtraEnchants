@@ -24,6 +24,9 @@ public class TillInteract implements Listener
     @EventHandler
     public void onTill(PlayerInteractEvent e)
     {
+        if(!plugin.getCfg().getBoolean("enchants.plow.enabled"))
+            return;
+        
         ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
         Player p = e.getPlayer();
     

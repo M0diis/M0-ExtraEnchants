@@ -1,11 +1,12 @@
 package me.M0dii.ExtraEnchants.Events;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-public class CombineEvent extends Event implements org.bukkit.event.Cancellable
+public class CombineEvent extends Event implements Cancellable
 {
     private final Player player;
     private boolean isCancelled;
@@ -46,7 +47,7 @@ public class CombineEvent extends Event implements org.bukkit.event.Cancellable
         return this.player;
     }
     
-    public InventoryClickEvent breakEvent()
+    public InventoryClickEvent clickEvent()
     {
         return this.event;
     }

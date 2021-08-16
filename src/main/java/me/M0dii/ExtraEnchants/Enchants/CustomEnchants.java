@@ -11,7 +11,16 @@ public class CustomEnchants
             new EnchantmentWrapper("plow", "Plow", 1);
     
     public static final Enchantment SMELT =
-            new EnchantmentWrapper("smelt", "Smelt", 1);
+            new SmeltWrapper("smelt", "Smelt", 1);
+    
+    public static final Enchantment BEHEADING =
+            new EnchantmentWrapper("beheading", "Beheading", 1);
+    
+    public static final Enchantment BONDED =
+            new EnchantmentWrapper("bonded", "Bonded", 1);
+    
+    public static final Enchantment LAVA_WALKER =
+            new EnchantmentWrapper("lava_walker", "Lava Walker", 1);
     
     public static Enchantment parse(String en)
     {
@@ -23,6 +32,13 @@ public class CustomEnchants
     
         if(en.equalsIgnoreCase("plow"))
             return PLOW;
+    
+        if(en.equalsIgnoreCase("beheading"))
+            return BEHEADING;
+    
+        if(en.equalsIgnoreCase("lava_walker")
+        || en.equalsIgnoreCase("lavawalker"))
+            return LAVA_WALKER;
         
         return null;
     }

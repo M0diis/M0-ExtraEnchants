@@ -3,9 +3,12 @@ package me.M0dii.ExtraEnchants.Listeners;
 import me.M0dii.ExtraEnchants.ExtraEnchants;
 import me.M0dii.ExtraEnchants.Enchants.CustomEnchants;
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class PlayerInteract implements org.bukkit.event.Listener
+public class PlayerInteract implements Listener
 {
     private ExtraEnchants plugin;
     
@@ -14,7 +17,7 @@ public class PlayerInteract implements org.bukkit.event.Listener
         this.plugin = plugin;
     }
     
-    @org.bukkit.event.EventHandler
+    @EventHandler
     public void onItemClick(PlayerInteractEvent e)
     {
         if(!e.hasItem())
@@ -25,18 +28,20 @@ public class PlayerInteract implements org.bukkit.event.Listener
      
         if(!e.getItem().getType().equals(Material.ENCHANTED_BOOK))
             return;
+    
+        ItemMeta meta = e.getItem().getItemMeta();
         
-        if((!e.getItem().getItemMeta().hasEnchant(CustomEnchants.TELEPATHY))
-        && (!e.getItem().getItemMeta().hasEnchant(CustomEnchants.PLOW))
-        && (!e.getItem().getItemMeta().hasEnchant(CustomEnchants.SMELT))
+        if((!meta.hasEnchant(CustomEnchants.TELEPATHY))
+        && (!meta.hasEnchant(CustomEnchants.PLOW))
+        && (!meta.hasEnchant(CustomEnchants.LAVA_WALKER))
+        && (!meta.hasEnchant(CustomEnchants.BONDED))
+        && (!meta.hasEnchant(CustomEnchants.SMELT))
         )
             return;
         
         e.getPlayer().sendMessage(this.plugin.format(e.getItem().getItemMeta().getDisplayName()));
         
-        for(String l : e.getItem().getItemMeta().getLore())
-        {
+        for(String l : meta.getLore())
             e.getPlayer().sendMessage(this.plugin.format(l));
-        }
     }
 }

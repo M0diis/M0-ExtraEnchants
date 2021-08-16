@@ -23,6 +23,9 @@ public class RegisterEnchants
     
         if (!list.contains(CustomEnchants.SMELT))
             registerEnchantment(CustomEnchants.SMELT);
+    
+        if (!list.contains(CustomEnchants.BEHEADING))
+            registerEnchantment(CustomEnchants.BEHEADING);
     }
     
     private static void registerEnchantment(final Enchantment enchantment)

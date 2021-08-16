@@ -21,6 +21,27 @@ enchants:
       - "&7Will till a 3x1 area to the left of till."
       - ""
       - "&6Enchantable Items: &aHoes"
+  lava_walker:
+    enabled: true
+    displayname: "&d&lLava Walker I"
+    lore:
+      - "&7Drag book and drop on Item."
+      - "&7Right click for more Info."
+      - ""
+      - "&7Will automatically plant seeds from hotbar."
+      - "&7Will till a 3x1 area to the left of till."
+      - ""
+      - "&6Enchantable Items: &aBoots"
+  bonded:
+    enabled: true
+    displayname: "&d&lBonded I"
+    lore:
+      - "&7Drag book and drop on Item."
+      - "&7Right click for more Info."
+      - ""
+      - "&7Will prevent the item from being dropped."
+      - ""
+      - "&6Enchantable Items: &aTools & Armor"
   smelt:
     enabled: true
     displayname: "&d&lSmelt I"
@@ -31,10 +52,9 @@ enchants:
       - "&7Will automatically smelt mined ores and blocks."
       - ""
       - "&6Enchantable Items: &aTools"
-
 messages:
   no-permission: "&c&lYou do not have permission to do this!"
   player-not-found: "&c&lPlayer not found."
-  enchantment-list: "&9&lCurrent Enchants:\n&3&lTelepathy, Plow, Smelt"
+  enchantment-list: "&9&lCurrent Enchants:\n&3&lTelepathy, Plow, Lava Walker, Bonded"
   usage: "&c&lCommand usage: &d/&7ee <enchantment> <player>"
   enchant-removed: "&4%enchant_name% enchant has been removed"

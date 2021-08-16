@@ -72,13 +72,13 @@ public class Enchant implements CommandExecutor, TabCompleter
         
         if(args.length >= 2)
         {
-            if(giveEnchantBookPlayer(sender, args, "telepathy", "TELEPATHY"))
+            if(giveEnchantBook(args, Bukkit.getPlayer(args[1]), "telepathy", "TELEPATHY"))
                 return true;
     
-            if(giveEnchantBookPlayer(sender, args, "plow", "PLOW"))
+            if(giveEnchantBook(args, Bukkit.getPlayer(args[1]), "plow", "PLOW"))
                 return true;
     
-            if(giveEnchantBookPlayer(sender, args, "smelt", "SMELT"))
+            if(giveEnchantBook(args, Bukkit.getPlayer(args[1]), "smelt", "SMELT"))
                 return true;
     
             sender.sendMessage(this.format(this.cfg.getString("messages.enchantment-list")));
@@ -89,39 +89,9 @@ public class Enchant implements CommandExecutor, TabCompleter
         return false;
     }
     
-    private boolean giveEnchantBookPlayer(@Nonnull CommandSender sender, @Nonnull String[] args,
-                                          String enchant, String name)
-    {
-        if(args[0].equalsIgnoreCase(enchant))
-        {
-            Player target = Bukkit.getPlayer(args[1]);
-            
-            ItemStack item = Enchanter.getBook(name);
-            
-            if(target == null)
-            {
-                sender.sendMessage(this.format(this.cfg.getString("messages.player-not-found")));
-                
-                return true;
-            }
-            
-            if(target.getInventory().firstEmpty() == -1)
-            {
-                target.getWorld().dropItemNaturally(target.getLocation(), item);
-                
-                return true;
-            }
-            
-            target.getInventory().addItem(item);
-            
-            return true;
-        }
-        return false;
-    }
-    
     private boolean giveEnchantBook(@Nonnull String[] args, Player player, String enchant, String telepathy2)
     {
-        if(args[0].equalsIgnoreCase(enchant))
+        if(args[0].equalsIgnoreCase(enchant) && player != null)
         {
             ItemStack item = Enchanter.getBook(telepathy2);
             
@@ -151,14 +121,13 @@ public class Enchant implements CommandExecutor, TabCompleter
             completes.add("plow");
             completes.add("telepathy");
             completes.add("smelt");
+            completes.add("beheading");
         }
     
         if(args.length == 2)
         {
             for(Player p : Bukkit.getOnlinePlayers())
-            {
                 completes.add(p.getName());
-            }
         }
         
         return completes;

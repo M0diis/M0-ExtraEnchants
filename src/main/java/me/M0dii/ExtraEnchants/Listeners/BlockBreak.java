@@ -40,6 +40,9 @@ public class BlockBreak implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent e)
     {
+        if(!plugin.getCfg().getBoolean("enchants.telepathy.enabled"))
+            return;
+        
         if(e.isCancelled())
             return;
     
