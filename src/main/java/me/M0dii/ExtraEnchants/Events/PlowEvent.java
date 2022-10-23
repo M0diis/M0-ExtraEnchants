@@ -5,48 +5,46 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.jetbrains.annotations.NotNull;
 
-public class PlowEvent extends Event implements Cancellable
-{
+public class PlowEvent extends Event implements Cancellable {
+    private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
-    private boolean isCancelled;
     private final PlayerInteractEvent event;
-    
-    public PlowEvent(Player p, PlayerInteractEvent e)
-    {
+    private final int enchantLevel;
+    private boolean isCancelled;
+
+    public PlowEvent(Player p, PlayerInteractEvent e, int enchantLevel) {
         this.player = p;
         this.event = e;
+        this.enchantLevel = enchantLevel;
     }
-    
-    public boolean isCancelled()
-    {
+
+    public static HandlerList getHandlerList() {
+        return HANDLERS;
+    }
+
+    public boolean isCancelled() {
         return this.isCancelled;
     }
-    
-    public void setCancelled(boolean isCancelled)
-    {
+
+    public void setCancelled(boolean isCancelled) {
         this.isCancelled = isCancelled;
     }
-    
-    private static final HandlerList HANDLERS = new HandlerList();
-    
-    public HandlerList getHandlers()
-    {
+
+    public @NotNull HandlerList getHandlers() {
         return HANDLERS;
     }
-    
-    public static HandlerList getHandlerList()
-    {
-        return HANDLERS;
-    }
-    
-    public Player getPlayer()
-    {
+
+    public Player getPlayer() {
         return this.player;
     }
-    
-    public PlayerInteractEvent breakEvent()
-    {
+
+    public PlayerInteractEvent getInteractEvent() {
         return this.event;
+    }
+
+    public int getEnchantLevel() {
+        return this.enchantLevel;
     }
 }

@@ -1,10 +1,10 @@
 enchants:
   telepathy:
     enabled: true
-    displayname: "&b&lTelepathy I"
+    displayname: "&b&lTelepathy %level%"
     lore:
-      - "&7Drag book and drop on Item."
-      - "&7Right click for more Info."
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
       - ""
       - "&7Will automatically send"
       - "&7mined blocks to your inventory."
@@ -12,20 +12,20 @@ enchants:
       - "&6Enchantable Items: &aTools"
   plow:
     enabled: true
-    displayname: "&d&lPlow I"
+    displayname: "&d&lPlow %level%"
     lore:
-      - "&7Drag book and drop on Item."
-      - "&7Right click for more Info."
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
       - ""
       - "&7Will automatically plant seeds from hotbar."
       - "&7Will till a 3x1 area to the left of till."
       - ""
       - "&6Enchantable Items: &aHoes"
-  lava_walker:
+  lavawalker:
     enabled: true
-    displayname: "&d&lLava Walker I"
+    displayname: "&d&lLava Walker %level%"
     lore:
-      - "&7Drag book and drop on Item."
+      - "&7Drag book and drop on item."
       - "&7Right click for more Info."
       - ""
       - "&7Will automatically plant seeds from hotbar."
@@ -34,24 +34,66 @@ enchants:
       - "&6Enchantable Items: &aBoots"
   bonded:
     enabled: true
-    displayname: "&d&lBonded I"
+    displayname: "&d&lBonded %level%"
     lore:
-      - "&7Drag book and drop on Item."
-      - "&7Right click for more Info."
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
       - ""
       - "&7Will prevent the item from being dropped."
       - ""
       - "&6Enchantable Items: &aTools & Armor"
   smelt:
     enabled: true
-    displayname: "&d&lSmelt I"
+    displayname: "&d&lSmelt %level%"
     lore:
-      - "&7Drag book and drop on Item."
-      - "&7Right click for more Info."
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
       - ""
       - "&7Will automatically smelt mined ores and blocks."
       - ""
       - "&6Enchantable Items: &aTools"
+  hasteminer:
+    enabled: true
+    displayname: "&d&lHaste Miner %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a 10% chance to give Haste 1 effect for 5 seconds."
+      - ""
+      - "&6Enchantable Items: &aPickaxes, Shovels"
+  veinminer:
+    enabled: true
+    displayname: "&d&lVein Miner %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a 10% chance to mine all adjacent ores."
+      - ""
+      - "&6Enchantable Items: &aPickaxes"
+  experienceminer:
+    enabled: true
+    displayname: "&d&lXP Miner %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a 5% to drop some additional experience."
+      - "&7while mining blocks."
+      - ""
+      - "&6Enchantable Items: &aPickaxes"
+  lifesteal:
+    enabled: true
+    displayname: "&d&lLifesteal %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a 5% to drop some additional experience."
+      - "&7while mining blocks."
+      - ""
+      - "&6Enchantable Items: &aPickaxes"
 messages:
   no-permission: "&c&lYou do not have permission to do this!"
   player-not-found: "&c&lPlayer not found."

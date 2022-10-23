@@ -9,33 +9,38 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ItemDrop implements Listener
-{
+public class ItemDrop implements Listener {
     private final ExtraEnchants plugin;
-    
-    public ItemDrop(ExtraEnchants plugin)
-    {
+
+    public ItemDrop(ExtraEnchants plugin) {
         this.plugin = plugin;
     }
-    
+
     @EventHandler
-    public void onDrop(PlayerDropItemEvent e)
-    {
-        if(!plugin.getCfg().getBoolean("enchants.bonded.enabled"))
+    public void onDrop(PlayerDropItemEvent e) {
+        if (!plugin.getCfg().getBoolean("enchants.bonded.enabled")) {
             return;
-        
+        }
+
         ItemStack i = e.getItemDrop().getItemStack();
-        
-        if(i.getType() == Material.ENCHANTED_BOOK)
+
+        if (i.getType() == Material.ENCHANTED_BOOK) {
             return;
-        
-        if(i.hasItemMeta())
-        {
-            ItemMeta m = i.getItemMeta();
-            
-            if(m.hasEnchant(CustomEnchants.BONDED))
-                e.setCancelled(true);
+        }
+
+        if (!i.hasItemMeta()) {
+            return;
+        }
+
+        ItemMeta m = i.getItemMeta();
+
+        if (m == null) {
+            return;
+        }
+
+        if (m.hasEnchant(CustomEnchants.BONDED)) {
+            e.setCancelled(true);
         }
     }
-    
+
 }
