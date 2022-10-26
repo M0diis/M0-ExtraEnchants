@@ -79,7 +79,7 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a 5% to drop some additional experience."
+      - "&7Has a 10% to drop some additional experience."
       - "&7while mining blocks."
       - ""
       - "&6Enchantable Items: &aPickaxes"
@@ -90,10 +90,20 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a 5% to drop some additional experience."
-      - "&7while mining blocks."
+      - "&7Has a 10% to heal yourself for 10% of the"
+      - "&7damage dealt."
       - ""
-      - "&6Enchantable Items: &aPickaxes"
+      - "&6Enchantable Items: &aSwords"
+  tunnel:
+    enabled: true
+    displayname: "&d&lLifesteal %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Can be helpful while tunnelling."
+      - ""
+      - "&6Enchantable Items: &aPickaxes, Shovels"
 messages:
   no-permission: "&c&lYou do not have permission to do this!"
   player-not-found: "&c&lPlayer not found."
