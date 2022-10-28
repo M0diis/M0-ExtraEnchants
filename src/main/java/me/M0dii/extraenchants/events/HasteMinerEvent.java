@@ -15,10 +15,13 @@ public class HasteMinerEvent extends Event implements Cancellable {
     private final Block block;
     private boolean isCancelled;
 
-    public HasteMinerEvent(Player p, BlockBreakEvent e) {
+    private int enchantLevel;
+
+    public HasteMinerEvent(Player p, BlockBreakEvent e, int enchantLevel) {
         this.player = p;
         this.event = e;
         this.block = e.getBlock();
+        this.enchantLevel = enchantLevel;
     }
 
     public static HandlerList getHandlerList() {
@@ -47,5 +50,9 @@ public class HasteMinerEvent extends Event implements Cancellable {
 
     public BlockBreakEvent getBlockBreakEvent() {
         return this.event;
+    }
+
+    public int getEnchantLevel() {
+        return this.enchantLevel;
     }
 }

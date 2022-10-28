@@ -36,12 +36,12 @@ public class OnAssassin implements Listener {
 
         double distance = loc.distance(loc2);
 
-        double finalDamage = 0.75 - (distance * 0.35);
-
-        if (finalDamage < 0.1) {
-            finalDamage = 0.1;
+        switch ((int) Math.round(distance)) {
+            case 0 -> e.getEntityDamageEvent().setDamage(damage * 1.35);
+            case 1 -> e.getEntityDamageEvent().setDamage(damage * 1.15);
+            case 2 -> e.getEntityDamageEvent().setDamage(damage * 0.8);
+            case 3 -> e.getEntityDamageEvent().setDamage(damage * 0.65);
+            default -> e.getEntityDamageEvent().setDamage(damage);
         }
-
-        e.getEntityDamageEvent().setDamage(damage * finalDamage);
     }
 }
