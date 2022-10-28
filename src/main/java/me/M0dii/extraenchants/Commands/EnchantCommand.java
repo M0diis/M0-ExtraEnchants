@@ -2,15 +2,18 @@ package me.m0dii.extraenchants.commands;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.Enchanter;
+import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -45,7 +48,53 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+
+
         if (sender instanceof Player target) {
+            if(args[0].equalsIgnoreCase("apply")) {
+                String ench = args[1].replace("_", "");
+
+                Messenger.debug("Enchantment supplied: " + ench);
+
+                for(EEnchant e : EEnchant.values()) {
+                    Messenger.debug("Enchantment: " + e.getEnchantment().getKey().getKey());
+                }
+
+                EEnchant enchant = EEnchant.get(ench);
+
+                if(enchant == null) {
+                    Messenger.debug("Parsed enchantment is null.");
+
+                    sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
+
+                    return true;
+                }
+
+                Enchantment enchantment = enchant.getEnchantment();
+
+                if(enchantment == null) {
+                    Messenger.debug("Enchantment is null.");
+
+                    sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
+
+                    return true;
+                }
+
+                ItemStack item = target.getInventory().getItemInMainHand();
+
+                if(item == null || item.getType() == Material.AIR) {
+                    sender.sendMessage(Utils.format("&cYou must hold an item in your hand."));
+
+                    return true;
+                }
+
+                Enchanter.applyEnchant(item, enchantment, 1, false);
+
+                sender.sendMessage(Utils.format("&aSuccessfully applied enchantment to item."));
+
+                return true;
+            }
+
             if (args.length == 2) {
                 target = Bukkit.getPlayer(args[1]);
             }
@@ -121,31 +170,42 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
         return true;
     }
-
     @Override
     public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd,
                                       @Nonnull String alias, @Nonnull String[] args) {
         List<String> completes = new ArrayList<>();
 
-        if (args.length == 1) {
+        if (args.length == 2 && args[0].equalsIgnoreCase("apply")) {
             CustomEnchants.getAllEnchants()
                     .stream()
                     .map(s -> s.getKey().getKey().toLowerCase())
-                    .filter(s -> s.toLowerCase().startsWith(args[0].toLowerCase()))
+                    .filter(s -> s.startsWith(args[0].toLowerCase()))
                     .forEach(completes::add);
         }
+        else {
+            if (args.length == 1) {
+                CustomEnchants.getAllEnchants()
+                        .stream()
+                        .map(s -> s.getKey().getKey().toLowerCase())
+                        .filter(s -> s.startsWith(args[0].toLowerCase()))
+                        .forEach(completes::add);
 
-        if (args.length == 2) {
-            Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
-                    .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase()))
-                    .forEach(completes::add);
+                completes.add("apply");
+            }
+
+            if (args.length == 2) {
+                Bukkit.getOnlinePlayers().stream()
+                        .map(Player::getName)
+                        .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase()))
+                        .forEach(completes::add);
+            }
+
+            if(args.length == 3) {
+                completes.add("1");
+                completes.add("2");
+            }
         }
 
-        if(args.length == 3) {
-            completes.add("1");
-            completes.add("2");
-        }
 
         return completes;
     }

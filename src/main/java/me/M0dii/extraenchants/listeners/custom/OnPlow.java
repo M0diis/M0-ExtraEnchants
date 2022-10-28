@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class OnTill implements Listener {
+public class OnPlow implements Listener {
     private static final List<Material> SEEDS = Arrays.asList(
             Material.CARROT,
             Material.POTATO,
@@ -38,7 +38,7 @@ public class OnTill implements Listener {
 
     private final ExtraEnchants plugin;
 
-    public OnTill(ExtraEnchants plugin) {
+    public OnPlow(ExtraEnchants plugin) {
         this.plugin = plugin;
 
         this.res = Residence.getInstance();
@@ -214,8 +214,7 @@ public class OnTill implements Listener {
                     setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.CARROTS);
             case POTATO ->
                     setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.POTATOES);
-            default -> {
-            }
+            default -> { }
         }
     }
 
@@ -278,8 +277,8 @@ public class OnTill implements Listener {
         ResidencePermissions perms = residence.getPermissions();
 
         return perms.playerHas(p, Flags.build, true)
-                || residence.isOwner(p)
-                || residence.isTrusted(p)
-                || res.isResAdminOn(p);
+            || residence.isOwner(p)
+            || residence.isTrusted(p)
+            || res.isResAdminOn(p);
     }
 }

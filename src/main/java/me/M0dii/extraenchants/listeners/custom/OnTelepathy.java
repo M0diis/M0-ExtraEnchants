@@ -33,7 +33,6 @@ public class OnTelepathy implements Listener {
         Block b = e.getBlock();
         PlayerInventory inv = player.getInventory();
         ItemStack hand = inv.getItemInMainHand();
-        Damageable itemDam = (Damageable) hand.getItemMeta();
 
         Collection<ItemStack> drops = e.getDrops();
 
@@ -51,7 +50,7 @@ public class OnTelepathy implements Listener {
                 b.getWorld().dropItemNaturally(
                         b.getLocation(), i);
 
-            applyDurability(hand, itemDam);
+            InventoryUtils.applyDurability(hand);
 
             return;
         }
@@ -83,15 +82,9 @@ public class OnTelepathy implements Listener {
             for (ItemStack i : drops) {
                 inv.addItem(i);
             }
-
-            if (hand.getType().getMaxDurability() <= itemDam.getDamage()) {
-                inv.removeItem(hand);
-
-                return;
-            }
         }
 
-        applyDurability(hand, itemDam);
+        InventoryUtils.applyDurability(hand);
     }
 
     public boolean doesFit(Inventory inv, Collection<ItemStack> drops) {
@@ -100,23 +93,6 @@ public class OnTelepathy implements Listener {
                 return true;
 
         return hasSpaceForItem(drops, inv);
-    }
-
-    private void applyDurability(ItemStack hand, Damageable itemDam) {
-        int unbreakingLevel = 0;
-
-        if (InventoryUtils.hasUnbreaking(hand)) {
-            unbreakingLevel = hand.getItemMeta().getEnchants().get(Enchantment.DURABILITY);
-        }
-
-        int chance = (100) / (1 + unbreakingLevel);
-
-        int res = r.nextInt(100 - 1) + 1;
-
-        if (res < chance)
-            itemDam.setDamage(itemDam.getDamage() + 1);
-
-        hand.setItemMeta(itemDam);
     }
 
     private void addToStack(Player p, Collection<ItemStack> drops) {

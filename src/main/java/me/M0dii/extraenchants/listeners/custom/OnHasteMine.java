@@ -1,6 +1,7 @@
 package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.HasteMinerEvent;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class OnHasteMine implements Listener {
 
     @EventHandler
     public void onHasteMine(HasteMinerEvent e) {
-        if (rnd.nextInt(100) > 10) {
+        if (rnd.nextInt(100) > EEnchant.HASTE_MINER.getTriggerChance()) {
             return;
         }
 
@@ -38,7 +39,9 @@ public class OnHasteMine implements Listener {
             return;
         }
 
-        p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 100, 1));
+        int level = e.getEnchantLevel();
+
+        p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (level * 100), level - 1));
 
         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_HIT, 0.1F, 0.1F);
     }

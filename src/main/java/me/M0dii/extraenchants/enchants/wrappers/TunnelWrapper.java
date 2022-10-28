@@ -1,7 +1,6 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
-import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.Wrapper;
@@ -16,27 +15,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@Wrapper(name = "Assassin", maxLvl = 1)
-public class AssassinWrapper extends Enchantment {
+@Wrapper(name = "Tunnel", maxLvl = 3)
+public class TunnelWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
 
-    public AssassinWrapper(final String name, final int lvl) {
+    public TunnelWrapper(final String name, final int lvl) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isSword(item);
+        return Enchantables.isPickaxe(item) || Enchantables.isShovel(item);
     }
 
     public boolean conflictsWith(final Enchantment enchantment) {
-        return enchantment.equals(EEnchant.LIFESTEAL.getEnchantment());
+        return enchantment.equals(Enchantment.SILK_TOUCH);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {
-        return EnchantmentTarget.WEAPON;
+        return EnchantmentTarget.TOOL;
     }
 
     public int getMaxLevel() {

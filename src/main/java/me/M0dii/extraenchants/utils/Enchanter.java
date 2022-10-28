@@ -1,8 +1,9 @@
 package me.m0dii.extraenchants.utils;
 
-import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class Enchanter {
     private static final ExtraEnchants plugin = ExtraEnchants.getPlugin(ExtraEnchants.class);
@@ -21,17 +23,21 @@ public class Enchanter {
 
         EEnchant eEnchant = EEnchant.get(type);
 
+        Messenger.debug("Got EEnchant: " + eEnchant.getDisplayName());
+
         if(eEnchant == null) {
             return null;
         }
 
-        Enchantment enchant = eEnchant.getEnchant();
+        Enchantment enchant = eEnchant.getEnchantment();
 
-        System.out.println("YESSS");
+        Messenger.debug("Got Enchantment: " + enchant.getKey().getKey());
 
         if(enchant == null) {
             return null;
         }
+
+        Messenger.debug("Adding unsafe enchantment to item.");
 
         item.addUnsafeEnchantment(enchant, level);
 
@@ -58,7 +64,36 @@ public class Enchanter {
         meta.setLore(lore);
         item.setItemMeta(meta);
 
+        Messenger.debug("Current enchantments:");
+
+        Set<Enchantment> enchants = item.getEnchantments().keySet();
+
+        for(Enchantment ench : enchants)
+        {
+            Messenger.debug(ench.getKey().getKey());
+        }
+
         return item;
     }
 
+    public static void applyEnchant(ItemStack item, Enchantment enchant, int level, boolean onlyLore) {
+        List<String> lore = new ArrayList<>();
+
+        lore.add(ChatColor.GRAY + PlainTextComponentSerializer.plainText().serialize(enchant.displayName(level)));
+
+        ItemMeta meta = item.getItemMeta();
+
+        if (meta.getLore() != null) {
+            for (String l : meta.getLore()) {
+                lore.add(Utils.format(l));
+            }
+        }
+
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+
+        if(!onlyLore) {
+            item.addUnsafeEnchantment(enchant, level);
+        }
+    }
 }

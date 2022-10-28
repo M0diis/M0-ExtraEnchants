@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.utils;
 
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -17,7 +18,11 @@ public class InventoryUtils {
                 .containsKey(Enchantment.DURABILITY);
     }
 
-    public static void applyDurability(ItemStack hand, Damageable itemDam) {
+    public static void applyDurability(ItemStack hand) {
+        if(!(hand.getItemMeta() instanceof Damageable damageable)) {
+            return;
+        }
+
         int unbreakingLevel = 0;
 
         if (InventoryUtils.hasUnbreaking(hand)) {
@@ -29,9 +34,13 @@ public class InventoryUtils {
         int res = random.nextInt(100 - 1) + 1;
 
         if (res < chance) {
-            itemDam.setDamage(itemDam.getDamage() + 1);
+            damageable.setDamage(damageable.getDamage() + 1);
         }
 
-        hand.setItemMeta(itemDam);
+        hand.setItemMeta(damageable);
+
+        if (damageable.getDamage() >= hand.getType().getMaxDurability()) {
+            hand.setType(Material.AIR);
+        }
     }
 }

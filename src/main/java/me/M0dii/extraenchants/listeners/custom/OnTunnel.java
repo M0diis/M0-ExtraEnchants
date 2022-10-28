@@ -8,7 +8,9 @@ import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.events.TunnelEvent;
 import me.m0dii.extraenchants.events.VeinMinerEvent;
+import me.m0dii.extraenchants.utils.Messenger;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -40,20 +42,26 @@ public class OnTunnel implements Listener {
 
     @EventHandler
     public void onTunnel(TunnelEvent e) {
+        Messenger.debug("Tunnel event called.");
+
         Player p = e.getPlayer();
 
         Block source = e.getBlock();
 
         int level = e.getEnchantLevel();
 
+        BlockFace facing = p.getFacing();
+
+        Messenger.debug("Player facing: " + facing);
+
         if(level == 1) {
-            Block opposite = source.getRelative(p.getFacing().getOppositeFace());
+            Block opposite = source.getRelative(facing);
 
             destroy(p, opposite);
         }
 
         if(level == 2) {
-            Block opposite = source.getRelative(p.getFacing().getOppositeFace());
+            Block opposite = source.getRelative(facing);
 
             destroy(p, opposite);
 
@@ -63,17 +71,36 @@ public class OnTunnel implements Listener {
     }
 
     private void destroy(Player p, Block b) {
-        if (b.getType().isSolid()) {
+        if (!b.getType().isSolid()) {
+            Messenger.debug("Block is not solid, skipping tunnel.");
             return;
         }
 
         if(!allowed(p, b.getLocation())) {
+            Messenger.debug("Player not allowed, skipping tunnel.");
+            return;
+        }
+
+        Material conflict = Stream.of(Material.BEDROCK,
+                        Material.BARRIER,
+                        Material.END_PORTAL_FRAME,
+                        Material.CHEST,
+                        Material.SPAWNER,
+                        Material.END_CRYSTAL,
+                        Material.END_GATEWAY,
+                        Material.END_PORTAL
+                )
+                .filter(b.getType()::equals)
+                .findFirst()
+                .orElse(null);
+
+        if(conflict != null) {
+            Messenger.debug("Block is a conflict, skipping tunnel.");
             return;
         }
 
         b.breakNaturally(p.getInventory().getItemInMainHand());
     }
-
 
     private boolean allowed(Player p, Location loc) {
         if (res == null) {

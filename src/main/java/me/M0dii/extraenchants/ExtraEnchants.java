@@ -3,9 +3,6 @@ package me.m0dii.extraenchants;
 import me.m0dii.extraenchants.commands.DisenchantCommand;
 import me.m0dii.extraenchants.commands.EnchantCommand;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
-import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.listeners.*;
-import me.m0dii.extraenchants.listeners.custom.*;
 import me.m0dii.extraenchants.utils.data.ConfigManager;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.CustomChart;
@@ -13,7 +10,6 @@ import org.bstats.charts.MultiLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -28,10 +24,14 @@ import java.util.Map;
 import java.util.Set;
 
 public class ExtraEnchants extends JavaPlugin {
-    public static ExtraEnchants instance;
+    private static ExtraEnchants instance;
     private PluginManager pm;
     private ConfigManager configManager;
     private boolean residence = false;
+
+    public static ExtraEnchants getInstance() {
+        return instance;
+    }
 
     public FileConfiguration getCfg() {
         return this.configManager.getConfig();
@@ -42,8 +42,6 @@ public class ExtraEnchants extends JavaPlugin {
     }
 
     public void onEnable() {
-        CustomEnchants.register();
-
         instance = this;
 
         this.configManager = new ConfigManager(this);
@@ -103,15 +101,7 @@ public class ExtraEnchants extends JavaPlugin {
     }
 
     private void registerEvents() {
-        this.pm.registerEvents(new PlayerDeathRespawn(), this);
-        this.pm.registerEvents(new PlayerInteract(this), this);
-        this.pm.registerEvents(new BlockBreak(this), this);
-        this.pm.registerEvents(new EnchantmentCombine(), this);
-        this.pm.registerEvents(new TillInteract(this), this);
-        this.pm.registerEvents(new ItemDrop(this), this);
-        this.pm.registerEvents(new PlayerDamage(this), this);
-
-        Reflections reflections = new Reflections("me.m0dii.extraenchants.listeners.custom");
+        Reflections reflections = new Reflections("me.m0dii.extraenchants.listeners");
 
         Set<Class<? extends Listener>> classes = reflections.getSubTypesOf(Listener.class);
         Iterator<Class<? extends Listener>> it = classes.iterator();
@@ -124,9 +114,9 @@ public class ExtraEnchants extends JavaPlugin {
 
                 Listener listener = constructor.newInstance(this);
 
-                Bukkit.getLogger().info("Registering listener: " + listener.getClass().getSimpleName());
-
                 this.pm.registerEvents(listener, this);
+
+                Bukkit.getLogger().info("Registered listener: " + listener.getClass().getSimpleName());
             }
         }
         catch (IllegalAccessException | InstantiationException |

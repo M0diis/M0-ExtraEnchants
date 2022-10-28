@@ -39,8 +39,9 @@ public class PlayerInteract implements Listener {
 
         ItemMeta meta = e.getItem().getItemMeta();
 
-        if (CustomEnchants.getAllEnchants().stream().allMatch(ench -> (!meta.hasEnchant(ench))))
+        if (CustomEnchants.getAllEnchants().stream().allMatch(ench -> (!meta.hasEnchant(ench)))) {
             return;
+        }
 
         e.getPlayer().sendMessage(Utils.format(e.getItem().getItemMeta().getDisplayName()));
 

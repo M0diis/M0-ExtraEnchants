@@ -1,7 +1,6 @@
 package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
-import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.SmeltEvent;
 import me.m0dii.extraenchants.events.TelepathyEvent;
@@ -43,9 +42,10 @@ public class OnSmelt implements Listener {
 
         int fortuneLevel = 1;
 
-        if (hasFortune)
+        if (hasFortune) {
             fortuneLevel = tool.getItemMeta().getEnchants()
                     .get(Enchantment.LOOT_BONUS_BLOCKS);
+        }
 
         while (recipes.hasNext() && !dontSmelt(b.getType().name())) {
             Recipe recipe = recipes.next();
@@ -80,9 +80,10 @@ public class OnSmelt implements Listener {
         }
 
         if (tool != null && tool.getItemMeta() != null &&
-                tool.getItemMeta().hasEnchant(EEnchant.TELEPATHY.getEnchant())) {
+            tool.getItemMeta().hasEnchant(EEnchant.TELEPATHY.getEnchantment())) {
             Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, e.getBlockBreakEvent(), results));
-        } else {
+        }
+        else {
             for (ItemStack drop : results) {
                 if(Material.AIR.equals(drop) || drop == null) {
                     continue;
@@ -93,7 +94,8 @@ public class OnSmelt implements Listener {
     }
 
     private boolean doDouble(String name) {
-        return Stream.of("IRON_ORE", "GOLD_ORE", "COAL_ORE").anyMatch(name::equalsIgnoreCase);
+        return Stream.of("IRON_ORE", "GOLD_ORE", "COAL_ORE")
+                .anyMatch(name::equalsIgnoreCase);
     }
 
     private boolean dontSmelt(String name) {

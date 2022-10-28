@@ -1,6 +1,5 @@
 package me.m0dii.extraenchants.listeners.custom;
 
-import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.Bukkit;
@@ -9,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -39,33 +39,41 @@ public class OnLavaWalk implements Listener {
     }
 
     @EventHandler
-    public void lavaWalk(PlayerMoveEvent e) {
-        if (!plugin.getCfg().getBoolean("enchants.lavawalker.enabled")) {
+    public void lavaWalk(final PlayerMoveEvent e) {
+        if (EEnchant.LAVA_WALKER.isDisabled()) {
             return;
         }
 
         ItemStack boots = e.getPlayer().getInventory().getBoots();
 
-        if (boots != null && boots.containsEnchantment(EEnchant.LAVA_WALKER.getEnchant())) {
-            Block b = e.getTo().clone().subtract(0.0D, 1.0D, 0.0D).getBlock();
+        Enchantment enchant = EEnchant.LAVA_WALKER.getEnchantment();
 
-            checkAndSet(b);
-            Block blkN = b.getRelative(BlockFace.NORTH);
-            checkAndSet(blkN);
-            getNorthSouth(blkN);
-
-            Block blkE = b.getRelative(BlockFace.EAST);
-            checkAndSet(blkE);
-            getNorthSouth(blkE);
-
-            Block blkS = b.getRelative(BlockFace.SOUTH);
-            checkAndSet(blkS);
-            getNorthSouth(blkS);
-
-            Block blkW = b.getRelative(BlockFace.WEST);
-            checkAndSet(blkW);
-            getNorthSouth(blkW);
+        if(enchant == null) {
+            return;
         }
+
+        if (boots == null || !boots.containsEnchantment(enchant)) {
+            return;
+        }
+
+        Block b = e.getTo().clone().subtract(0.0D, 1.0D, 0.0D).getBlock();
+
+        checkAndSet(b);
+        Block blkN = b.getRelative(BlockFace.NORTH);
+        checkAndSet(blkN);
+        getNorthSouth(blkN);
+
+        Block blkE = b.getRelative(BlockFace.EAST);
+        checkAndSet(blkE);
+        getNorthSouth(blkE);
+
+        Block blkS = b.getRelative(BlockFace.SOUTH);
+        checkAndSet(blkS);
+        getNorthSouth(blkS);
+
+        Block blkW = b.getRelative(BlockFace.WEST);
+        checkAndSet(blkW);
+        getNorthSouth(blkW);
     }
 
     private void getNorthSouth(Block b) {

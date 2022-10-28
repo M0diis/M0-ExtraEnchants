@@ -52,7 +52,7 @@ public class DisenchantCommand implements CommandExecutor {
             return true;
         }
 
-        CustomEnchants.ENCHANTMENTS.forEach((key, enchant) -> {
+        CustomEnchants.getAllEnchants().forEach((enchant) -> {
             if (hand.getItemMeta().hasEnchant(enchant)) {
                 removeEnchant(sender, hand, enchant, hand, enchant.getName());
             }

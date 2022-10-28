@@ -1,6 +1,5 @@
 package me.m0dii.extraenchants.listeners;
 
-import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.*;
 import me.m0dii.extraenchants.ExtraEnchants;
@@ -11,7 +10,6 @@ import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,16 +20,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 
 public class BlockBreak implements Listener {
     private final List<String> heads = Arrays.asList("PLAYER_HEAD", "SKELETON_SKULL", "CREEPER_HEAD", "WITHER_SKELETON_SKULL",
             "ZOMBIE_HEAD", "CREEPER_WALL_HEAD", "PLAYER_WALL_HEAD", "DRAGON_HEAD", "DRAGON_WALL_HEAD", "ZOMBIE_WALL_HEAD",
             "SKELETON_WALL_SKULL", "WITHER_SKELETON_WALL_SKULL");
 
-    private final List<String> hoes = Arrays.asList(
-            "NETHERITE_HOE", "DIAMOND_HOE", "IRON_HOE",
-            "GOLDEN_HOE", "STONE_HOE", "WOODEN_HOE");
-
+    private static final Random rnd = new Random();
     private final ExtraEnchants plugin;
 
     public BlockBreak(ExtraEnchants plugin) {
@@ -39,112 +35,61 @@ public class BlockBreak implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreakTelepathy(BlockBreakEvent e) {
-        if (!plugin.getCfg().getBoolean("enchants.telepathy.enabled")) {
+    public void onBlockBreakTelepathy(final BlockBreakEvent e) {
+        if(shouldSkip(e, EEnchant.TELEPATHY)) {
             return;
         }
-
-        if (e.isCancelled()) {
-            return;
-        }
-
-        if (e.getBlock().getWorld().getGameRuleValue(GameRule.DO_TILE_DROPS) == Boolean.FALSE)
-            return;
 
         Player p = e.getPlayer();
         Block b = e.getBlock();
 
-        if (OnLavaWalk.lavaWalkerBlocks.contains(b)) {
-            e.setDropItems(false);
-
-            return;
-        }
-
         ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
 
-        if (b.getType().equals(Material.SPAWNER)
-         || b.getType().name().toUpperCase().contains("SPAWNER"))
+        Collection<ItemStack> drops = b.getDrops(hand);
+
+        if (drops.isEmpty()) {
             return;
-
-        ItemStack offhand = e.getPlayer().getInventory().getItemInOffHand();
-
-        if (offhand != null) {
-            if (offhand.hasItemMeta() &&
-                offhand.getItemMeta().hasEnchant(EEnchant.TELEPATHY.getEnchant())) {
-                return;
         }
 
-        if (hand == null)
-            return;
+        e.setDropItems(false);
 
-        if (hand.getItemMeta() == null)
+        if (!hand.getItemMeta().hasEnchant(EEnchant.SMELT.getEnchantment())) {
+            Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, e, drops));
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onBlockBreakSmelt(final BlockBreakEvent e) {
+        if(shouldSkip(e, EEnchant.SMELT)) {
             return;
+        }
 
-        if (!hand.getItemMeta().hasEnchant(EEnchant.SMELT.getEnchant())
-         && !hand.getItemMeta().hasEnchant(EEnchant.TELEPATHY.getEnchant())
-         && !hand.getItemMeta().hasEnchant(EEnchant.PLOW.getEnchant()))
-            return;
+        Player p = e.getPlayer();
+        Block b = e.getBlock();
 
-        if ((p.getGameMode() == GameMode.CREATIVE)
-         || (p.getGameMode() == GameMode.SPECTATOR))
-            return;
-
-        if ((e.getBlock().getState() instanceof Container))
-            return;
-
-        if (this.heads.contains(b.getType().toString()))
-            return;
+        ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
 
         Collection<ItemStack> drops = b.getDrops(hand);
 
         e.setDropItems(false);
 
-        if (hand.getItemMeta().hasEnchant(EEnchant.PLOW.getEnchant())) {
-            Bukkit.getPluginManager().callEvent(new SmeltEvent(p, e, drops));
-        } else if (!hand.getItemMeta().hasEnchant(EEnchant.SMELT.getEnchant()) &&
-                hand.getItemMeta().hasEnchant(EEnchant.TELEPATHY.getEnchant())) {
-                if (hoes.contains(hand.getType().toString())) {
-                    for (ItemStack drop : drops)
-                        p.getInventory().addItem(drop);
-
-                    return;
-                }
-
-                if (b.getType().name().contains("BED")) {
-                    p.getInventory().addItem(new ItemStack(b.getType()));
-
-                    return;
-                }
-
-                if (drops.isEmpty()) {
-                    return;
-                }
-
-                Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, e, drops));
-            }
-        }
+        Bukkit.getPluginManager().callEvent(new SmeltEvent(p, e, drops));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreakHasteMiner(BlockBreakEvent e) {
-        if (!plugin.getCfg().getBoolean("enchants.hasteminer.enabled")) {
+    public void onBlockBreakHasteMiner(final BlockBreakEvent e) {
+        if(shouldSkip(e, EEnchant.HASTE_MINER)) {
             return;
         }
 
-        if(shouldSkip(e, EEnchant.HASTE_MINER.getEnchant())) {
-            return;
-        }
+        int level = e.getPlayer().getInventory().getItemInMainHand()
+                .getEnchantmentLevel(EEnchant.HASTE_MINER.getEnchantment());
 
-        Bukkit.getPluginManager().callEvent(new HasteMinerEvent(e.getPlayer(), e));
+        Bukkit.getPluginManager().callEvent(new HasteMinerEvent(e.getPlayer(), e, level));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreakExperienceMiner(BlockBreakEvent e) {
-        if (!plugin.getCfg().getBoolean("enchants.experienceminer.enabled")) {
-            return;
-        }
-
-        if(shouldSkip(e, EEnchant.EXPERIENCE_MINER.getEnchant())) {
+    public void onBlockBreakExperienceMiner(final BlockBreakEvent e) {
+        if(shouldSkip(e, EEnchant.EXPERIENCE_MINER)) {
             return;
         }
 
@@ -152,24 +97,62 @@ public class BlockBreak implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreakVeinMiner(BlockBreakEvent e) {
-        if (!plugin.getCfg().getBoolean("enchants.veinminer.enabled")) {
-            return;
-        }
-
-        if(shouldSkip(e, EEnchant.VEIN_MINER.getEnchant())) {
+    public void onBlockBreakVeinMiner(final BlockBreakEvent e) {
+        if(shouldSkip(e, EEnchant.VEIN_MINER)) {
             return;
         }
 
         Bukkit.getPluginManager().callEvent(new VeinMinerEvent(e.getPlayer(), e));
     }
 
-    private boolean shouldSkip(BlockBreakEvent e, Enchantment enchant) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onBlockBreakTunnel(BlockBreakEvent e) {
+        if(shouldSkip(e, EEnchant.TUNNEL)) {
+            return;
+        }
+
+        ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
+
+        Bukkit.getPluginManager().callEvent(new TunnelEvent(e.getPlayer(), e,
+                hand.getEnchantmentLevel(EEnchant.TUNNEL.getEnchantment())));
+    }
+
+    private boolean shouldSkip(BlockBreakEvent e, EEnchant enchant) {
         if (e.isCancelled()) {
             return true;
         }
 
-        if (e.getBlock().getWorld().getGameRuleValue(GameRule.DO_TILE_DROPS) == Boolean.FALSE) {
+        if (enchant.isDisabled()) {
+            return true;
+        }
+
+        if(enchant.getTriggerChance() != 100 && enchant.getTriggerChance() != -1 && rnd.nextInt(100) > enchant.getTriggerChance()) {
+            return true;
+        }
+
+        Block block = e.getBlock();
+
+        if (OnLavaWalk.lavaWalkerBlocks.contains(block)) {
+            e.setDropItems(false);
+
+            return true;
+        }
+
+        if (block.getWorld().getGameRuleValue(GameRule.DO_TILE_DROPS) == Boolean.FALSE) {
+            return true;
+        }
+
+        if (block.getType().equals(Material.SPAWNER)
+         || block.getType().name().toUpperCase().contains("BED")
+         || block.getType().name().toUpperCase().contains("SPAWNER")) {
+            return true;
+        }
+
+        if ((block.getState() instanceof Container)) {
+            return true;
+        }
+
+        if (this.heads.contains(block.getType().toString())) {
             return true;
         }
 
@@ -185,7 +168,7 @@ public class BlockBreak implements Listener {
             return true;
         }
 
-        if (!hand.getItemMeta().hasEnchant(enchant)) {
+        if (!hand.getItemMeta().hasEnchant(enchant.getEnchantment())) {
             return true;
         }
 

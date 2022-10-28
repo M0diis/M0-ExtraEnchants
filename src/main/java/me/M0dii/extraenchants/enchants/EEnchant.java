@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.enchants;
 
+import me.m0dii.extraenchants.ExtraEnchants;
 import org.bukkit.enchantments.Enchantment;
 
 import java.util.Arrays;
@@ -16,31 +17,51 @@ public enum EEnchant {
     ANTI_THORNS("Anti Thorns"),
     EXPERIENCE_MINER("Experience Miner"),
     LIFESTEAL("Lifesteal"),
+    ASSASSIN("Assassin"),
+    REPLANTER("Replanter"),
+    BERSERK("Berserk"),
     TUNNEL("Tunnel");
 
-    final String name;
+    private final ExtraEnchants instance = ExtraEnchants.getInstance();
+
+    final String displayName;
 
     Enchantment enchant;
 
-    EEnchant(String name) {
-        this.name = name;
+    EEnchant(String displayName) {
+        this.displayName = displayName;
     }
 
-    public String getName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public Enchantment getEnchant() {
+    public Enchantment getEnchantment() {
         return this.enchant;
     }
 
-    public void setEnchant(Enchantment enchant) {
+    public void setEnchantment(Enchantment enchant) {
         this.enchant = enchant;
+    }
+
+    public int getTriggerChance() {
+        return instance.getCfg().getInt("enchants." + name().toLowerCase() + ".trigger-chance", -1);
+    }
+
+    public boolean isDisabled() {
+        return !instance.getCfg().getBoolean("enchants." + name().toLowerCase() + ".enabled", true);
+    }
+
+    public int getEnchantChance() {
+        return instance.getCfg().getInt("enchants." + name().toLowerCase() + ".table-chance", -1);
     }
 
     public static EEnchant get(String value) {
         return Arrays.stream(EEnchant.values())
-                .filter(v -> v.getName().equalsIgnoreCase(value) || v.getName().replace(" ", "").equalsIgnoreCase(value))
+                .filter(v -> v.getDisplayName().equalsIgnoreCase(value)
+                     || v.getDisplayName().replace(" ", "").equalsIgnoreCase(value)
+                     || v.getDisplayName().replace(" ", "_").equalsIgnoreCase(value)
+                )
                 .findFirst()
                 .orElse(null);
     }

@@ -1,6 +1,5 @@
 package me.m0dii.extraenchants.listeners.custom;
 
-import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.AntiThornsEvent;
 import me.m0dii.extraenchants.ExtraEnchants;
@@ -10,8 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,36 +35,32 @@ public class OnAntiThorns implements Listener {
         int deflectPercentage = 0;
 
         if(helmet != null) {
-            if(helmet.containsEnchantment(EEnchant.ANTI_THORNS.getEnchant())) {
-                ItemMeta meta = helmet.getItemMeta();
-                InventoryUtils.applyDurability(helmet, (Damageable) meta);
+            if(helmet.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
+                InventoryUtils.applyDurability(helmet);
 
                 deflectPercentage += 25;
             }
         }
 
         if(chestplate != null) {
-            if(chestplate.containsEnchantment(EEnchant.ANTI_THORNS.getEnchant())) {
-                ItemMeta meta = chestplate.getItemMeta();
-                InventoryUtils.applyDurability(chestplate, (Damageable) meta);
+            if(chestplate.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
+                InventoryUtils.applyDurability(chestplate);
 
                 deflectPercentage += 25;
             }
         }
 
         if(leggings != null) {
-            if(leggings.containsEnchantment(EEnchant.ANTI_THORNS.getEnchant())) {
-                ItemMeta meta = leggings.getItemMeta();
-                InventoryUtils.applyDurability(leggings, (Damageable) meta);
+            if(leggings.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
+                InventoryUtils.applyDurability(leggings);
 
                 deflectPercentage += 25;
             }
         }
 
         if(boots != null) {
-            if(boots.containsEnchantment(EEnchant.ANTI_THORNS.getEnchant())) {
-                ItemMeta meta = boots.getItemMeta();
-                InventoryUtils.applyDurability(boots, (Damageable) meta);
+            if(boots.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
+                InventoryUtils.applyDurability(boots);
 
                 deflectPercentage += 25;
             }

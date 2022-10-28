@@ -1,20 +1,22 @@
 package me.m0dii.extraenchants.enchants;
 
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.utils.Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
-import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 public class CustomEnchants {
-    public static final Map<EEnchant, Enchantment> ENCHANTMENTS = new HashMap<>();
+
+    private static final ExtraEnchants plugin = ExtraEnchants.getInstance();
 
     public static void register() {
-        ENCHANTMENTS.clear();
+        List<Enchantment> list = Arrays.stream(Enchantment.values()).toList();
 
         Reflections reflections = new Reflections("me.m0dii.extraenchants.enchants.wrappers");
 
@@ -41,11 +43,11 @@ public class CustomEnchants {
 
                 Enchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLvl());
 
+                registerEnchantment(enchantment, list);
+
                 Bukkit.getLogger().info("Registering enchant wrapper: " + enchantment.getClass().getSimpleName());
 
-                eEnchant.setEnchant(enchantment);
-
-                ENCHANTMENTS.put(eEnchant, enchantment);
+                eEnchant.setEnchantment(enchantment);
             }
         }
         catch (IllegalAccessException | InstantiationException |
@@ -54,11 +56,24 @@ public class CustomEnchants {
         }
     }
 
-    public static Enchantment parse(EEnchant key) {
-        return ENCHANTMENTS.getOrDefault(key, null);
+    public static List<Enchantment> getAllEnchants() {
+        return Arrays.stream(EEnchant.values()).map(EEnchant::getEnchantment).toList();
     }
 
-    public static List<Enchantment> getAllEnchants() {
-        return ENCHANTMENTS.values().stream().toList();
+    private static void registerEnchantment(final Enchantment enchantment, List<Enchantment> list) {
+        if (list.contains(enchantment)) {
+            return;
+        }
+
+        try {
+            final Field f = Enchantment.class.getDeclaredField("acceptingNew");
+
+            f.setAccessible(true);
+            f.set(null, true);
+
+            Enchantment.registerEnchantment(enchantment);
+        } catch (Exception e) {
+            Bukkit.getLogger().severe("[M0-ExtraEnchants] Could not register enchantment: " + enchantment.getKey());
+        }
     }
 }

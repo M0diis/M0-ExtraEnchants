@@ -16,12 +16,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@Wrapper(name = "Assassin", maxLvl = 1)
-public class AssassinWrapper extends Enchantment {
+@Wrapper(name = "Berserk", maxLvl = 1)
+public class BerserkWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
 
-    public AssassinWrapper(final String name, final int lvl) {
+    public BerserkWrapper(final String name, final int lvl) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;

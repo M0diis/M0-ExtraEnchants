@@ -16,27 +16,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@Wrapper(name = "Assassin", maxLvl = 1)
-public class AssassinWrapper extends Enchantment {
+@Wrapper(name = "Replanter", maxLvl = 1)
+public class ReplanterWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
 
-    public AssassinWrapper(final String name, final int lvl) {
+    public ReplanterWrapper(final String name, final int lvl) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isSword(item);
+        return Enchantables.isHoe(item);
     }
 
-    public boolean conflictsWith(final Enchantment enchantment) {
-        return enchantment.equals(EEnchant.LIFESTEAL.getEnchantment());
+    public boolean conflictsWith(final Enchantment e) {
+        return e.equals(Enchantment.SILK_TOUCH) || e.equals(EEnchant.PLOW.getEnchantment());
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {
-        return EnchantmentTarget.WEAPON;
+        return EnchantmentTarget.TOOL;
     }
 
     public int getMaxLevel() {

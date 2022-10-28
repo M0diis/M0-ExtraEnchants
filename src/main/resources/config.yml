@@ -1,6 +1,8 @@
 enchants:
   telepathy:
     enabled: true
+    trigger-chance: -1
+    table-chance: -1
     displayname: "&b&lTelepathy %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -12,6 +14,8 @@ enchants:
       - "&6Enchantable Items: &aTools"
   plow:
     enabled: true
+    trigger-chance: -1
+    table-chance: -1
     displayname: "&d&lPlow %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -23,6 +27,8 @@ enchants:
       - "&6Enchantable Items: &aHoes"
   lavawalker:
     enabled: true
+    trigger-chance: -1
+    table-chance: -1
     displayname: "&d&lLava Walker %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -34,6 +40,8 @@ enchants:
       - "&6Enchantable Items: &aBoots"
   bonded:
     enabled: true
+    trigger-chance: -1
+    table-chance: -1
     displayname: "&d&lBonded %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -44,6 +52,8 @@ enchants:
       - "&6Enchantable Items: &aTools & Armor"
   smelt:
     enabled: true
+    trigger-chance: -1
+    table-chance: -1
     displayname: "&d&lSmelt %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -54,6 +64,8 @@ enchants:
       - "&6Enchantable Items: &aTools"
   hasteminer:
     enabled: true
+    trigger-chance: 10
+    table-chance: -1
     displayname: "&d&lHaste Miner %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -64,6 +76,8 @@ enchants:
       - "&6Enchantable Items: &aPickaxes, Shovels"
   veinminer:
     enabled: true
+    trigger-chance: 10
+    table-chance: -1
     displayname: "&d&lVein Miner %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -74,6 +88,8 @@ enchants:
       - "&6Enchantable Items: &aPickaxes"
   experienceminer:
     enabled: true
+    trigger-chance: 10
+    table-chance: -1
     displayname: "&d&lXP Miner %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -85,6 +101,8 @@ enchants:
       - "&6Enchantable Items: &aPickaxes"
   lifesteal:
     enabled: true
+    trigger-chance: 10
+    table-chance: -1
     displayname: "&d&lLifesteal %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -96,6 +114,8 @@ enchants:
       - "&6Enchantable Items: &aSwords"
   tunnel:
     enabled: true
+    trigger-chance: -1
+    table-chance: -1
     displayname: "&d&lLifesteal %level%"
     lore:
       - "&7Drag book and drop on item."
@@ -104,9 +124,25 @@ enchants:
       - "&7Can be helpful while tunnelling."
       - ""
       - "&6Enchantable Items: &aPickaxes, Shovels"
+  berserk:
+    enabled: true
+    trigger-chance: -1
+    table-chance: -1
+    displayname: "&d&lBerserk %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Does less damage on full health,"
+      - "&7does more damage on less health."
+      - ""
+      - "&6Enchantable Items: &aSwords"
+
 messages:
   no-permission: "&c&lYou do not have permission to do this!"
   player-not-found: "&c&lPlayer not found."
   enchantment-list: "&9&lCurrent Enchants:\n&3&lTelepathy, Plow, Lava Walker, Bonded"
   usage: "&c&lCommand usage: &d/&7ee <enchantment> <player>"
   enchant-removed: "&4%enchant_name% enchant has been removed"
+
+debug: false

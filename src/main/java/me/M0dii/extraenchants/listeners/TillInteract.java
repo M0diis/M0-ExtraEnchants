@@ -1,9 +1,10 @@
 package me.m0dii.extraenchants.listeners;
 
-import me.m0dii.extraenchants.enchants.CustomEnchants;
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.PlowEvent;
-import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.events.ReplanterEvent;
+import me.m0dii.extraenchants.utils.Enchantables;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -21,9 +22,14 @@ public class TillInteract implements Listener {
     }
 
     @EventHandler
-    public void onTill(PlayerInteractEvent e) {
-        if (!plugin.getCfg().getBoolean("enchants.plow.enabled"))
+    public void onPlayerInteractPlow(final PlayerInteractEvent e) {
+        if(EEnchant.PLOW.isDisabled()) {
             return;
+        }
+
+        if (e.isCancelled()) {
+            return;
+        }
 
         ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
         Player p = e.getPlayer();
@@ -36,11 +42,11 @@ public class TillInteract implements Listener {
             return;
         }
 
-        if (!hand.getItemMeta().hasEnchant(EEnchant.PLOW.getEnchant())) {
+        if (!hand.getItemMeta().hasEnchant(EEnchant.PLOW.getEnchantment())) {
             return;
         }
 
-        if (!hand.getType().toString().toUpperCase().contains("HOE")) {
+        if (!Enchantables.isHoe(hand)) {
             return;
         }
 
@@ -53,10 +59,47 @@ public class TillInteract implements Listener {
             return;
         }
 
+        Bukkit.getPluginManager().callEvent(new PlowEvent(p, e, hand.getEnchantmentLevel(EEnchant.PLOW.getEnchantment())));
+    }
+
+    @EventHandler
+    public void onPlayerInteractReplanter(final PlayerInteractEvent e) {
+        if(EEnchant.REPLANTER.isDisabled()) {
+            return;
+        }
+
         if (e.isCancelled()) {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new PlowEvent(p, e, hand.getEnchantmentLevel(EEnchant.PLOW.getEnchant())));
+        ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
+        Player p = e.getPlayer();
+
+        if (hand == null) {
+            return;
+        }
+
+        if (hand.getItemMeta() == null) {
+            return;
+        }
+
+        if (!hand.getItemMeta().hasEnchant(EEnchant.REPLANTER.getEnchantment())) {
+            return;
+        }
+
+        if (!Enchantables.isHoe(hand)) {
+            return;
+        }
+
+        if ((p.getGameMode() == GameMode.CREATIVE)
+         || (p.getGameMode() == GameMode.SPECTATOR)) {
+            return;
+        }
+
+        if (e.getAction() != Action.RIGHT_CLICK_BLOCK) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new ReplanterEvent(p, e));
     }
 }

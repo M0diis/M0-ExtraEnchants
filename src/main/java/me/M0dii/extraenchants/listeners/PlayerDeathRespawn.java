@@ -1,6 +1,6 @@
 package me.m0dii.extraenchants.listeners;
 
-import me.m0dii.extraenchants.enchants.CustomEnchants;
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -16,6 +16,11 @@ import java.util.*;
 
 public class PlayerDeathRespawn implements Listener {
     private final Map<UUID, List<ItemStack>> keptItems = new HashMap<>();
+    private final ExtraEnchants plugin;
+
+    public PlayerDeathRespawn(ExtraEnchants plugin) {
+        this.plugin = plugin;
+    }
 
     @EventHandler
     public void onRespawn(PlayerRespawnEvent e) {
@@ -82,9 +87,9 @@ public class PlayerDeathRespawn implements Listener {
             if (item.hasItemMeta() && item.getItemMeta() != null) {
                 ItemMeta meta = item.getItemMeta();
 
-                if (meta.hasEnchant(EEnchant.BONDED.getEnchant())) {
+                if (meta.hasEnchant(EEnchant.BONDED.getEnchantment())) {
                     drops.remove(item);
-                    meta.removeEnchant(EEnchant.BONDED.getEnchant());
+                    meta.removeEnchant(EEnchant.BONDED.getEnchantment());
                     item.setItemMeta(meta);
                     bondedItems.add(item);
                 }

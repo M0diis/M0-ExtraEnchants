@@ -1,20 +1,22 @@
 package me.m0dii.extraenchants.listeners;
 
-import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.AntiThornsEvent;
 import me.m0dii.extraenchants.events.AssassinEvent;
+import me.m0dii.extraenchants.events.BerserkEvent;
 import me.m0dii.extraenchants.events.LifestealEvent;
 import me.m0dii.extraenchants.ExtraEnchants;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
-public class PlayerDamage implements org.bukkit.event.Listener {
+public class PlayerDamage implements Listener {
     private ExtraEnchants plugin;
 
     public PlayerDamage(ExtraEnchants plugin) {
@@ -22,8 +24,8 @@ public class PlayerDamage implements org.bukkit.event.Listener {
     }
 
     @EventHandler
-    public void onEntityDamageAntiThorns(EntityDamageEvent e) {
-        if (!plugin.getCfg().getBoolean("enchants.antithorns.enabled")) {
+    public void onEntityDamageAntiThorns(final EntityDamageEvent e) {
+        if(EEnchant.ANTI_THORNS.isDisabled()) {
             return;
         }
 
@@ -39,56 +41,55 @@ public class PlayerDamage implements org.bukkit.event.Listener {
     }
     
     @EventHandler
-    public void onEntityDamageLifesteal(EntityDamageByEntityEvent e) {
-        if (!plugin.getCfg().getBoolean("enchants.lifesteal.enabled")) {
+    public void onEntityDamageLifesteal(final EntityDamageByEntityEvent e) {
+        if(shouldSkip(e, EEnchant.LIFESTEAL)) {
             return;
         }
 
-        if(!(e.getDamager() instanceof Player p)) {
-            return;
-        }
-
-        ItemStack mainHand = p.getInventory().getItemInMainHand();
-
-        if(mainHand == null || mainHand.getType().equals(Material.AIR)) {
-            return;
-        }
-
-        if(!mainHand.hasItemMeta()) {
-            return;
-        }
-
-        if(!mainHand.getItemMeta().hasEnchant(EEnchant.LIFESTEAL.getEnchant())) {
-            return;
-        }
-
-        Bukkit.getPluginManager().callEvent(new LifestealEvent(p, e));
+        Bukkit.getPluginManager().callEvent(new LifestealEvent((Player)e.getDamager(), e));
     }
 
     @EventHandler
     public void onEntityDamageAssassin(EntityDamageByEntityEvent e) {
-        if (!plugin.getCfg().getBoolean("enchants.assassin.enabled")) {
+        if(shouldSkip(e, EEnchant.ASSASSIN)) {
             return;
         }
 
-        if(!(e.getDamager() instanceof Player p)) {
+        Bukkit.getPluginManager().callEvent(new AssassinEvent((Player)e.getDamager(), e));
+    }
+
+    @EventHandler
+    public void onEntityDamageBerserk(final EntityDamageByEntityEvent e) {
+        if(shouldSkip(e, EEnchant.BERSERK)) {
             return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new BerserkEvent((Player)e.getDamager(), e));
+    }
+
+    private boolean shouldSkip(EntityDamageByEntityEvent e, EEnchant enchant) {
+        if(enchant.isDisabled()) {
+            return true;
+        }
+
+        if(!(e.getDamager() instanceof Player p)) {
+            return true;
         }
 
         ItemStack mainHand = p.getInventory().getItemInMainHand();
 
-        if(mainHand == null || mainHand.getType().equals(Material.AIR)) {
-            return;
+        if(mainHand == null || mainHand.getType().isAir()) {
+            return true;
         }
 
         if(!mainHand.hasItemMeta()) {
-            return;
+            return true;
         }
 
-        if(!mainHand.getItemMeta().hasEnchant(EEnchant.LIFESTEAL.getEnchant())) {
-            return;
+        if(!mainHand.getItemMeta().hasEnchant(enchant.getEnchantment())) {
+            return true;
         }
 
-        Bukkit.getPluginManager().callEvent(new AssassinEvent(p, e));
+        return false;
     }
 }
