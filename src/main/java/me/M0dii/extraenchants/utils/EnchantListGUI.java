@@ -69,6 +69,8 @@ public class EnchantListGUI implements InventoryHolder {
 
             meta.setLore(lore);
 
+            item.addUnsafeEnchantment(e.getEnchantment(), 1);
+
             item.setItemMeta(meta);
 
             this.inventory.addItem(item);

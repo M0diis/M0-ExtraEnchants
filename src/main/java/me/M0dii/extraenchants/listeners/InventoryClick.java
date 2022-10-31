@@ -4,6 +4,7 @@ import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.CombineEvent;
+import me.m0dii.extraenchants.utils.EnchantInfoGUI;
 import me.m0dii.extraenchants.utils.EnchantListGUI;
 import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
@@ -23,6 +24,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 public class InventoryClick implements Listener {
 
@@ -96,15 +99,115 @@ public class InventoryClick implements Listener {
 
         if(clickedInv.getHolder() instanceof EnchantListGUI list) {
             e.setCancelled(true);
+
+            Player p = (Player)e.getWhoClicked();
+
+            ItemStack item = e.getCurrentItem();
+
+            if(item == null) {
+                return;
+            }
+
+            ItemMeta meta = item.getItemMeta();
+
+            if(meta == null) {
+                return;
+            }
+
+            String name = Utils.stripColor(meta.displayName());
+
+            if(name == null) {
+                return;
+            }
+
+            EEnchant enchant = EEnchant.parse(name);
+
+            if(enchant == null) {
+                return;
+            }
+
+            EnchantInfoGUI gui = new EnchantInfoGUI(enchant.getEnchantment());
+
+            gui.open(p);
         }
     }
 
     @EventHandler
-    public void onInventoryClickEnchantList(final InventoryDragEvent e) {
+    public void onInventoryClickEnchantInfo(final InventoryClickEvent e) {
+        Inventory clickedInv = e.getClickedInventory();
+
+        if(clickedInv == null) {
+            return;
+        }
+
+        if(clickedInv.getHolder() instanceof EnchantInfoGUI list) {
+            e.setCancelled(true);
+
+            ItemStack clicked = e.getCurrentItem();
+            if(clicked != null && clicked.getType().equals(Material.PAPER)) {
+                Player p = (Player)e.getWhoClicked();
+
+                EnchantListGUI gui = new EnchantListGUI();
+
+                gui.open(p);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDragEnchantInfo(final InventoryDragEvent e) {
+        Inventory clickedInv = e.getInventory();
+
+        if(clickedInv.getHolder() instanceof EnchantInfoGUI list) {
+            e.setCancelled(true);
+
+            ItemStack clicked = e.getOldCursor();
+            if(clicked != null && clicked.getType().equals(Material.PAPER)) {
+                Player p = (Player)e.getWhoClicked();
+
+                EnchantListGUI gui = new EnchantListGUI();
+
+                gui.open(p);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryDragEnchantList(final InventoryDragEvent e) {
         Inventory clickedInv = e.getInventory();
 
         if(clickedInv.getHolder() instanceof EnchantListGUI list) {
             e.setCancelled(true);
+
+            Player p = (Player)e.getWhoClicked();
+
+            ItemStack item = e.getOldCursor();
+
+            if(item == null) {
+                return;
+            }
+
+            ItemMeta meta = item.getItemMeta();
+
+            if(meta == null) {
+                return;
+            }
+
+            String name = Utils.stripColor(meta.displayName());
+
+            if(name == null) {
+                return;
+            }
+
+            Enchantment enchant = EEnchant.toEnchant(name);
+
+            if(enchant == null) {
+                return;
+            }
+
+            EnchantInfoGUI gui = new EnchantInfoGUI(enchant);
+
+            gui.open(p);
         }
     }
 

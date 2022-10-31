@@ -85,9 +85,10 @@ public enum EEnchant {
 
     public static EEnchant parse(String value) {
         return Arrays.stream(EEnchant.values())
-                .filter(v -> v.getDisplayName().equalsIgnoreCase(value)
-                        || v.getDisplayName().replace(" ", "").equalsIgnoreCase(value)
-                        || v.getDisplayName().replace(" ", "_").equalsIgnoreCase(value)
+                .filter(v -> v.getDisplayName().equalsIgnoreCase(value.trim())
+                        || v.getDisplayName().replace(" ", "").equalsIgnoreCase(value.trim())
+                        || v.getDisplayName().replace(" ", "_").equalsIgnoreCase(value.trim())
+                        || v.getConfigName().equalsIgnoreCase(value.trim())
                 )
                 .findFirst()
                 .orElse(null);
@@ -95,9 +96,10 @@ public enum EEnchant {
 
     public static Enchantment toEnchant(String value) {
         return Arrays.stream(EEnchant.values())
-                .filter(v -> v.getDisplayName().equalsIgnoreCase(value)
-                        || v.getDisplayName().replace(" ", "").equalsIgnoreCase(value)
-                        || v.getDisplayName().replace(" ", "_").equalsIgnoreCase(value)
+                .filter(v -> v.getDisplayName().equalsIgnoreCase(value.trim())
+                        || v.getDisplayName().replace(" ", "").equalsIgnoreCase(value.trim())
+                        || v.getDisplayName().replace(" ", "_").equalsIgnoreCase(value.trim())
+                        || v.getConfigName().equalsIgnoreCase(value.trim())
                 )
                 .map(EEnchant::getEnchantment)
                 .findFirst()
