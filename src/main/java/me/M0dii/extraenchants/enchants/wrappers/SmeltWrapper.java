@@ -1,6 +1,7 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.Wrapper;
@@ -32,7 +33,8 @@ public class SmeltWrapper extends Enchantment {
     }
 
     public boolean conflictsWith(final Enchantment enchantment) {
-        return enchantment.equals(Enchantment.SILK_TOUCH);
+        return enchantment.equals(Enchantment.SILK_TOUCH)
+            || EEnchant.TELEPATHY.equals(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {
