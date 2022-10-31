@@ -1,8 +1,10 @@
 package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.AssassinEvent;
 import me.m0dii.extraenchants.events.BerserkEvent;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
@@ -21,6 +23,10 @@ public class OnBerserk implements Listener {
 
     @EventHandler
     public void onBerserk(final BerserkEvent e) {
+        if (!Utils.shouldTrigger(EEnchant.BERSERK)) {
+            return;
+        }
+
         Player damager = e.getPlayer();
 
         double healthHas = damager.getHealth();

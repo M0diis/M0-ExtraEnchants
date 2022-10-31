@@ -1,9 +1,11 @@
 package me.m0dii.extraenchants.listeners.custom;
 
+import com.bekvon.bukkit.residence.commands.tool;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.SmeltEvent;
 import me.m0dii.extraenchants.events.TelepathyEvent;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -27,7 +29,11 @@ public class OnSmelt implements Listener {
     }
 
     @EventHandler
-    public void onSmelt(SmeltEvent e) {
+    public void onSmelt(final SmeltEvent e) {
+        if (!Utils.shouldTrigger(EEnchant.SMELT)) {
+            return;
+        }
+
         Block b = e.getBlock();
         Player p = e.getPlayer();
         ItemStack tool = p.getInventory().getItemInMainHand();
@@ -50,20 +56,22 @@ public class OnSmelt implements Listener {
         while (recipes.hasNext() && !dontSmelt(b.getType().name())) {
             Recipe recipe = recipes.next();
 
-            if (!(recipe instanceof FurnaceRecipe furnaceRecipe))
+            if (!(recipe instanceof FurnaceRecipe furnaceRecipe)) {
                 continue;
+            }
 
-            if (furnaceRecipe.getInput().getType() != b.getType())
+            if (furnaceRecipe.getInput().getType() != b.getType()) {
                 continue;
+            }
 
-            if (hasFortune) {
-                if (doDouble(b.getType().name())) {
-                    int extraDrops = rnd.nextInt(fortuneLevel + 1);
+            if (hasFortune && doDouble(b.getType().name())) {
+                int extraDrops = rnd.nextInt(fortuneLevel + 1);
 
-                    for (int i = 0; i <= extraDrops; i++)
-                        results.add(furnaceRecipe.getResult());
-                } else results.add(furnaceRecipe.getResult());
-            } else results.add(furnaceRecipe.getResult());
+                for (int i = 0; i <= extraDrops; i++) {
+                    results.add(furnaceRecipe.getResult());
+                }
+            }
+            else results.add(furnaceRecipe.getResult());
 
             break;
         }

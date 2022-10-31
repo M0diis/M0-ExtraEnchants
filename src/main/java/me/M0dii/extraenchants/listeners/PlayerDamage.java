@@ -1,29 +1,26 @@
 package me.m0dii.extraenchants.listeners;
 
-import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.AntiThornsEvent;
-import me.m0dii.extraenchants.events.AssassinEvent;
-import me.m0dii.extraenchants.events.BerserkEvent;
-import me.m0dii.extraenchants.events.LifestealEvent;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.events.*;
+import me.m0dii.extraenchants.utils.InventoryUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 public class PlayerDamage implements Listener {
-    private ExtraEnchants plugin;
+    private final ExtraEnchants plugin;
 
     public PlayerDamage(ExtraEnchants plugin) {
         this.plugin = plugin;
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageAntiThorns(final EntityDamageEvent e) {
         if(EEnchant.ANTI_THORNS.isDisabled()) {
             return;
@@ -39,8 +36,8 @@ public class PlayerDamage implements Listener {
 
         Bukkit.getPluginManager().callEvent(new AntiThornsEvent(p, e));
     }
-    
-    @EventHandler
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageLifesteal(final EntityDamageByEntityEvent e) {
         if(shouldSkip(e, EEnchant.LIFESTEAL)) {
             return;
@@ -49,7 +46,7 @@ public class PlayerDamage implements Listener {
         Bukkit.getPluginManager().callEvent(new LifestealEvent((Player)e.getDamager(), e));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageAssassin(EntityDamageByEntityEvent e) {
         if(shouldSkip(e, EEnchant.ASSASSIN)) {
             return;
@@ -58,13 +55,26 @@ public class PlayerDamage implements Listener {
         Bukkit.getPluginManager().callEvent(new AssassinEvent((Player)e.getDamager(), e));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageBerserk(final EntityDamageByEntityEvent e) {
         if(shouldSkip(e, EEnchant.BERSERK)) {
             return;
         }
 
         Bukkit.getPluginManager().callEvent(new BerserkEvent((Player)e.getDamager(), e));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityDamageColdSteel(final EntityDamageByEntityEvent e) {
+        if(EEnchant.COLD_STEEL.isDisabled()) {
+            return;
+        }
+
+        if(!(e.getDamager() instanceof Player p)) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new ColdSteelEvent(p, e));
     }
 
     private boolean shouldSkip(EntityDamageByEntityEvent e, EEnchant enchant) {
@@ -78,16 +88,8 @@ public class PlayerDamage implements Listener {
 
         ItemStack mainHand = p.getInventory().getItemInMainHand();
 
-        if(mainHand == null || mainHand.getType().isAir()) {
-            return true;
-        }
-
-        if(!mainHand.hasItemMeta()) {
-            return true;
-        }
-
-        if(!mainHand.getItemMeta().hasEnchant(enchant.getEnchantment())) {
-            return true;
+        if(InventoryUtils.hasEnchant(mainHand, enchant)) {
+            return false;
         }
 
         return false;

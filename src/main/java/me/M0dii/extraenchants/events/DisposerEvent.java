@@ -8,20 +8,17 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class HasteMinerEvent extends Event implements Cancellable {
+public class DisposerEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
     private final BlockBreakEvent event;
     private final Block block;
     private boolean isCancelled;
 
-    private final int enchantLevel;
-
-    public HasteMinerEvent(Player p, BlockBreakEvent e, int enchantLevel) {
+    public DisposerEvent(Player p, BlockBreakEvent e) {
         this.player = p;
         this.event = e;
         this.block = e.getBlock();
-        this.enchantLevel = enchantLevel;
     }
 
     public static HandlerList getHandlerList() {
@@ -50,9 +47,5 @@ public class HasteMinerEvent extends Event implements Cancellable {
 
     public BlockBreakEvent getBlockBreakEvent() {
         return this.event;
-    }
-
-    public int getEnchantLevel() {
-        return this.enchantLevel;
     }
 }

@@ -3,6 +3,7 @@ package me.m0dii.extraenchants.listeners.custom;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.HasteMinerEvent;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,8 +15,6 @@ import java.util.Optional;
 import java.util.Random;
 
 public class OnHasteMine implements Listener {
-    private static final Random rnd = new Random();
-
     private final ExtraEnchants plugin;
 
     public OnHasteMine(ExtraEnchants plugin) {
@@ -24,7 +23,7 @@ public class OnHasteMine implements Listener {
 
     @EventHandler
     public void onHasteMine(HasteMinerEvent e) {
-        if (rnd.nextInt(100) > EEnchant.HASTE_MINER.getTriggerChance()) {
+        if (!Utils.shouldTrigger(EEnchant.HASTE_MINER)) {
             return;
         }
 

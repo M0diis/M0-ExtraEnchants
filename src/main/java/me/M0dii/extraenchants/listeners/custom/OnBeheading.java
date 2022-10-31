@@ -1,7 +1,9 @@
 package me.m0dii.extraenchants.listeners.custom;
 
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.BeheadingEvent;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Entity;
@@ -18,17 +20,24 @@ import java.util.List;
 import java.util.Random;
 
 public class OnBeheading implements Listener {
-    private static final Random rnd = new Random();
     private final ExtraEnchants plugin;
-    private final List<String> heads = Arrays.asList("CREEPER_HEAD", "WITHER_SKELETON_SKULL",
-            "ZOMBIE_HEAD", "DRAGON_HEAD");
+    private final List<String> heads = List.of(
+            "CREEPER_HEAD",
+            "WITHER_SKELETON_SKULL",
+            "ZOMBIE_HEAD",
+            "DRAGON_HEAD"
+    );
 
     public OnBeheading(ExtraEnchants plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler
-    public void onBehead(BeheadingEvent e) {
+    public void onBehead(final BeheadingEvent e) {
+        if (!Utils.shouldTrigger(EEnchant.BEHEADING)) {
+            return;
+        }
+
         Player killer = e.getPlayer();
 
         Entity died = e.getEntityDeathEvent().getEntity();

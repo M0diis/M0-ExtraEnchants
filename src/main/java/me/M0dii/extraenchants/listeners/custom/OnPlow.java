@@ -1,27 +1,21 @@
 package me.m0dii.extraenchants.listeners.custom;
 
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.containers.Flags;
-import com.bekvon.bukkit.residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.residence.protection.ResidenceManager;
-import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.PlowEvent;
 import me.m0dii.extraenchants.utils.InventoryUtils;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class OnPlow implements Listener {
     private static final List<Material> SEEDS = Arrays.asList(
@@ -32,24 +26,18 @@ public class OnPlow implements Listener {
             Material.BEETROOT_SEEDS,
             Material.MELON_SEEDS
     );
-    private final Residence res;
-    private final Random r = new Random();
-    private ResidenceManager rm;
-
     private final ExtraEnchants plugin;
 
     public OnPlow(ExtraEnchants plugin) {
         this.plugin = plugin;
-
-        this.res = Residence.getInstance();
-
-        if (res != null) {
-            this.rm = res.getResidenceManager();
-        }
     }
 
     @EventHandler
     public void onCustomTill(final PlowEvent event) {
+        if (!Utils.shouldTrigger(EEnchant.PLOW)) {
+            return;
+        }
+
         final Player p = event.getPlayer();
         final Block block1 = event.getInteractEvent().getClickedBlock();
 
@@ -57,29 +45,7 @@ public class OnPlow implements Listener {
 
         ItemStack hand = p.getInventory().getItemInMainHand();
 
-        Damageable itemDam = (Damageable) hand.getItemMeta();
-
-        if (hand.getType().getMaxDurability() <= itemDam.getDamage()) {
-            p.getInventory().removeItem(hand);
-
-            return;
-        }
-
-        int unbreakingLevel = 0;
-
-        if (InventoryUtils.hasUnbreaking(hand)) {
-            unbreakingLevel = hand.getItemMeta().getEnchants().get(Enchantment.DURABILITY);
-        }
-
-        int chance = (100) / (1 + unbreakingLevel);
-
-        int currChance = r.nextInt(100 - 1) + 1;
-
-        if (currChance < chance) {
-            itemDam.setDamage(itemDam.getDamage() + 3);
-        }
-
-        hand.setItemMeta(itemDam);
+        InventoryUtils.applyDurability(hand);
 
         if (block1 == null) {
             return;
@@ -226,7 +192,7 @@ public class OnPlow implements Listener {
                           Block block5, Block plant5,
                           int amount, int slot,
                           ItemStack fee, Material seed) {
-        if (allowed(p, plant1.getLocation())) {
+        if (Utils.allowed(p, plant1.getLocation())) {
             block1.setType(Material.FARMLAND);
             plant1.setType(seed);
 
@@ -247,7 +213,7 @@ public class OnPlow implements Listener {
             return;
         }
 
-        if (allowed(p, plant.getLocation())) {
+        if (Utils.allowed(p, plant.getLocation())) {
             if (plant.getType().equals(Material.AIR) && amount >= 1 &&
                     (block.getType().equals(Material.DIRT) ||
                             block.getType().equals(Material.GRASS_BLOCK))) {
@@ -261,24 +227,5 @@ public class OnPlow implements Listener {
                 p.updateInventory();
             }
         }
-    }
-
-    private boolean allowed(Player p, Location loc) {
-        if (res == null) {
-            return true;
-        }
-
-        ClaimedResidence residence = rm.getByLoc(loc);
-
-        if (residence == null) {
-            return true;
-        }
-
-        ResidencePermissions perms = residence.getPermissions();
-
-        return perms.playerHas(p, Flags.build, true)
-            || residence.isOwner(p)
-            || residence.isTrusted(p)
-            || res.isResAdminOn(p);
     }
 }

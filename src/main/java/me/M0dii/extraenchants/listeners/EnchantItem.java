@@ -36,7 +36,7 @@ public class EnchantItem implements Listener {
         EEnchant eenchant = Arrays.stream(EEnchant.values())
                 .filter(o -> o.getEnchantChance() != -1)
                 .filter(o -> !o.isDisabled())
-                .filter(o -> o.getEnchantment().canEnchantItem(target))
+                .filter(o -> o.canEnchantItem(target))
                 .filter(o -> rnd.nextInt(100) < o.getEnchantChance())
                 .findFirst()
                 .orElse(null);
@@ -49,8 +49,8 @@ public class EnchantItem implements Listener {
 
         if (e.getEnchantsToAdd().keySet()
                 .stream()
-                .anyMatch(add -> add.conflictsWith(eenchant.getEnchantment())
-        || eenchant.getEnchantment().conflictsWith(add))) {
+                .anyMatch(add -> eenchant.conflictsWith(add)
+                        || add.conflictsWith(eenchant.getEnchantment()))) {
             return;
         }
 

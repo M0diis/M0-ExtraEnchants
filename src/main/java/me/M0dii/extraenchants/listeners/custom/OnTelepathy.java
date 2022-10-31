@@ -1,8 +1,10 @@
 package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.TelepathyEvent;
 import me.m0dii.extraenchants.utils.InventoryUtils;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
@@ -28,7 +30,11 @@ public class OnTelepathy implements Listener {
     }
 
     @EventHandler
-    public void onTelepathy(TelepathyEvent e) {
+    public void onTelepathy(final TelepathyEvent e) {
+        if (!Utils.shouldTrigger(EEnchant.TELEPATHY)) {
+            return;
+        }
+
         Player player = e.getPlayer();
         Block b = e.getBlock();
         PlayerInventory inv = player.getInventory();
@@ -62,23 +68,29 @@ public class OnTelepathy implements Listener {
 
             if (name.contains("WALL_") || name.contains("BANNER")) {
                 if (name.contains("BANNER")) {
-                    for (ItemStack i : drops)
+                    for (ItemStack i : drops) {
                         inv.addItem(i);
-                } else {
+                    }
+                }
+                else {
                     Material m = Material.getMaterial(name.replace("WALL_", ""));
 
                     if (m != null)
                         inv.addItem(new ItemStack(m));
                 }
-            } else {
+            }
+            else {
                 inv.addItem(itm);
             }
-        } else if (inv.firstEmpty() == -1) {
+        }
+        else if (inv.firstEmpty() == -1) {
             ItemStack item = drops.iterator().next();
 
-            if (inv.contains(item))
+            if (inv.contains(item)) {
                 addToStack(player, drops);
-        } else {
+            }
+        }
+        else {
             for (ItemStack i : drops) {
                 inv.addItem(i);
             }

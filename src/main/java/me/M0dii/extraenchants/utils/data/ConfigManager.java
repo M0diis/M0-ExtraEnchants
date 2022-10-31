@@ -12,7 +12,7 @@ import java.util.logging.Level;
 
 public class ConfigManager {
     private final ExtraEnchants plugin;
-    String configFile = "config.yml";
+    private final String configFile = "config.yml";
     private FileConfiguration dataConfig = null;
     private File dataConfigFile = null;
 

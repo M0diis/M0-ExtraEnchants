@@ -2,6 +2,7 @@ package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -40,7 +41,7 @@ public class OnLavaWalk implements Listener {
 
     @EventHandler
     public void lavaWalk(final PlayerMoveEvent e) {
-        if (EEnchant.LAVA_WALKER.isDisabled()) {
+        if (!Utils.shouldTrigger(EEnchant.LAVA_WALKER)) {
             return;
         }
 

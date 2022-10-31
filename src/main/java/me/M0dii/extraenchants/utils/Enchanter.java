@@ -21,17 +21,7 @@ public class Enchanter {
     public static ItemStack getBook(String type, int level) {
         ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
 
-        EEnchant eEnchant = EEnchant.get(type);
-
-        Messenger.debug("Got EEnchant: " + eEnchant.getDisplayName());
-
-        if(eEnchant == null) {
-            return null;
-        }
-
-        Enchantment enchant = eEnchant.getEnchantment();
-
-        Messenger.debug("Got Enchantment: " + enchant.getKey().getKey());
+        Enchantment enchant = EEnchant.toEnchant(type);
 
         if(enchant == null) {
             return null;
@@ -52,7 +42,7 @@ public class Enchanter {
         }
 
         meta.setDisplayName(Utils.format(
-                displayName.replace("%level%", Utils.arabicToRoman(level)))
+            displayName.replace("%level%", Utils.arabicToRoman(level)))
         );
 
         List<String> lore = new ArrayList<>();

@@ -32,7 +32,8 @@ public class AssassinWrapper extends Enchantment {
     }
 
     public boolean conflictsWith(final Enchantment enchantment) {
-        return enchantment.equals(EEnchant.LIFESTEAL.getEnchantment());
+        return EEnchant.LIFESTEAL.equals(enchantment)
+            || EEnchant.BERSERK.equals(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {

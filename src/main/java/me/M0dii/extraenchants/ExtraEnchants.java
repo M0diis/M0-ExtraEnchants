@@ -48,7 +48,7 @@ public class ExtraEnchants extends JavaPlugin {
 
         this.pm = this.getServer().getPluginManager();
 
-        this.getLogger().info("EnhancedEnchantments has been enabled.");
+        getLogger().info("EnhancedEnchantments has been enabled.");
 
         Plugin residence = this.pm.getPlugin("Residence");
 

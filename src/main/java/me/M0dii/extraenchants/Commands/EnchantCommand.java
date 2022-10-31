@@ -3,10 +3,12 @@ package me.m0dii.extraenchants.commands;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.utils.EnchantListGUI;
 import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,6 +18,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -30,133 +33,98 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd,
                              @Nonnull String label, @Nonnull String[] args) {
-        if (!sender.hasPermission("extraenchants.command.enchant")) {
-            sender.sendMessage(Utils.format(this.cfg.getString("messages.no-permission")));
+        if (isArgument(0, args, "list") && sender instanceof Player player) {
+            EnchantListGUI list = new EnchantListGUI();
+
+            list.open(player);
 
             return true;
         }
 
-        if (args.length == 0) {
-            sender.sendMessage(Utils.format(this.cfg.getString("messages.usage")));
-
-            return true;
-        }
-
-        if (args.length == 1 && !(sender instanceof Player)) {
-            sender.sendMessage(Utils.format(this.cfg.getString("messages.usage")));
-
-            return true;
-        }
-
-
-
-        if (sender instanceof Player target) {
-            if(args[0].equalsIgnoreCase("apply")) {
-                String ench = args[1].replace("_", "");
-
-                Messenger.debug("Enchantment supplied: " + ench);
-
-                for(EEnchant e : EEnchant.values()) {
-                    Messenger.debug("Enchantment: " + e.getEnchantment().getKey().getKey());
-                }
-
-                EEnchant enchant = EEnchant.get(ench);
-
-                if(enchant == null) {
-                    Messenger.debug("Parsed enchantment is null.");
-
-                    sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
-
-                    return true;
-                }
-
-                Enchantment enchantment = enchant.getEnchantment();
-
-                if(enchantment == null) {
-                    Messenger.debug("Enchantment is null.");
-
-                    sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
-
-                    return true;
-                }
-
-                ItemStack item = target.getInventory().getItemInMainHand();
-
-                if(item == null || item.getType() == Material.AIR) {
-                    sender.sendMessage(Utils.format("&cYou must hold an item in your hand."));
-
-                    return true;
-                }
-
-                Enchanter.applyEnchant(item, enchantment, 1, false);
-
-                sender.sendMessage(Utils.format("&aSuccessfully applied enchantment to item."));
+        if (isArgument(0, args, "apply") && sender instanceof Player target) {
+            if (!sender.hasPermission("extraenchants.command.apply")) {
+                sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
 
                 return true;
             }
 
-            if (args.length == 2) {
-                target = Bukkit.getPlayer(args[1]);
-            }
+            String enchantName = args[1].replace("_", "");
 
-            String ench = args[0].replace("_", "");
+            EEnchant enchant = EEnchant.parse(enchantName);
 
-            int level = 1;
+            if(enchant == null) {
+                sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
 
-            try {
-                if(args.length == 3) {
-                    level = Integer.parseInt(args[2]);
-                }
-            } catch (NumberFormatException ignored) { }
-
-            if (giveTargetBook(sender, target, ench, level)) {
                 return true;
             }
 
+            Enchantment enchantment = enchant.getEnchantment();
+
+            if(enchantment == null) {
+                sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
+
+                return true;
+            }
+
+            ItemStack item = target.getInventory().getItemInMainHand();
+
+            if(item.getType() == Material.AIR) {
+                sender.sendMessage(Utils.format("&cYou must hold an item in your hand."));
+
+                return true;
+            }
+
+            Enchanter.applyEnchant(item, enchantment, 1, false);
+
+            sender.sendMessage(Utils.format("&aSuccessfully applied enchantment to item."));
+
             return true;
         }
-        else {
+
+        // /extraenchants give <player> <enchantment> <level>
+        if(isArgument(0, args, "give") && args.length >= 3) {
+            if (!sender.hasPermission("extraenchants.command.give")) {
+                sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
+
+                return true;
+            }
+
             Player target = Bukkit.getPlayer(args[1]);
 
+            String enchantName = args[2].replace("_", "");
+
             if(target == null) {
-                sender.sendMessage(Utils.format("Nenurodytas žaidėjas!"));
+                sender.sendMessage(Utils.format("&cPlayer not found."));
 
                 return true;
             }
-
-            String enchant = args[0].replace("_", "");
 
             int level = 1;
 
             try {
-                if(args.length >= 3) {
-                    level = Integer.parseInt(args[2]);
+                if(args.length >= 4) {
+                    level = Integer.parseInt(args[3]);
                 }
             } catch (NumberFormatException ignored) { }
 
-            if (giveTargetBook(sender, target, enchant, level)) {
+            if (giveBook(enchantName, target, level)) {
                 return true;
             }
+
+            sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
         }
+
+        sender.sendMessage(Utils.format(cfg.getString("messages.usage")));
 
         return true;
     }
 
-    private boolean giveTargetBook(@Nonnull CommandSender sender, Player target, String ench, int level) {
-        if (giveBook(ench, target,  level))
-            return true;
-
-        sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
-
-        return false;
-    }
-
-    private boolean giveBook(String arg0, Player player, int level) {
+    private boolean giveBook(String enchantName, Player player, int level) {
         if (player == null) {
             return false;
         }
 
-        ItemStack item = Enchanter.getBook(arg0, level);
+        ItemStack item = Enchanter.getBook(enchantName, level);
 
         if(item == null) {
             return false;
@@ -175,38 +143,64 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
                                       @Nonnull String alias, @Nonnull String[] args) {
         List<String> completes = new ArrayList<>();
 
-        if (args.length == 2 && args[0].equalsIgnoreCase("apply")) {
-            CustomEnchants.getAllEnchants()
-                    .stream()
-                    .map(s -> s.getKey().getKey().toLowerCase())
-                    .filter(s -> s.startsWith(args[0].toLowerCase()))
-                    .forEach(completes::add);
-        }
-        else {
-            if (args.length == 1) {
-                CustomEnchants.getAllEnchants()
-                        .stream()
-                        .map(s -> s.getKey().getKey().toLowerCase())
-                        .filter(s -> s.startsWith(args[0].toLowerCase()))
-                        .forEach(completes::add);
 
+        if(args.length == 1) {
+            if("list".contains(args[0].toLowerCase())) {
+                completes.add("list");
+            }
+
+            if("apply".contains(args[0].toLowerCase())) {
                 completes.add("apply");
             }
 
-            if (args.length == 2) {
-                Bukkit.getOnlinePlayers().stream()
-                        .map(Player::getName)
-                        .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase()))
-                        .forEach(completes::add);
-            }
-
-            if(args.length == 3) {
-                completes.add("1");
-                completes.add("2");
+            if("give".contains(args[0].toLowerCase())) {
+                completes.add("give");
             }
         }
 
+        // /extraenchants apply <enchant> <level>
+        if (args.length == 2 && args[0].equalsIgnoreCase("apply")) {
+            if(sender.hasPermission("extraenchants.command.apply")) {
+                CustomEnchants.getAllEnchants()
+                        .stream()
+                        .map(s -> s.getKey().getKey().toLowerCase())
+                        .filter(s -> s.startsWith(args[1].toLowerCase()))
+                        .forEach(completes::add);
+            }
+        }
+
+        // /extraenchants give <player> <enchant> <level>
+        if(args.length == 2 && args[0].equalsIgnoreCase("give")) {
+            Bukkit.getOnlinePlayers().stream()
+                    .map(Player::getName)
+                    .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase()))
+                    .forEach(completes::add);
+        }
+
+        // /extraenchants give <player> <enchant> <level>
+        if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
+            if(sender.hasPermission("extraenchants.command.give")) {
+                CustomEnchants.getAllEnchants()
+                        .stream()
+                        .map(s -> s.getKey().getKey().toLowerCase())
+                        .filter(s -> s.startsWith(args[2].toLowerCase()))
+                        .forEach(completes::add);
+            }
+        }
+
+        if(args.length == 4) {
+            completes.add("1");
+            completes.add("2");
+        }
 
         return completes;
+    }
+
+    private boolean isArgument(int index, String[] args, String argument) {
+        if(args.length < index) {
+            return false;
+        }
+
+        return args[index].equalsIgnoreCase(argument);
     }
 }

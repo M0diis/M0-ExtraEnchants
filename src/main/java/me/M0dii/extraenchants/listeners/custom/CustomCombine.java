@@ -6,6 +6,7 @@ import me.m0dii.extraenchants.utils.Utils;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
@@ -39,13 +40,26 @@ public class CustomCombine implements Listener {
 
         int enchantLevel = e.getEnchantLevel();
 
+        Player p = e.getPlayer();
+
         if (!enchant.canEnchantItem(curr)) {
+            p.sendMessage(Utils.format("&cKerėjimas negali būti uždėtas ant šio daikto."));
+
             return;
         }
+
         if ((curr.hasItemMeta()) && (meta.hasEnchant(enchant))) {
             return;
         }
+
         if (enchants.anyMatch(enchant::conflictsWith)) {
+            p.sendMessage(Utils.format("&cKerėjimas negali būti uždėtas kartu su žemiau nurodytai kerėjimais:"));
+
+            meta.getEnchants().keySet().stream().filter(enchant::conflictsWith)
+                    .forEach((conflict) -> {
+                        p.sendMessage(Utils.format( "&8• &7" + conflict.getName().replace("_", " ")));
+                    });
+
             return;
         }
 

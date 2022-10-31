@@ -11,7 +11,7 @@ enchants:
       - "&7Will automatically send"
       - "&7mined blocks to your inventory."
       - ""
-      - "&6Enchantable Items: &aTools"
+      - "&6Enchantable items: &aTools"
   plow:
     enabled: true
     trigger-chance: -1
@@ -24,8 +24,8 @@ enchants:
       - "&7Will automatically plant seeds from hotbar."
       - "&7Will till a 3x1 area to the left of till."
       - ""
-      - "&6Enchantable Items: &aHoes"
-  lavawalker:
+      - "&6Enchantable items: &aHoes"
+  lava_walker:
     enabled: true
     trigger-chance: -1
     table-chance: -1
@@ -37,7 +37,7 @@ enchants:
       - "&7Will automatically plant seeds from hotbar."
       - "&7Will till a 3x1 area to the left of till."
       - ""
-      - "&6Enchantable Items: &aBoots"
+      - "&6Enchantable items: &aBoots"
   bonded:
     enabled: true
     trigger-chance: -1
@@ -49,7 +49,7 @@ enchants:
       - ""
       - "&7Will prevent the item from being dropped."
       - ""
-      - "&6Enchantable Items: &aTools & Armor"
+      - "&6Enchantable items: &aTools & Armor"
   smelt:
     enabled: true
     trigger-chance: -1
@@ -61,8 +61,8 @@ enchants:
       - ""
       - "&7Will automatically smelt mined ores and blocks."
       - ""
-      - "&6Enchantable Items: &aTools"
-  hasteminer:
+      - "&6Enchantable items: &aTools"
+  haste_miner:
     enabled: true
     trigger-chance: 10
     table-chance: -1
@@ -73,7 +73,7 @@ enchants:
       - ""
       - "&7Has a 10% chance to give Haste 1 effect for 5 seconds."
       - ""
-      - "&6Enchantable Items: &aPickaxes, Shovels"
+      - "&6Enchantable items: &aPickaxes, Shovels"
   veinminer:
     enabled: true
     trigger-chance: 10
@@ -85,8 +85,8 @@ enchants:
       - ""
       - "&7Has a 10% chance to mine all adjacent ores."
       - ""
-      - "&6Enchantable Items: &aPickaxes"
-  experienceminer:
+      - "&6Enchantable items: &aPickaxes"
+  experience_miner:
     enabled: true
     trigger-chance: 10
     table-chance: -1
@@ -98,7 +98,7 @@ enchants:
       - "&7Has a 10% to drop some additional experience."
       - "&7while mining blocks."
       - ""
-      - "&6Enchantable Items: &aPickaxes"
+      - "&6Enchantable items: &aPickaxes"
   lifesteal:
     enabled: true
     trigger-chance: 10
@@ -111,7 +111,7 @@ enchants:
       - "&7Has a 10% to heal yourself for 10% of the"
       - "&7damage dealt."
       - ""
-      - "&6Enchantable Items: &aSwords"
+      - "&6Enchantable items: &aSwords"
   tunnel:
     enabled: true
     trigger-chance: -1
@@ -123,7 +123,7 @@ enchants:
       - ""
       - "&7Can be helpful while tunnelling."
       - ""
-      - "&6Enchantable Items: &aPickaxes, Shovels"
+      - "&6Enchantable items: &aPickaxes, Shovels"
   berserk:
     enabled: true
     trigger-chance: -1
@@ -136,8 +136,31 @@ enchants:
       - "&7Does less damage on full health,"
       - "&7does more damage on less health."
       - ""
-      - "&6Enchantable Items: &aSwords"
-
+      - "&6Enchantable items: &aSwords"
+  disposer:
+    enabled: true
+    trigger-chance: -1
+    table-chance: -1
+    displayname: "&d&lDisposer %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Automatically destroys mined blocks."
+      - ""
+      - "&6Enchantable items: &aPickaxes"
+  cold_steel:
+    enabled: true
+    trigger-chance: 5
+    table-chance: 10
+    displayname: "&d&lCold Steel %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a 5% chance to inflict slowness."
+      - ""
+      - "&6Enchantable items: &aArmor"
 messages:
   no-permission: "&c&lYou do not have permission to do this!"
   player-not-found: "&c&lPlayer not found."

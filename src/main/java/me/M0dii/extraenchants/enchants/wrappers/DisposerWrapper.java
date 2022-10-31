@@ -16,23 +16,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@Wrapper(name = "Plow", maxLvl = 2)
-public class PlowWrapper extends Enchantment {
+@Wrapper(name = "Disposer", maxLvl = 1)
+public class DisposerWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
 
-    public PlowWrapper(final String name, final int lvl) {
+    public DisposerWrapper(final String name, final int lvl) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isHoe(item);
+        return Enchantables.isPickaxe(item);
     }
 
     public boolean conflictsWith(final Enchantment enchantment) {
-        return enchantment.equals(Enchantment.SILK_TOUCH) || EEnchant.PLOW.equals(enchantment);
+        return enchantment.equals(Enchantment.SILK_TOUCH)
+            || EEnchant.TELEPATHY.equals(enchantment)
+            || EEnchant.SMELT.equals(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {

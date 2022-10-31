@@ -33,7 +33,7 @@ public class CustomEnchants {
 
                 Wrapper wrapper = clazz.getAnnotation(Wrapper.class);
 
-                EEnchant eEnchant = EEnchant.get(wrapper.name());
+                EEnchant eEnchant = EEnchant.parse(wrapper.name());
 
                 if(eEnchant == null) {
                     continue;
@@ -72,7 +72,7 @@ public class CustomEnchants {
             f.set(null, true);
 
             Enchantment.registerEnchantment(enchantment);
-        } catch (Exception e) {
+        } catch (Exception ex) {
             Bukkit.getLogger().severe("[M0-ExtraEnchants] Could not register enchantment: " + enchantment.getKey());
         }
     }

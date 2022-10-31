@@ -4,6 +4,7 @@ import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.AntiThornsEvent;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.utils.InventoryUtils;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -16,17 +17,18 @@ import java.util.Random;
 
 public class OnAntiThorns implements Listener {
     private static final Random random = new Random();
-    public static List<Block> lavaWalkerBlocks;
     private final ExtraEnchants plugin;
 
     public OnAntiThorns(ExtraEnchants plugin) {
         this.plugin = plugin;
-
-        lavaWalkerBlocks = new ArrayList<>();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onAntiThorns(AntiThornsEvent e) {
+    public void onAntiThorns(final AntiThornsEvent e) {
+        if (!Utils.shouldTrigger(EEnchant.ANTI_THORNS)) {
+            return;
+        }
+
         ItemStack helmet = e.getPlayer().getInventory().getHelmet();
         ItemStack chestplate = e.getPlayer().getInventory().getChestplate();
         ItemStack leggings = e.getPlayer().getInventory().getLeggings();

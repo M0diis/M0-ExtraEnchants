@@ -5,8 +5,11 @@ import com.bekvon.bukkit.residence.containers.Flags;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import com.bekvon.bukkit.residence.protection.ResidenceManager;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.VeinMinerEvent;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.utils.Messenger;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -27,26 +30,17 @@ public class OnVeinMine implements Listener {
     private static final BlockFace[] AREA = {
             BlockFace.UP, BlockFace.DOWN, BlockFace.EAST, BlockFace.WEST, BlockFace.SOUTH, BlockFace.NORTH
     };
-
     private static final String META_BLOCK_VEINED = "veinminer_block_veined";
-
-    private static final Random rnd = new Random();
     private final ExtraEnchants plugin;
-    private final Residence res;
-    private ResidenceManager rm;
+
     public OnVeinMine(ExtraEnchants plugin) {
         this.plugin = plugin;
-
-        this.res = Residence.getInstance();
-
-        if (res != null) {
-            this.rm = res.getResidenceManager();
-        }
     }
 
     @EventHandler
-    public void onVeinMine(VeinMinerEvent e) {
-        if (rnd.nextInt(100) > 10) {
+    public void onVeinMine(final VeinMinerEvent e) {
+        Messenger.debug("VeinMiner event called.");
+        if(!Utils.shouldTrigger(EEnchant.VEIN_MINER)) {
             return;
         }
 
@@ -90,26 +84,7 @@ public class OnVeinMine implements Listener {
         return Stream.of(AREA).map(block::getRelative)
                 .filter(blockAdded -> blockAdded.getType() == block.getType())
                 .filter(b -> b.getType().name().contains("ORE"))
-                .filter(b -> allowed(player, b.getLocation()))
+                .filter(b -> Utils.allowed(player, b.getLocation()))
                 .collect(Collectors.toSet());
-    }
-
-    private boolean allowed(Player p, Location loc) {
-        if (res == null) {
-            return true;
-        }
-
-        ClaimedResidence residence = rm.getByLoc(loc);
-
-        if (residence == null) {
-            return true;
-        }
-
-        ResidencePermissions perms = residence.getPermissions();
-
-        return perms.playerHas(p, Flags.build, true)
-                || residence.isOwner(p)
-                || residence.isTrusted(p)
-                || res.isResAdminOn(p);
     }
 }

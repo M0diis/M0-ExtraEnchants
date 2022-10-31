@@ -1,7 +1,9 @@
 package me.m0dii.extraenchants.listeners.custom;
 
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.ExperienceMinerEvent;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +22,7 @@ public class OnExperienceMine implements Listener {
 
     @EventHandler
     public void onExperienceMine(ExperienceMinerEvent e) {
-        if (rnd.nextInt(100) > 10) {
+        if (!Utils.shouldTrigger(EEnchant.EXPERIENCE_MINER)) {
             return;
         }
 

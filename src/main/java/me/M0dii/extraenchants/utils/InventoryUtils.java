@@ -1,21 +1,31 @@
 package me.m0dii.extraenchants.utils;
 
+import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Random;
 
 public class InventoryUtils {
     private static final Random random = new Random();
-    public static boolean hasUnbreaking(ItemStack item) {
-        if(item.getItemMeta() == null) {
+
+    public static boolean hasEnchant(ItemStack item, Enchantment enchant) {
+        ItemMeta itemMeta = item.getItemMeta();
+
+        return itemMeta != null && itemMeta.getEnchants().containsKey(enchant);
+    }
+
+    public static boolean hasEnchant(ItemStack item, EEnchant enchant) {
+        if(item == null) {
             return false;
         }
 
-        return item.getItemMeta().getEnchants()
-                .containsKey(Enchantment.DURABILITY);
+        ItemMeta itemMeta = item.getItemMeta();
+
+        return itemMeta != null && itemMeta.getEnchants().containsKey(enchant.getEnchantment());
     }
 
     public static void applyDurability(ItemStack hand) {
@@ -25,7 +35,7 @@ public class InventoryUtils {
 
         int unbreakingLevel = 0;
 
-        if (InventoryUtils.hasUnbreaking(hand)) {
+        if (InventoryUtils.hasEnchant(hand, Enchantment.DURABILITY)) {
             unbreakingLevel = hand.getItemMeta().getEnchants().get(Enchantment.DURABILITY);
         }
 

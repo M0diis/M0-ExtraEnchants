@@ -7,10 +7,12 @@ import com.bekvon.bukkit.residence.protection.ResidenceManager;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import com.google.common.collect.Sets;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.PlowEvent;
 import me.m0dii.extraenchants.events.ReplanterEvent;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Messenger;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -59,6 +61,10 @@ public class OnReplanter implements Listener {
     @EventHandler
     public void onReplanter(final ReplanterEvent e) {
         Messenger.debug("Replanter event called.");
+
+        if (!Utils.shouldTrigger(EEnchant.REPLANTER)) {
+            return;
+        }
 
         Block blockPlant = e.getInteractEvent().getClickedBlock();
 

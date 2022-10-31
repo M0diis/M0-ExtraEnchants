@@ -4,18 +4,22 @@ import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.*;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.listeners.custom.OnLavaWalk;
+import me.m0dii.extraenchants.utils.Utils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -27,7 +31,6 @@ public class BlockBreak implements Listener {
             "ZOMBIE_HEAD", "CREEPER_WALL_HEAD", "PLAYER_WALL_HEAD", "DRAGON_HEAD", "DRAGON_WALL_HEAD", "ZOMBIE_WALL_HEAD",
             "SKELETON_WALL_SKULL", "WITHER_SKELETON_WALL_SKULL");
 
-    private static final Random rnd = new Random();
     private final ExtraEnchants plugin;
 
     public BlockBreak(ExtraEnchants plugin) {
@@ -106,7 +109,7 @@ public class BlockBreak implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreakTunnel(BlockBreakEvent e) {
+    public void onBlockBreakTunnel(final BlockBreakEvent e) {
         if(shouldSkip(e, EEnchant.TUNNEL)) {
             return;
         }
@@ -117,16 +120,21 @@ public class BlockBreak implements Listener {
                 hand.getEnchantmentLevel(EEnchant.TUNNEL.getEnchantment())));
     }
 
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onBlockBreakDisposer(final BlockBreakEvent e) {
+        if(shouldSkip(e, EEnchant.DISPOSER)) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new DisposerEvent(e.getPlayer(), e));
+    }
+
     private boolean shouldSkip(BlockBreakEvent e, EEnchant enchant) {
         if (e.isCancelled()) {
             return true;
         }
 
-        if (enchant.isDisabled()) {
-            return true;
-        }
-
-        if(enchant.getTriggerChance() != 100 && enchant.getTriggerChance() != -1 && rnd.nextInt(100) > enchant.getTriggerChance()) {
+        if (!Utils.shouldTrigger(enchant)) {
             return true;
         }
 
@@ -174,5 +182,39 @@ public class BlockBreak implements Listener {
 
         return (p.getGameMode() == GameMode.CREATIVE)
             || (p.getGameMode() == GameMode.SPECTATOR);
+    }
+
+    @EventHandler
+    public void onBlockBreakFixEnchant(BlockBreakEvent e) {
+        ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+
+        ItemMeta meta = item.getItemMeta();
+
+        if(meta == null) {
+            return;
+        }
+
+        List<Component> lore = meta.lore();
+
+        if(lore == null || lore.isEmpty()) {
+            return;
+        }
+
+        for (Component comp : lore) {
+            try {
+                String text = Utils.stripColor(comp);
+
+                String enchantName = text.split(" ")[0];
+
+                Enchantment enchantment = EEnchant.toEnchant(enchantName);
+
+                if (enchantment != null) {
+                    if (!meta.hasEnchant(enchantment)) {
+                        item.addUnsafeEnchantment(enchantment, 1);
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+        }
     }
 }

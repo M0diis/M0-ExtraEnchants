@@ -1,7 +1,6 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
-import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.Wrapper;
@@ -16,27 +15,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@Wrapper(name = "Plow", maxLvl = 2)
-public class PlowWrapper extends Enchantment {
+@Wrapper(name = "Cold Steel", maxLvl = 1)
+public class ColdSteelWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
 
-    public PlowWrapper(final String name, final int lvl) {
+    public ColdSteelWrapper(final String name, final int lvl) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isHoe(item);
+        return Enchantables.isArmor(item);
     }
 
     public boolean conflictsWith(final Enchantment enchantment) {
-        return enchantment.equals(Enchantment.SILK_TOUCH) || EEnchant.PLOW.equals(enchantment);
+        return enchantment.equals(Enchantment.THORNS);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {
-        return EnchantmentTarget.TOOL;
+        return EnchantmentTarget.ARMOR;
     }
 
     public int getMaxLevel() {
@@ -60,7 +59,12 @@ public class PlowWrapper extends Enchantment {
     }
 
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
-        return Set.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND);
+        return Set.of(
+                EquipmentSlot.HEAD,
+                EquipmentSlot.CHEST,
+                EquipmentSlot.LEGS,
+                EquipmentSlot.FEET
+        );
     }
 
     public float getDamageIncrease(int value, @NotNull EntityCategory category) {

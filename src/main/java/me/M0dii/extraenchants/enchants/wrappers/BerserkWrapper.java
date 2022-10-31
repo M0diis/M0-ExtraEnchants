@@ -31,8 +31,9 @@ public class BerserkWrapper extends Enchantment {
         return Enchantables.isSword(item);
     }
 
-    public boolean conflictsWith(final Enchantment enchantment) {
-        return enchantment.equals(EEnchant.LIFESTEAL.getEnchantment());
+    public boolean conflictsWith(final @NotNull Enchantment enchantment) {
+        return EEnchant.LIFESTEAL.equals(enchantment)
+            || EEnchant.ASSASSIN.equals(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {
