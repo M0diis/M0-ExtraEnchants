@@ -2,13 +2,11 @@ package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.AssassinEvent;
 import me.m0dii.extraenchants.events.BerserkEvent;
+import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
-import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +21,7 @@ public class OnBerserk implements Listener {
 
     @EventHandler
     public void onBerserk(final BerserkEvent e) {
+        Messenger.debug("BerserkEvent called");
         if (!Utils.shouldTrigger(EEnchant.BERSERK)) {
             return;
         }
@@ -52,7 +51,7 @@ public class OnBerserk implements Listener {
         }
 
         double damageAmount = 0.1;
-        double damageCap = 1.35;
+        double damageCap = 1.30;
         double damageFinal = Math.min(damageCap, 1D + damageAmount * pointAmount);
 
         e.getEntityDamageEvent().setDamage(e.getEntityDamageEvent().getDamage() * damageFinal);

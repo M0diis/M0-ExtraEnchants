@@ -5,10 +5,8 @@ import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.EnchantListGUI;
 import me.m0dii.extraenchants.utils.Enchanter;
-import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -18,17 +16,18 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
 public class EnchantCommand implements CommandExecutor, TabCompleter {
+    private final ExtraEnchants plugin;
     private final FileConfiguration cfg;
 
     public EnchantCommand(ExtraEnchants plugin) {
         this.cfg = plugin.getCfg();
+        this.plugin = plugin;
     }
 
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd,
@@ -37,6 +36,20 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             EnchantListGUI list = new EnchantListGUI();
 
             list.open(player);
+
+            return true;
+        }
+
+        if(isArgument(0, args, "reload")) {
+            if(!sender.hasPermission("extraenchants.command.reload")) {
+                sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
+
+                return true;
+            }
+
+            plugin.getConfigManager().reloadConfig();
+
+            sender.sendMessage(Utils.format(cfg.getString("messages.reloaded")));
 
             return true;
         }
@@ -69,19 +82,18 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             ItemStack item = target.getInventory().getItemInMainHand();
 
             if(item.getType() == Material.AIR) {
-                sender.sendMessage(Utils.format("&cYou must hold an item in your hand."));
+                sender.sendMessage(Utils.format(cfg.getString("messages.hold-item")));
 
                 return true;
             }
 
             Enchanter.applyEnchant(item, enchantment, 1, false);
 
-            sender.sendMessage(Utils.format("&aSuccessfully applied enchantment to item."));
+            sender.sendMessage(Utils.format(cfg.getString("messages.enchant-applied")));
 
             return true;
         }
 
-        // /extraenchants give <player> <enchantment> <level>
         if(isArgument(0, args, "give") && args.length >= 3) {
             if (!sender.hasPermission("extraenchants.command.give")) {
                 sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
@@ -94,7 +106,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             String enchantName = args[2].replace("_", "");
 
             if(target == null) {
-                sender.sendMessage(Utils.format("&cPlayer not found."));
+                sender.sendMessage(Utils.format(cfg.getString("messages.player-not-found")));
 
                 return true;
             }
@@ -156,6 +168,10 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             if("give".contains(args[0].toLowerCase())) {
                 completes.add("give");
             }
+
+            if("reload".contains(args[0].toLowerCase())) {
+                completes.add("reload");
+            }
         }
 
         // /extraenchants apply <enchant> <level>
@@ -197,7 +213,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean isArgument(int index, String[] args, String argument) {
-        if(args.length < index) {
+        if(args.length == 0 || args.length < index) {
             return false;
         }
 

@@ -1,40 +1,25 @@
 package me.m0dii.extraenchants.listeners.custom;
 
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.containers.Flags;
-import com.bekvon.bukkit.residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.residence.protection.ResidenceManager;
-import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import com.google.common.collect.Sets;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.PlowEvent;
 import me.m0dii.extraenchants.events.ReplanterEvent;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Random;
 import java.util.Set;
 
 public class OnReplanter implements Listener {
-    private static final Random rnd = new Random();
     private static final Set<Material> CROPS = Sets.newHashSet(
             Material.WHEAT_SEEDS,
             Material.BEETROOT_SEEDS,
@@ -42,25 +27,18 @@ public class OnReplanter implements Listener {
             Material.PUMPKIN_SEEDS,
             Material.POTATO,
             Material.CARROT,
-            Material.NETHER_WART);
+            Material.NETHER_WART
+    );
 
-    private final Residence res;
-    private ResidenceManager rm;
     private final ExtraEnchants plugin;
 
     public OnReplanter(ExtraEnchants plugin) {
         this.plugin = plugin;
-
-        this.res = Residence.getInstance();
-
-        if (res != null) {
-            this.rm = res.getResidenceManager();
-        }
     }
 
     @EventHandler
     public void onReplanter(final ReplanterEvent e) {
-        Messenger.debug("Replanter event called.");
+        Messenger.debug("ReplanterEvent called.");
 
         if (!Utils.shouldTrigger(EEnchant.REPLANTER)) {
             return;
@@ -72,13 +50,9 @@ public class OnReplanter implements Listener {
             return;
         }
 
-        Messenger.debug("Block is not null.");
-
         if (!CROPS.contains(this.fineBlockToSeeds(blockPlant.getType()))) {
             return;
         }
-
-        Messenger.debug("Block is a crop.");
 
         BlockData dataPlant = blockPlant.getBlockData();
 
@@ -86,15 +60,11 @@ public class OnReplanter implements Listener {
             return;
         }
 
-        Messenger.debug("Block is ageable.");
-
         Player player = e.getPlayer();
 
-        if(!allowed(player, blockPlant.getLocation())) {
+        if(!Utils.allowed(player, blockPlant.getLocation())) {
             return;
         }
-
-        Messenger.debug("Player is allowed to replant.");
 
         ItemStack hand = player.getInventory().getItemInMainHand();
 
@@ -107,25 +77,6 @@ public class OnReplanter implements Listener {
 
             InventoryUtils.applyDurability(hand);
         }
-    }
-
-    private boolean allowed(Player p, Location loc) {
-        if (res == null) {
-            return true;
-        }
-
-        ClaimedResidence residence = rm.getByLoc(loc);
-
-        if (residence == null) {
-            return true;
-        }
-
-        ResidencePermissions perms = residence.getPermissions();
-
-        return perms.playerHas(p, Flags.build, true)
-            || residence.isOwner(p)
-            || residence.isTrusted(p)
-            || res.isResAdminOn(p);
     }
 
     @NotNull

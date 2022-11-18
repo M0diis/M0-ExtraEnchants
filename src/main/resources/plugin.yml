@@ -8,7 +8,7 @@ commands:
   extraenchant:
     permission: extraenchants.command.enchant
     description: Enchant command.
-    aliases: [ee, ae]
+    aliases: [ee, extraenchants, eench]
   unenchant:
     permission: extraenchants.command.unenchant
     description: Unenchant command.

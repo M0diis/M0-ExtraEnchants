@@ -1,9 +1,10 @@
 package me.m0dii.extraenchants.listeners;
 
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.*;
-import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.listeners.custom.OnLavaWalk;
+import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -24,7 +25,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 
 public class BlockBreak implements Listener {
     private final List<String> heads = Arrays.asList("PLAYER_HEAD", "SKELETON_SKULL", "CREEPER_HEAD", "WITHER_SKELETON_SKULL",
@@ -46,7 +46,7 @@ public class BlockBreak implements Listener {
         Player p = e.getPlayer();
         Block b = e.getBlock();
 
-        ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
+        ItemStack hand = p.getInventory().getItemInMainHand();
 
         Collection<ItemStack> drops = b.getDrops(hand);
 
@@ -84,8 +84,7 @@ public class BlockBreak implements Listener {
             return;
         }
 
-        int level = e.getPlayer().getInventory().getItemInMainHand()
-                .getEnchantmentLevel(EEnchant.HASTE_MINER.getEnchantment());
+        int level = InventoryUtils.getEnchantLevelHand(e.getPlayer(), EEnchant.HASTE_MINER);
 
         Bukkit.getPluginManager().callEvent(new HasteMinerEvent(e.getPlayer(), e, level));
     }
@@ -134,10 +133,6 @@ public class BlockBreak implements Listener {
             return true;
         }
 
-        if (!Utils.shouldTrigger(enchant)) {
-            return true;
-        }
-
         Block block = e.getBlock();
 
         if (OnLavaWalk.lavaWalkerBlocks.contains(block)) {
@@ -150,9 +145,11 @@ public class BlockBreak implements Listener {
             return true;
         }
 
-        if (block.getType().equals(Material.SPAWNER)
-         || block.getType().name().toUpperCase().contains("BED")
-         || block.getType().name().toUpperCase().contains("SPAWNER")) {
+        Material type = block.getType();
+
+        if (type.equals(Material.SPAWNER)
+         || type.name().toUpperCase().contains("BED")
+         || type.name().toUpperCase().contains("SPAWNER")) {
             return true;
         }
 
@@ -160,7 +157,7 @@ public class BlockBreak implements Listener {
             return true;
         }
 
-        if (this.heads.contains(block.getType().toString())) {
+        if (this.heads.contains(type.toString())) {
             return true;
         }
 
@@ -168,15 +165,15 @@ public class BlockBreak implements Listener {
 
         ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
 
-        if (hand == null || hand.getType().equals(Material.AIR)) {
+        if (hand == null || hand.getType().isAir()) {
             return true;
         }
 
-        if (hand.getItemMeta() == null || !hand.hasItemMeta()) {
+        if (!InventoryUtils.hasEnchant(hand, enchant)) {
             return true;
         }
 
-        if (!hand.getItemMeta().hasEnchant(enchant.getEnchantment())) {
+        if(!Utils.allowed(p, e.getBlock().getLocation())) {
             return true;
         }
 

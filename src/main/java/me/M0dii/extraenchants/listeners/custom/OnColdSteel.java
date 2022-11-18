@@ -2,14 +2,10 @@ package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.AntiThornsEvent;
 import me.m0dii.extraenchants.events.ColdSteelEvent;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
-import org.bukkit.Sound;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -17,10 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class OnColdSteel implements Listener {
     private final ExtraEnchants plugin;
@@ -32,6 +24,7 @@ public class OnColdSteel implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onColdSteel(final ColdSteelEvent e) {
         Messenger.debug("ColdSteelEvent called.");
+
         if (!Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
             return;
         }

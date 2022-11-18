@@ -21,7 +21,7 @@ public class OnExperienceMine implements Listener {
     }
 
     @EventHandler
-    public void onExperienceMine(ExperienceMinerEvent e) {
+    public void onExperienceMine(final ExperienceMinerEvent e) {
         if (!Utils.shouldTrigger(EEnchant.EXPERIENCE_MINER)) {
             return;
         }

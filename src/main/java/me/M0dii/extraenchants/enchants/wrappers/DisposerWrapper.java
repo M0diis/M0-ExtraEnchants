@@ -28,7 +28,7 @@ public class DisposerWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isPickaxe(item);
+        return Enchantables.isTool(item, true);
     }
 
     public boolean conflictsWith(final Enchantment enchantment) {

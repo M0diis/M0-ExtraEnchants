@@ -23,31 +23,33 @@ public class ConfigManager {
     }
 
     public void reloadConfig() {
-        if (this.dataConfigFile == null)
+        if (this.dataConfigFile == null) {
             this.dataConfigFile = new File(this.plugin.getDataFolder(), this.configFile);
+        }
 
         this.dataConfig = YamlConfiguration.loadConfiguration(this.dataConfigFile);
 
         InputStream defConfigStream = this.plugin.getResource(this.configFile);
 
         if (defConfigStream != null) {
-            YamlConfiguration defConfig =
-                    YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream));
 
             this.dataConfig.setDefaults(defConfig);
         }
     }
 
     public FileConfiguration getConfig() {
-        if (this.dataConfig == null)
+        if (this.dataConfig == null) {
             reloadConfig();
+        }
 
         return this.dataConfig;
     }
 
     public void saveConfig() {
-        if (this.dataConfig == null || this.dataConfigFile == null)
+        if (this.dataConfig == null || this.dataConfigFile == null) {
             return;
+        }
 
         try {
             this.getConfig().save(this.dataConfigFile);
@@ -57,8 +59,9 @@ public class ConfigManager {
     }
 
     public void saveDefaultConfig() {
-        if (this.dataConfigFile == null)
+        if (this.dataConfigFile == null) {
             this.dataConfigFile = new File(this.plugin.getDataFolder(), this.configFile);
+        }
 
         if (!this.dataConfigFile.exists())
             this.plugin.saveResource(this.configFile, false);

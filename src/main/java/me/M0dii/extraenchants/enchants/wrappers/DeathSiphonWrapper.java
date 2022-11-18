@@ -1,7 +1,6 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
-import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.Wrapper;
@@ -15,30 +14,28 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
-@Wrapper(name = "Smelt", maxLvl = 1)
-public class SmeltWrapper extends Enchantment {
+@Wrapper(name = "Death Siphon", maxLvl = 1)
+public class DeathSiphonWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
 
-    public SmeltWrapper(final String name, final int lvl) {
+    public DeathSiphonWrapper(final String name, final int lvl) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isTool(item, false);
+        return Enchantables.isArmor(item);
     }
 
-    public boolean conflictsWith(final @NotNull Enchantment enchantment) {
-        return Enchantment.SILK_TOUCH.equals(enchantment)
-            || EEnchant.TELEPATHY.equals(enchantment);
+    public boolean conflictsWith(final Enchantment enchantment) {
+        return enchantment.equals(Enchantment.THORNS);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {
-        return EnchantmentTarget.TOOL;
+        return EnchantmentTarget.ARMOR;
     }
 
     public int getMaxLevel() {
@@ -62,7 +59,12 @@ public class SmeltWrapper extends Enchantment {
     }
 
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
-        return Set.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND);
+        return Set.of(
+                EquipmentSlot.HEAD,
+                EquipmentSlot.CHEST,
+                EquipmentSlot.LEGS,
+                EquipmentSlot.FEET
+        );
     }
 
     public float getDamageIncrease(int value, @NotNull EntityCategory category) {
@@ -87,6 +89,6 @@ public class SmeltWrapper extends Enchantment {
 
     @Override
     public @NotNull String translationKey() {
-        return name.toLowerCase();
+        return name.toLowerCase().replace(" ", "_");
     }
 }

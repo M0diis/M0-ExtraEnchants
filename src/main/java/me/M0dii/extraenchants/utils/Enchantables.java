@@ -8,7 +8,8 @@ public class Enchantables {
     }
 
     public static boolean isAxe(ItemStack item) {
-        return item.getType().name().toUpperCase().contains("AXE");
+        return item.getType().name().toUpperCase().contains("AXE")
+           && !item.getType().name().toUpperCase().contains("PICKAXE");
     }
 
     public static boolean isShovel(ItemStack item) {

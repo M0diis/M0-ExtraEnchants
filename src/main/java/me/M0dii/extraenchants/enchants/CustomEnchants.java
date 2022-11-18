@@ -18,42 +18,36 @@ public class CustomEnchants {
     public static void register() {
         List<Enchantment> list = Arrays.stream(Enchantment.values()).toList();
 
-        Reflections reflections = new Reflections("me.m0dii.extraenchants.enchants.wrappers");
+        new Reflections("me.m0dii.extraenchants.enchants.wrappers")
+                .getSubTypesOf(Enchantment.class)
+                .forEach(clazz -> {
+                    try {
+                        if (!clazz.isAnnotationPresent(Wrapper.class)) {
+                            return;
+                        }
 
-        Set<Class<? extends Enchantment>> classes = reflections.getSubTypesOf(Enchantment.class);
-        Iterator<Class<? extends Enchantment>> it = classes.iterator();
+                        Wrapper wrapper = clazz.getAnnotation(Wrapper.class);
 
-        try {
-            while (it.hasNext()) {
-                Class<? extends Enchantment> clazz = it.next();
+                        EEnchant eEnchant = EEnchant.parse(wrapper.name());
 
-                if (!clazz.isAnnotationPresent(Wrapper.class)) {
-                    continue;
-                }
+                        if(eEnchant == null) {
+                            return;
+                        }
 
-                Wrapper wrapper = clazz.getAnnotation(Wrapper.class);
+                        Constructor<? extends Enchantment> constructor = clazz.getConstructor(String.class, int.class);
 
-                EEnchant eEnchant = EEnchant.parse(wrapper.name());
+                        Enchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLvl());
 
-                if(eEnchant == null) {
-                    continue;
-                }
+                        registerEnchantment(enchantment, list);
 
-                Constructor<? extends Enchantment> constructor = clazz.getConstructor(String.class, int.class);
+                        Bukkit.getLogger().info("Registering enchant wrapper: " + enchantment.getClass().getSimpleName());
 
-                Enchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLvl());
-
-                registerEnchantment(enchantment, list);
-
-                Bukkit.getLogger().info("Registering enchant wrapper: " + enchantment.getClass().getSimpleName());
-
-                eEnchant.setEnchantment(enchantment);
-            }
-        }
-        catch (IllegalAccessException | InstantiationException |
-               NoSuchMethodException | InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
+                        eEnchant.setEnchantment(enchantment);
+                    } catch (NoSuchMethodException | IllegalAccessException | InstantiationException |
+                             InvocationTargetException ex) {
+                        ex.printStackTrace();
+                    }
+                });
     }
 
     public static List<Enchantment> getAllEnchants() {

@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.Set;
 
 public class CustomCombine implements Listener {
 
@@ -25,7 +25,7 @@ public class CustomCombine implements Listener {
     }
 
     @EventHandler
-    public void onCustomCombine(CombineEvent e) {
+    public void onCustomCombine(final CombineEvent e) {
         ItemStack curr = e.getInventoryClickEvent().getCurrentItem();
 
         if (curr == null) {
@@ -36,30 +36,25 @@ public class CustomCombine implements Listener {
 
         ItemMeta meta = curr.getItemMeta();
 
-        Stream<Enchantment> enchants = meta.getEnchants().keySet().stream();
+        Set<Enchantment> enchants = meta.getEnchants().keySet();
 
         int enchantLevel = e.getEnchantLevel();
 
         Player p = e.getPlayer();
 
         if (!enchant.canEnchantItem(curr)) {
-            p.sendMessage(Utils.format("&cKerėjimas negali būti uždėtas ant šio daikto."));
+            p.sendMessage(Utils.format(plugin.getCfg().getString("messages.cannot-enchant-item")));
 
             return;
         }
+
+        removeLowerLevel(curr, enchant, meta, enchants, enchantLevel);
 
         if ((curr.hasItemMeta()) && (meta.hasEnchant(enchant))) {
             return;
         }
 
-        if (enchants.anyMatch(enchant::conflictsWith)) {
-            p.sendMessage(Utils.format("&cKerėjimas negali būti uždėtas kartu su žemiau nurodytai kerėjimais:"));
-
-            meta.getEnchants().keySet().stream().filter(enchant::conflictsWith)
-                    .forEach((conflict) -> {
-                        p.sendMessage(Utils.format( "&8• &7" + conflict.getName().replace("_", " ")));
-                    });
-
+        if (hasConflict(enchant, meta, enchants, p)) {
             return;
         }
 
@@ -70,6 +65,48 @@ public class CustomCombine implements Listener {
         }
 
         e.getInventoryClickEvent().setCursor(null);
+    }
+
+    private boolean hasConflict(Enchantment enchant, ItemMeta meta, Set<Enchantment> enchants, Player p) {
+        if (enchants.stream().anyMatch(enchant::conflictsWith)) {
+            p.sendMessage(Utils.format(plugin.getCfg().getString("messages.enchant-conflicts")));
+
+            meta.getEnchants().keySet().stream().filter(enchant::conflictsWith)
+                    .forEach((conflict) -> {
+                        p.sendMessage(Utils.format( "&8• &7" + conflict.getName().replace("_", " ")));
+                    });
+
+            return true;
+        }
+        return false;
+    }
+
+    private void removeLowerLevel(ItemStack curr, Enchantment newEnchant, ItemMeta meta, Set<Enchantment> enchants, int enchantLevel) {
+        enchants.stream()
+                .filter(enchantment -> enchantment.equals(newEnchant))
+                .findFirst()
+                .ifPresent((oldEnchant -> {
+            int currentLevel = meta.getEnchantLevel(oldEnchant);
+
+            if(enchantLevel <= currentLevel) {
+                return;
+            }
+
+            meta.removeEnchant(oldEnchant);
+
+            List<String> lore = new ArrayList<>();
+
+            if (meta.getLore() != null) {
+                for (String l : meta.getLore()) {
+                    if (!l.contains(oldEnchant.getName()))
+                        lore.add(l);
+                }
+
+                meta.setLore(lore);
+            }
+
+            curr.setItemMeta(meta);
+        }));
     }
 
     private boolean combine(CombineEvent event, ItemStack curr, Enchantment enchant, int level) {

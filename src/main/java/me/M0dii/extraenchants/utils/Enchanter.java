@@ -12,24 +12,23 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Enchanter {
-    private static final ExtraEnchants plugin = ExtraEnchants.getPlugin(ExtraEnchants.class);
+    private static final ExtraEnchants plugin = ExtraEnchants.getInstance();
     private static final FileConfiguration cfg = plugin.getCfg();
 
     public static ItemStack getBook(String type, int level) {
         ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
 
-        Enchantment enchant = EEnchant.toEnchant(type);
+        EEnchant enchant = EEnchant.parse(type);
 
         if(enchant == null) {
             return null;
         }
 
-        Messenger.debug("Adding unsafe enchantment to item.");
+        Enchantment enchantment = enchant.getEnchantment();
 
-        item.addUnsafeEnchantment(enchant, level);
+        item.addUnsafeEnchantment(enchantment, level);
 
         ItemMeta meta = item.getItemMeta();
 
@@ -48,20 +47,14 @@ public class Enchanter {
         List<String> lore = new ArrayList<>();
 
         for (String l : cfg.getStringList(String.format("enchants.%s.lore", name))) {
-            lore.add(Utils.format(l.replace("%level%", Utils.arabicToRoman(level))));
+            String line = l.replace("%level%", Utils.arabicToRoman(level))
+                           .replace("%trigger-chance%", enchant.getTriggerChance() + "%");
+
+            lore.add(Utils.format(line));
         }
 
         meta.setLore(lore);
         item.setItemMeta(meta);
-
-        Messenger.debug("Current enchantments:");
-
-        Set<Enchantment> enchants = item.getEnchantments().keySet();
-
-        for(Enchantment ench : enchants)
-        {
-            Messenger.debug(ench.getKey().getKey());
-        }
 
         return item;
     }

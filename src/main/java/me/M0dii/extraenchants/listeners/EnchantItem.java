@@ -45,12 +45,10 @@ public class EnchantItem implements Listener {
             return;
         }
 
-        Messenger.debug("Enchanting " + target.getType().name() + " with " + eenchant.getEnchantment().getKey().getKey());
-
         if (e.getEnchantsToAdd().keySet()
                 .stream()
                 .anyMatch(add -> eenchant.conflictsWith(add)
-                        || add.conflictsWith(eenchant.getEnchantment()))) {
+                       || add.conflictsWith(eenchant.getEnchantment()))) {
             return;
         }
 

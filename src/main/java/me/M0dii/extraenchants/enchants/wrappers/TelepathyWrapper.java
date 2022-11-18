@@ -32,8 +32,8 @@ public class TelepathyWrapper extends Enchantment {
         return Enchantables.isTool(item, false);
     }
 
-    public boolean conflictsWith(final Enchantment enchantment) {
-        return enchantment.equals(Enchantment.SILK_TOUCH)
+    public boolean conflictsWith(final @NotNull Enchantment enchantment) {
+        return Enchantment.SILK_TOUCH.equals(enchantment)
             || EEnchant.SMELT.equals(enchantment);
     }
 

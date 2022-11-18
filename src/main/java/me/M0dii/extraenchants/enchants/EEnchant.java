@@ -1,42 +1,56 @@
 package me.m0dii.extraenchants.enchants;
 
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.utils.Messenger;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public enum EEnchant {
-    TELEPATHY("Telepathy"),
-    PLOW("Plow"),
-    SMELT("Smelt"),
-    BEHEADING("Beheading"),
-    BONDED("Bonded"),
-    LAVA_WALKER("Lava Walker"),
-    HASTE_MINER("Haste Miner"),
-    VEIN_MINER("Vein Miner"),
-    ANTI_THORNS("Anti Thorns"),
-    EXPERIENCE_MINER("Experience Miner"),
-    LIFESTEAL("Lifesteal"),
-    ASSASSIN("Assassin"),
-    REPLANTER("Replanter"),
-    BERSERK("Berserk"),
-    DISPOSER("Disposer"),
-    TUNNEL("Tunnel"),
-    COLD_STEEL("Cold Steel");
+    TELEPATHY,
+    PLOW,
+    SMELT,
+    BEHEADING,
+    BONDED,
+    LAVA_WALKER,
+    HASTE_MINER,
+    VEIN_MINER,
+    ANTI_THORNS,
+    EXPERIENCE_MINER,
+    LIFESTEAL,
+    ASSASSIN,
+    REPLANTER,
+    BERSERK,
+    DISPOSER,
+    TUNNEL,
+    WITHERING,
+    BARBARIAN,
+    ARMOR_BREAKER,
+    COLD_STEEL,
+    DEATH_SIPHON;
 
     private final ExtraEnchants instance = ExtraEnchants.getInstance();
 
-    final String displayName;
-
-    Enchantment enchant;
-
-    EEnchant(String displayName) {
-        this.displayName = displayName;
-    }
+    private Enchantment enchant;
 
     public String getDisplayName() {
-        return displayName;
+        if(!this.name().contains("_")) {
+            return StringUtils.capitalize(this.name().toLowerCase());
+        }
+
+        String[] split = this.name().split("_");
+
+        return Arrays.stream(split)
+                .map(s -> StringUtils.capitalize(s.toLowerCase()))
+                .map(String::trim)
+                .collect(Collectors.joining(" "));
+    }
+
+    public String getConfigName() {
+        return name().toLowerCase().replace("_", "");
     }
 
     public Enchantment getEnchantment() {
@@ -52,6 +66,7 @@ public enum EEnchant {
     }
 
     public boolean isDisabled() {
+        Messenger.debug("Is disabled, path: 'enchants." + getConfigName() + ".enabled'");
         return !instance.getCfg().getBoolean("enchants." + getConfigName() + ".enabled", true);
     }
 
@@ -59,9 +74,6 @@ public enum EEnchant {
         return instance.getCfg().getInt("enchants." + getConfigName() + ".table-chance", -1);
     }
 
-    public String getConfigName() {
-        return name().toLowerCase().replace("_", "");
-    }
 
     public boolean conflictsWith(Enchantment enchant) {
         return this.enchant.conflictsWith(enchant);

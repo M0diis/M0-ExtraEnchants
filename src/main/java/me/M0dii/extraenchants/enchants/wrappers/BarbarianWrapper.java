@@ -15,30 +15,29 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
-@Wrapper(name = "Smelt", maxLvl = 1)
-public class SmeltWrapper extends Enchantment {
+@Wrapper(name = "Barbarian", maxLvl = 1)
+public class BarbarianWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
 
-    public SmeltWrapper(final String name, final int lvl) {
+    public BarbarianWrapper(final String name, final int lvl) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isTool(item, false);
+        return Enchantables.isAxe(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
-        return Enchantment.SILK_TOUCH.equals(enchantment)
-            || EEnchant.TELEPATHY.equals(enchantment);
+        return EEnchant.LIFESTEAL.equals(enchantment)
+            || EEnchant.BERSERK.equals(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {
-        return EnchantmentTarget.TOOL;
+        return EnchantmentTarget.WEAPON;
     }
 
     public int getMaxLevel() {
@@ -87,6 +86,6 @@ public class SmeltWrapper extends Enchantment {
 
     @Override
     public @NotNull String translationKey() {
-        return name.toLowerCase();
+        return name.toLowerCase().replace(" ", "_");
     }
 }

@@ -4,14 +4,15 @@ import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.LifestealEvent;
 import me.m0dii.extraenchants.utils.Utils;
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.util.Vector;
-
-import java.util.Random;
 
 public class OnLifesteal implements Listener {
     private final ExtraEnchants plugin;
@@ -28,8 +29,6 @@ public class OnLifesteal implements Listener {
 
         Player damager = e.getPlayer();
 
-        Entity target = e.getEntityDamageEvent().getEntity();
-
         double damage = e.getEntityDamageEvent().getDamage();
 
         double heal = damage * 0.1;
@@ -37,6 +36,8 @@ public class OnLifesteal implements Listener {
         if(damager.getHealth() + heal > 20) {
             return;
         }
+
+        Entity target = e.getEntityDamageEvent().getEntity();
 
         damager.setHealth(damager.getHealth() + heal);
 
@@ -60,6 +61,5 @@ public class OnLifesteal implements Listener {
 
             dir.normalize();
         }
-
     }
 }

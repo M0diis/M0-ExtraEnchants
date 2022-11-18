@@ -30,8 +30,8 @@ public class TunnelWrapper extends Enchantment {
         return Enchantables.isPickaxe(item) || Enchantables.isShovel(item);
     }
 
-    public boolean conflictsWith(final Enchantment enchantment) {
-        return enchantment.equals(Enchantment.SILK_TOUCH);
+    public boolean conflictsWith(final @NotNull Enchantment enchantment) {
+        return Enchantment.SILK_TOUCH.equals(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {

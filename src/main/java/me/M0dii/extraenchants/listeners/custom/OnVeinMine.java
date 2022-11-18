@@ -1,16 +1,10 @@
 package me.m0dii.extraenchants.listeners.custom;
 
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.containers.Flags;
-import com.bekvon.bukkit.residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.residence.protection.ResidenceManager;
-import com.bekvon.bukkit.residence.protection.ResidencePermissions;
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.VeinMinerEvent;
-import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -21,7 +15,6 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
-import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,6 +33,7 @@ public class OnVeinMine implements Listener {
     @EventHandler
     public void onVeinMine(final VeinMinerEvent e) {
         Messenger.debug("VeinMiner event called.");
+
         if(!Utils.shouldTrigger(EEnchant.VEIN_MINER)) {
             return;
         }

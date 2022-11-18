@@ -64,7 +64,10 @@ public class EnchantListGUI implements InventoryHolder {
             List<String> lore = new ArrayList<>();
 
             for (String l : plugin.getCfg().getStringList(String.format("enchants.%s.lore", e.getConfigName()))) {
-                lore.add(Utils.format(l.replace("%level%", "")));
+                String line = l.replace("%level%", "")
+                        .replace("%trigger-chance%", e.getTriggerChance() + "%");
+
+                lore.add(Utils.format(line));
             }
 
             meta.setLore(lore);

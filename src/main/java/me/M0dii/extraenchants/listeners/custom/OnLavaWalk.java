@@ -2,6 +2,7 @@ package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -9,7 +10,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -40,26 +40,20 @@ public class OnLavaWalk implements Listener {
     }
 
     @EventHandler
-    public void lavaWalk(final PlayerMoveEvent e) {
+    public void onLavaWalker(final PlayerMoveEvent e) {
         if (!Utils.shouldTrigger(EEnchant.LAVA_WALKER)) {
             return;
         }
 
         ItemStack boots = e.getPlayer().getInventory().getBoots();
 
-        Enchantment enchant = EEnchant.LAVA_WALKER.getEnchantment();
-
-        if(enchant == null) {
-            return;
-        }
-
-        if (boots == null || !boots.containsEnchantment(enchant)) {
+        if (!InventoryUtils.hasEnchant(boots, EEnchant.LAVA_WALKER)) {
             return;
         }
 
         Block b = e.getTo().clone().subtract(0.0D, 1.0D, 0.0D).getBlock();
-
         checkAndSet(b);
+
         Block blkN = b.getRelative(BlockFace.NORTH);
         checkAndSet(blkN);
         getNorthSouth(blkN);
@@ -77,17 +71,16 @@ public class OnLavaWalk implements Listener {
         getNorthSouth(blkW);
     }
 
-    private void getNorthSouth(Block b) {
+    private void getNorthSouth(final Block b) {
         checkAndSet(b.getRelative(BlockFace.NORTH));
         checkAndSet(b.getRelative(BlockFace.SOUTH));
     }
 
-    private void checkAndSet(Block b) {
+    private void checkAndSet(final Block b) {
         if (b.isLiquid() && b.getType().equals(Material.LAVA)) {
             BlockData bd = b.getBlockData();
 
             if (bd instanceof Levelled lv) {
-
                 if (lv.getLevel() != 0) {
                     return;
                 }

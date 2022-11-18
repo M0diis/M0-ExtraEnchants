@@ -19,9 +19,7 @@ import org.reflections.Reflections;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 public class ExtraEnchants extends JavaPlugin {
     private static ExtraEnchants instance;
@@ -35,6 +33,10 @@ public class ExtraEnchants extends JavaPlugin {
 
     public FileConfiguration getCfg() {
         return this.configManager.getConfig();
+    }
+
+    public ConfigManager getConfigManager() {
+        return this.configManager;
     }
 
     public boolean hasResidence() {
@@ -101,28 +103,23 @@ public class ExtraEnchants extends JavaPlugin {
     }
 
     private void registerEvents() {
-        Reflections reflections = new Reflections("me.m0dii.extraenchants.listeners");
+        new Reflections("me.m0dii.extraenchants.listeners")
+                .getSubTypesOf(Listener.class)
+                .forEach(clazz -> {
+                    try {
+                        Constructor<? extends Listener> constructor = clazz.getConstructor(ExtraEnchants.class);
 
-        Set<Class<? extends Listener>> classes = reflections.getSubTypesOf(Listener.class);
-        Iterator<Class<? extends Listener>> it = classes.iterator();
+                        Listener listener = constructor.newInstance(this);
 
-        try {
-            while (it.hasNext()) {
-                Class<? extends Listener> clazz = it.next();
+                        this.pm.registerEvents(listener, this);
 
-                Constructor<? extends Listener> constructor = clazz.getConstructor(ExtraEnchants.class);
-
-                Listener listener = constructor.newInstance(this);
-
-                this.pm.registerEvents(listener, this);
-
-                Bukkit.getLogger().info("Registered listener: " + listener.getClass().getSimpleName());
-            }
-        }
-        catch (IllegalAccessException | InstantiationException |
-               NoSuchMethodException | InvocationTargetException ex) {
-            ex.printStackTrace();
-        }
+                        Bukkit.getLogger().info("Registered listener: " + listener.getClass().getSimpleName());
+                    }
+                    catch (IllegalAccessException | InstantiationException |
+                           NoSuchMethodException | InvocationTargetException ex) {
+                        ex.printStackTrace();
+                    }
+                });
     }
 
     private void registerCommands() {

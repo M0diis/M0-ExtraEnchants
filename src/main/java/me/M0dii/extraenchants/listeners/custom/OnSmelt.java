@@ -1,13 +1,12 @@
 package me.m0dii.extraenchants.listeners.custom;
 
-import com.bekvon.bukkit.residence.commands.tool;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.SmeltEvent;
 import me.m0dii.extraenchants.events.TelepathyEvent;
+import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -87,13 +86,12 @@ public class OnSmelt implements Listener {
             results = new ArrayList<>(drops);
         }
 
-        if (tool != null && tool.getItemMeta() != null &&
-            tool.getItemMeta().hasEnchant(EEnchant.TELEPATHY.getEnchantment())) {
+        if (InventoryUtils.hasEnchant(tool, EEnchant.TELEPATHY)) {
             Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, e.getBlockBreakEvent(), results));
         }
         else {
             for (ItemStack drop : results) {
-                if(Material.AIR.equals(drop) || drop == null) {
+                if(drop == null || drop.getType().isAir()) {
                     continue;
                 }
                 b.getWorld().dropItemNaturally(b.getLocation(), drop);

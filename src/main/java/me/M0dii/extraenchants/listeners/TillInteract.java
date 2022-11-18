@@ -5,6 +5,7 @@ import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.PlowEvent;
 import me.m0dii.extraenchants.events.ReplanterEvent;
 import me.m0dii.extraenchants.utils.Enchantables;
+import me.m0dii.extraenchants.utils.InventoryUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -59,7 +60,9 @@ public class TillInteract implements Listener {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new PlowEvent(p, e, hand.getEnchantmentLevel(EEnchant.PLOW.getEnchantment())));
+        int level = InventoryUtils.getEnchantLevel(hand, EEnchant.PLOW);
+
+        Bukkit.getPluginManager().callEvent(new PlowEvent(p, e, level));
     }
 
     @EventHandler

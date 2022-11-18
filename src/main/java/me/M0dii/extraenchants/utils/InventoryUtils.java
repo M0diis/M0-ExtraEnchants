@@ -3,6 +3,7 @@ package me.m0dii.extraenchants.utils;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -26,6 +27,28 @@ public class InventoryUtils {
         ItemMeta itemMeta = item.getItemMeta();
 
         return itemMeta != null && itemMeta.getEnchants().containsKey(enchant.getEnchantment());
+    }
+
+    public static int getEnchantLevel(ItemStack item, EEnchant enchant) {
+        if(item == null) {
+            return 0;
+        }
+
+        return item.getEnchantmentLevel(enchant.getEnchantment());
+    }
+
+    public static int getEnchantLevelHand(Player p, EEnchant enchant) {
+        if(p == null) {
+            return 0;
+        }
+
+        ItemStack item = p.getInventory().getItemInMainHand();
+
+        if(item == null || item.getType().isAir()) {
+            return 0;
+        }
+
+        return getEnchantLevel(item, enchant);
     }
 
     public static void applyDurability(ItemStack hand) {

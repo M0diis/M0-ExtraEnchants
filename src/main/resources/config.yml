@@ -25,7 +25,7 @@ enchants:
       - "&7Will till a 3x1 area to the left of till."
       - ""
       - "&6Enchantable items: &aHoes"
-  lava_walker:
+  lavawalker:
     enabled: true
     trigger-chance: -1
     table-chance: -1
@@ -62,7 +62,7 @@ enchants:
       - "&7Will automatically smelt mined ores and blocks."
       - ""
       - "&6Enchantable items: &aTools"
-  haste_miner:
+  hasteminer:
     enabled: true
     trigger-chance: 10
     table-chance: -1
@@ -86,7 +86,7 @@ enchants:
       - "&7Has a 10% chance to mine all adjacent ores."
       - ""
       - "&6Enchantable items: &aPickaxes"
-  experience_miner:
+  experienceminer:
     enabled: true
     trigger-chance: 10
     table-chance: -1
@@ -95,7 +95,7 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a 10% to drop some additional experience."
+      - "&7Has a %trigger-chance% chance to drop some additional experience."
       - "&7while mining blocks."
       - ""
       - "&6Enchantable items: &aPickaxes"
@@ -108,8 +108,8 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a 10% to heal yourself for 10% of the"
-      - "&7damage dealt."
+      - "&7Has a %trigger-chance% chance to heal yourself"
+      - "&7for 10% of the damage dealt."
       - ""
       - "&6Enchantable items: &aSwords"
   tunnel:
@@ -149,7 +149,7 @@ enchants:
       - "&7Automatically destroys mined blocks."
       - ""
       - "&6Enchantable items: &aPickaxes"
-  cold_steel:
+  coldsteel:
     enabled: true
     trigger-chance: 5
     table-chance: 10
@@ -158,7 +158,56 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a 5% chance to inflict slowness."
+      - "&7Has a %trigger-chance% chance to inflict slowness."
+      - ""
+      - "&6Enchantable items: &aArmor"
+  withering:
+    enabled: true
+    trigger-chance: 1
+    table-chance: -1
+    displayname: "&d&lWithering %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a %trigger-chance% chance to inflict wither effect."
+      - ""
+      - "&6Enchantable items: &aWeapons"
+  armorbreaker:
+    enabled: true
+    trigger-chance: 5
+    table-chance: -1
+    displayname: "&d&lArmor Breaker %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a %trigger-chance% chance to deal extra durability damage."
+      - ""
+      - "&6Enchantable items: &aWeapons"
+  barbarian:
+    enabled: true
+    trigger-chance: 5
+    table-chance: -1
+    displayname: "&d&lBarbarian %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a %trigger-chance% chance to deal 1.25x damage."
+      - ""
+      - "&6Enchantable items: &aWeapons"
+  deathsiphon:
+    enabled: true
+    trigger-chance: 25
+    table-chance: -1
+    displayname: "&d&lBarbarian %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Each piece has a %trigger-chance% to grant"
+      - "&dRegeneration III&7 for 3 seconds."
       - ""
       - "&6Enchantable items: &aArmor"
 messages:
@@ -167,5 +216,10 @@ messages:
   enchantment-list: "&9&lCurrent Enchants:\n&3&lTelepathy, Plow, Lava Walker, Bonded"
   usage: "&c&lCommand usage: &d/&7ee <enchantment> <player>"
   enchant-removed: "&4%enchant_name% enchant has been removed"
+  enchant-conflicts: "&cEnchant conflicts with one of the enchants shown below:"
+  cannot-enchant-item: "&cYou cannot enchant this item."
+  enchant-applied: "&aSuccessfully applied enchantment to item."
+  hold-item: "&cYou must hold an item in your hand."
+  reloaded: "&aSuccessfully reloaded config."
 
 debug: false

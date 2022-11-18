@@ -1,8 +1,8 @@
 package me.m0dii.extraenchants.listeners.custom;
 
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.BeheadingEvent;
-import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -15,9 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 public class OnBeheading implements Listener {
     private final ExtraEnchants plugin;

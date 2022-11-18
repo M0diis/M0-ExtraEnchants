@@ -12,7 +12,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.Optional;
-import java.util.Random;
 
 public class OnHasteMine implements Listener {
     private final ExtraEnchants plugin;
@@ -22,7 +21,7 @@ public class OnHasteMine implements Listener {
     }
 
     @EventHandler
-    public void onHasteMine(HasteMinerEvent e) {
+    public void onHasteMine(final HasteMinerEvent e) {
         if (!Utils.shouldTrigger(EEnchant.HASTE_MINER)) {
             return;
         }
