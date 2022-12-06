@@ -72,8 +72,6 @@ public class OnPlow implements Listener {
         Block plant5 = null;
         Block block5 = null;
 
-        System.out.println(event.getEnchantLevel());
-
         if (p.getFacing() == BlockFace.NORTH) {
             plant2 = clickedLocation.clone().add(-1.0, 0.0, 0.0).getBlock();
             block2 = clickedLocation.clone().add(-1.0, -1.0, 0.0).getBlock();

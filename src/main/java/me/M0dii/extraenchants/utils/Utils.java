@@ -3,7 +3,6 @@ package me.m0dii.extraenchants.utils;
 import com.bekvon.bukkit.residence.Residence;
 import com.bekvon.bukkit.residence.containers.Flags;
 import com.bekvon.bukkit.residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.residence.protection.ResidenceManager;
 import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import net.kyori.adventure.text.Component;
@@ -16,7 +15,6 @@ import java.util.Random;
 
 public class Utils {
     private static final Residence res = Residence.getInstance();
-    private static final ResidenceManager rm = res.getResidenceManager();
 
     private static final Random random = new Random();
 
@@ -45,7 +43,7 @@ public class Utils {
             return true;
         }
 
-        ClaimedResidence residence = rm.getByLoc(loc);
+        ClaimedResidence residence = res.getResidenceManager().getByLoc(loc);
 
         if (residence == null) {
             return true;

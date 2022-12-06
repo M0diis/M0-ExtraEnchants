@@ -1,12 +1,16 @@
 package me.m0dii.extraenchants.enchants;
 
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Messenger;
+import me.m0dii.extraenchants.utils.Utils;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public enum EEnchant {
@@ -30,11 +34,13 @@ public enum EEnchant {
     BARBARIAN,
     ARMOR_BREAKER,
     COLD_STEEL,
+    BAT_VISION,
     DEATH_SIPHON;
 
     private final ExtraEnchants instance = ExtraEnchants.getInstance();
 
     private Enchantment enchant;
+
 
     public String getDisplayName() {
         if(!this.name().contains("_")) {
@@ -74,12 +80,123 @@ public enum EEnchant {
         return instance.getCfg().getInt("enchants." + getConfigName() + ".table-chance", -1);
     }
 
+    public String getDisplayInLore(int level, boolean formatted) {
+        String name = instance.getCfg().getString("enchants." + getConfigName() + ".enchanted-item-lore-name", getDisplayName())
+                .replace("%level%", Utils.arabicToRoman(level));
+
+        return formatted ? ChatColor.translateAlternateColorCodes('&', name) : name;
+    }
+
 
     public boolean conflictsWith(Enchantment enchant) {
         return this.enchant.conflictsWith(enchant);
     }
 
     public boolean canEnchantItem(ItemStack item) {
+        if (!getEnchantableTypes().isEmpty()) {
+        for(Enchantables.ItemType type : getEnchantableTypes()) {
+            switch (type) {
+                case ALL:
+                    return true;
+                case ARMOR:
+                    if(Enchantables.isArmor(item)) {
+                        return true;
+                    }
+                    break;
+                case SWORD:
+                    if(Enchantables.isSword(item)) {
+                        return true;
+                    }
+                    break;
+                case AXE:
+                    if(Enchantables.isAxe(item)) {
+                        return true;
+                    }
+                    break;
+                case PICKAXE:
+                    if(Enchantables.isPickaxe(item)) {
+                        return true;
+                    }
+                    break;
+                case SHOVEL:
+                    if(Enchantables.isShovel(item)) {
+                        return true;
+                    }
+                    break;
+                case HOE:
+                    if(Enchantables.isHoe(item)) {
+                        return true;
+                    }
+                    break;
+                case BOW:
+                    if(Enchantables.isBow(item)) {
+                        return true;
+                    }
+                    break;
+                case FISHING_ROD:
+                    if(Enchantables.isFishingRod(item)) {
+                        return true;
+                    }
+                    break;
+                case TRIDENT:
+                    if(Enchantables.isTrident(item)) {
+                        return true;
+                    }
+                    break;
+                case CROSSBOW:
+                    if(Enchantables.isCrossbow(item)) {
+                        return true;
+                    }
+                    break;
+                case SHEARS:
+                    if(Enchantables.isShears(item)) {
+                        return true;
+                    }
+                    break;
+                case SHIELD:
+                    if(Enchantables.isShield(item)) {
+                        return true;
+                    }
+                    break;
+                case ELYTRA:
+                    if(Enchantables.isElytra(item)) {
+                        return true;
+                    }
+                    break;
+                case TOOL:
+                    if(Enchantables.isTool(item)) {
+                        return true;
+                    }
+                    break;
+                case WEAPON:
+                    if(Enchantables.isWeapon(item)) {
+                        return true;
+                    }
+                    break;
+                case HELMET:
+                    if(Enchantables.isHelmet(item)) {
+                        return true;
+                    }
+                    break;
+                case CHESTPLATE:
+                    if(Enchantables.isChestplate(item)) {
+                        return true;
+                    }
+                    break;
+                case LEGGINGS:
+                    if(Enchantables.isLeggings(item)) {
+                        return true;
+                    }
+                    break;
+                case BOOTS:
+                    if(Enchantables.isBoots(item)) {
+                        return true;
+                    }
+                    break;
+                }
+            }
+        }
+
         return this.enchant.canEnchantItem(item);
     }
 
@@ -93,6 +210,20 @@ public enum EEnchant {
 
     public void enchant(ItemStack item, int level) {
         item.addUnsafeEnchantment(enchant, level);
+    }
+
+    public List<Enchantables.ItemType> getEnchantableTypes() {
+        return instance.getCfg().getStringList("enchants." + getConfigName() + ".enchantable-items")
+                .stream()
+                .map(Enchantables.ItemType::parse)
+                .collect(Collectors.toList());
+    }
+
+    public List<Enchantment> getCustomConflicts() {
+        return instance.getCfg().getStringList("enchants." + getConfigName() + ".conflicts")
+                .stream()
+                .map(s -> Enchantment.getByName(s.toUpperCase()))
+                .collect(Collectors.toList());
     }
 
     public static EEnchant parse(String value) {
@@ -114,6 +245,13 @@ public enum EEnchant {
                         || v.getConfigName().equalsIgnoreCase(value.trim())
                 )
                 .map(EEnchant::getEnchantment)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static EEnchant fromEnchant(Enchantment enchant) {
+        return Arrays.stream(EEnchant.values())
+                .filter(v -> v.getEnchantment().equals(enchant))
                 .findFirst()
                 .orElse(null);
     }

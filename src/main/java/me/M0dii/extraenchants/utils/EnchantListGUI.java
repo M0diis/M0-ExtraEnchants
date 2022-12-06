@@ -1,7 +1,6 @@
 package me.m0dii.extraenchants.utils;
 
 import me.m0dii.extraenchants.ExtraEnchants;
-import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -39,11 +38,8 @@ public class EnchantListGUI implements InventoryHolder {
     public void init() {
         EEnchant[] enchants = EEnchant.values();
 
-        for(int i = 0; i < enchants.length; i++)
-        {
-            EEnchant e = enchants[i];
-
-            if(e.isDisabled()) {
+        for (EEnchant e : enchants) {
+            if (e.isDisabled()) {
                 continue;
             }
 
@@ -51,9 +47,9 @@ public class EnchantListGUI implements InventoryHolder {
 
             ItemMeta meta = item.getItemMeta();
 
-            String displayName = plugin.getCfg().getString(String.format("enchants.%s.displayname", e.getConfigName()));
+            String displayName = plugin.getCfg().getString(String.format("enchants.%s.book-display-name", e.getConfigName()));
 
-            if(displayName == null) {
+            if (displayName == null) {
                 continue;
             }
 

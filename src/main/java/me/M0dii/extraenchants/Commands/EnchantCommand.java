@@ -6,6 +6,7 @@ import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.EnchantListGUI;
 import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.Utils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -87,7 +88,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            Enchanter.applyEnchant(item, enchantment, 1, false);
+            Enchanter.applyEnchant(item, enchant, 1, false);
 
             sender.sendMessage(Utils.format(cfg.getString("messages.enchant-applied")));
 
@@ -179,8 +180,8 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             if(sender.hasPermission("extraenchants.command.apply")) {
                 CustomEnchants.getAllEnchants()
                         .stream()
-                        .map(s -> s.getKey().getKey().toLowerCase())
-                        .filter(s -> s.startsWith(args[1].toLowerCase()))
+                        .map(s -> s.getKey().getKey())
+                        .filter(s -> StringUtils.startsWithIgnoreCase(s, args[1]))
                         .forEach(completes::add);
             }
         }
@@ -189,7 +190,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
         if(args.length == 2 && args[0].equalsIgnoreCase("give")) {
             Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
-                    .filter(s -> s.toLowerCase().startsWith(args[1].toLowerCase()))
+                    .filter(s -> StringUtils.startsWithIgnoreCase(s, args[1]))
                     .forEach(completes::add);
         }
 
@@ -198,8 +199,8 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             if(sender.hasPermission("extraenchants.command.give")) {
                 CustomEnchants.getAllEnchants()
                         .stream()
-                        .map(s -> s.getKey().getKey().toLowerCase())
-                        .filter(s -> s.startsWith(args[2].toLowerCase()))
+                        .map(s -> s.getKey().getKey())
+                        .filter(s -> StringUtils.startsWithIgnoreCase(s, args[2]))
                         .forEach(completes::add);
             }
         }

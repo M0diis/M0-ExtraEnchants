@@ -2,8 +2,6 @@ package me.m0dii.extraenchants.utils;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -34,7 +32,7 @@ public class Enchanter {
 
         String name = type.toLowerCase();
 
-        String displayName = cfg.getString(String.format("enchants.%s.displayname", name));
+        String displayName = cfg.getString(String.format("enchants.%s.book-display-name", name));
 
         if(displayName == null) {
             return item;
@@ -59,10 +57,10 @@ public class Enchanter {
         return item;
     }
 
-    public static void applyEnchant(ItemStack item, Enchantment enchant, int level, boolean onlyLore) {
+    public static void applyEnchant(ItemStack item, EEnchant enchant, int level, boolean onlyLore) {
         List<String> lore = new ArrayList<>();
 
-        lore.add(ChatColor.GRAY + PlainTextComponentSerializer.plainText().serialize(enchant.displayName(level)));
+        lore.add(enchant.getDisplayInLore(level, true));
 
         ItemMeta meta = item.getItemMeta();
 
@@ -76,7 +74,7 @@ public class Enchanter {
         item.setItemMeta(meta);
 
         if(!onlyLore) {
-            item.addUnsafeEnchantment(enchant, level);
+            item.addUnsafeEnchantment(enchant.getEnchantment(), level);
         }
     }
 }

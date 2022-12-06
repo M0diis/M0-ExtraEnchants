@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
@@ -25,7 +24,6 @@ public class ExtraEnchants extends JavaPlugin {
     private static ExtraEnchants instance;
     private PluginManager pm;
     private ConfigManager configManager;
-    private boolean residence = false;
 
     public static ExtraEnchants getInstance() {
         return instance;
@@ -39,10 +37,6 @@ public class ExtraEnchants extends JavaPlugin {
         return this.configManager;
     }
 
-    public boolean hasResidence() {
-        return residence;
-    }
-
     public void onEnable() {
         instance = this;
 
@@ -51,12 +45,6 @@ public class ExtraEnchants extends JavaPlugin {
         this.pm = this.getServer().getPluginManager();
 
         getLogger().info("EnhancedEnchantments has been enabled.");
-
-        Plugin residence = this.pm.getPlugin("Residence");
-
-        if (residence != null && residence.isEnabled()) {
-            this.residence = true;
-        }
 
         registerEvents();
         registerCommands();

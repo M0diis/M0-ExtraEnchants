@@ -1,10 +1,9 @@
 package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.CombineEvent;
 import me.m0dii.extraenchants.utils.Utils;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,17 +67,18 @@ public class CustomCombine implements Listener {
     }
 
     private boolean hasConflict(Enchantment enchant, ItemMeta meta, Set<Enchantment> enchants, Player p) {
-        if (enchants.stream().anyMatch(enchant::conflictsWith)) {
-            p.sendMessage(Utils.format(plugin.getCfg().getString("messages.enchant-conflicts")));
-
-            meta.getEnchants().keySet().stream().filter(enchant::conflictsWith)
-                    .forEach((conflict) -> {
-                        p.sendMessage(Utils.format( "&8• &7" + conflict.getName().replace("_", " ")));
-                    });
-
-            return true;
+        if (enchants.stream().noneMatch(enchant::conflictsWith)) {
+            return false;
         }
-        return false;
+
+        p.sendMessage(Utils.format(plugin.getCfg().getString("messages.enchant-conflicts")));
+
+        meta.getEnchants().keySet().stream().filter(enchant::conflictsWith)
+                .forEach((conflict) -> {
+                    p.sendMessage(Utils.format( "&8• &7" + conflict.getName().replace("_", " ")));
+                });
+
+        return true;
     }
 
     private void removeLowerLevel(ItemStack curr, Enchantment newEnchant, ItemMeta meta, Set<Enchantment> enchants, int enchantLevel) {
@@ -114,7 +114,7 @@ public class CustomCombine implements Listener {
 
         List<String> lore = new ArrayList<>();
 
-        lore.add(ChatColor.GRAY + PlainTextComponentSerializer.plainText().serialize(enchant.displayName(level)));
+        lore.add(EEnchant.fromEnchant(enchant).getDisplayInLore(level, true));
 
         ItemMeta meta = curr.getItemMeta();
 

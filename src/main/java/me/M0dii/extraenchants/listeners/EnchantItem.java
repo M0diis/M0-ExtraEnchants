@@ -72,7 +72,7 @@ public class EnchantItem implements Listener {
                 result.setItemMeta(tableMeta);
             }
 
-            Enchanter.applyEnchant(result, eenchant.getEnchantment(), 1, true);
+            Enchanter.applyEnchant(result, eenchant, 1, true);
 
             e.getInventory().setItem(0, result);
         });

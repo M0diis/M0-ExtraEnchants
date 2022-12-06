@@ -1,9 +1,31 @@
 enchants:
+  antithorns:
+    enabled: true # Enable/Disable the enchantment
+    trigger-chance: -1 # Chance of triggering the enchantment. -1 for disabled
+    table-chance: -1 # Chance of getting this enchant on a table, -1 for disabled
+    enchanted-item-lore-name: '&7Anti-Thorns %level%' # The lore name of the enchantment
+    book-display-name: "&d&lAnti Thorns %level%" # The display name of the book which you get via the command
+    lore: # The lore of the book which you get via the command
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Each piece on its own has 25% to deflect"
+      - "&7all thorns damage."
+      - "&7Having 4 pieces will deflect 100% of thorns damage."
+      - ""
+      - "&6Enchantable items: &aTools"
+    # Apart from the internal enchant conflicts, you can add your own here.
+    # Has to be valid enchantment names. (Currently supports only vanilla enchantments).
+    # You can find a list of enchantment names here (field):
+    # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/enchantments/Enchantment.html
+    conflicts:
+      - THORNS
   telepathy:
     enabled: true
     trigger-chance: -1
     table-chance: -1
-    displayname: "&b&lTelepathy %level%"
+    enchanted-item-lore-name: '&7Telepathy %level%'
+    book-display-name: "&b&lTelepathy %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -12,11 +34,21 @@ enchants:
       - "&7mined blocks to your inventory."
       - ""
       - "&6Enchantable items: &aTools"
+    # Can be: TOOLS, ARMOR, WEAPONS, ALL
+    # or specify the type of armor, e.g. HELMET, CHESTPLATE, LEGGINGS, BOOTS, ELYTRA, SHIELD
+    # or specify the type of tool, e.g. PICKAXE, AXE, SHOVEL, HOE, SWORD, BOW, FISHING_ROD
+    # or specify the type of weapon, e.g. SWORD, BOW, CROSSBOW
+    # The default limitation still applies if you don't specify anything.
+    enchantable-items:
+      - TOOLS
+    conflicts:
+      - SILK_TOUCH
   plow:
     enabled: true
     trigger-chance: -1
     table-chance: -1
-    displayname: "&d&lPlow %level%"
+    enchanted-item-lore-name: '&7Plow %level%'
+    book-display-name: "&d&lPlow %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -25,11 +57,15 @@ enchants:
       - "&7Will till a 3x1 area to the left of till."
       - ""
       - "&6Enchantable items: &aHoes"
+    conflicts: []
+    enchantable-items:
+      - HOE
   lavawalker:
     enabled: true
     trigger-chance: -1
     table-chance: -1
-    displayname: "&d&lLava Walker %level%"
+    enchanted-item-lore-name: '&7Lava Walker %level%'
+    book-display-name: "&d&lLava Walker %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more Info."
@@ -38,11 +74,14 @@ enchants:
       - "&7Will till a 3x1 area to the left of till."
       - ""
       - "&6Enchantable items: &aBoots"
+    conflicts: []
+    enchantable-items: []
   bonded:
     enabled: true
     trigger-chance: -1
     table-chance: -1
-    displayname: "&d&lBonded %level%"
+    enchanted-item-lore-name: '&7Bonded %level%'
+    book-display-name: "&d&lBonded %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -50,11 +89,14 @@ enchants:
       - "&7Will prevent the item from being dropped."
       - ""
       - "&6Enchantable items: &aTools & Armor"
+    conflicts: []
+    enchantable-items: []
   smelt:
     enabled: true
     trigger-chance: -1
     table-chance: -1
-    displayname: "&d&lSmelt %level%"
+    enchanted-item-lore-name: '&7Smelt %level%'
+    book-display-name: "&d&lSmelt %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -62,11 +104,14 @@ enchants:
       - "&7Will automatically smelt mined ores and blocks."
       - ""
       - "&6Enchantable items: &aTools"
+    conflicts: []
+    enchantable-items: []
   hasteminer:
     enabled: true
     trigger-chance: 10
     table-chance: -1
-    displayname: "&d&lHaste Miner %level%"
+    enchanted-item-lore-name: '&7Haste-Miner %level%'
+    book-display-name: "&d&lHaste Miner %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -74,11 +119,14 @@ enchants:
       - "&7Has a 10% chance to give Haste 1 effect for 5 seconds."
       - ""
       - "&6Enchantable items: &aPickaxes, Shovels"
+    conflicts: []
+    enchantable-items: []
   veinminer:
     enabled: true
     trigger-chance: 10
     table-chance: -1
-    displayname: "&d&lVein Miner %level%"
+    enchanted-item-lore-name: '&7Bonded %level%'
+    book-display-name: "&d&lVein Miner %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -86,11 +134,14 @@ enchants:
       - "&7Has a 10% chance to mine all adjacent ores."
       - ""
       - "&6Enchantable items: &aPickaxes"
+    conflicts: []
+    enchantable-items: []
   experienceminer:
     enabled: true
     trigger-chance: 10
     table-chance: -1
-    displayname: "&d&lXP Miner %level%"
+    enchanted-item-lore-name: '&7Experience Miner %level%'
+    book-display-name: "&d&lXP Miner %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -99,11 +150,14 @@ enchants:
       - "&7while mining blocks."
       - ""
       - "&6Enchantable items: &aPickaxes"
+    conflicts: []
+    enchantable-items: []
   lifesteal:
     enabled: true
     trigger-chance: 10
     table-chance: -1
-    displayname: "&d&lLifesteal %level%"
+    enchanted-item-lore-name: '&7Lifesteal %level%'
+    book-display-name: "&d&lLifesteal %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -112,11 +166,14 @@ enchants:
       - "&7for 10% of the damage dealt."
       - ""
       - "&6Enchantable items: &aSwords"
+    conflicts: []
+    enchantable-items: []
   tunnel:
     enabled: true
     trigger-chance: -1
     table-chance: -1
-    displayname: "&d&lLifesteal %level%"
+    enchanted-item-lore-name: '&7Tunnel %level%'
+    book-display-name: "&d&lLifesteal %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -124,11 +181,14 @@ enchants:
       - "&7Can be helpful while tunnelling."
       - ""
       - "&6Enchantable items: &aPickaxes, Shovels"
+    conflicts: []
+    enchantable-items: []
   berserk:
     enabled: true
     trigger-chance: -1
     table-chance: -1
-    displayname: "&d&lBerserk %level%"
+    enchanted-item-lore-name: '&7Berserk %level%'
+    book-display-name: "&d&lBerserk %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -137,11 +197,14 @@ enchants:
       - "&7does more damage on less health."
       - ""
       - "&6Enchantable items: &aSwords"
+    conflicts: []
+    enchantable-items: []
   disposer:
     enabled: true
     trigger-chance: -1
     table-chance: -1
-    displayname: "&d&lDisposer %level%"
+    enchanted-item-lore-name: '&7Disposer %level%'
+    book-display-name: "&d&lDisposer %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -149,11 +212,14 @@ enchants:
       - "&7Automatically destroys mined blocks."
       - ""
       - "&6Enchantable items: &aPickaxes"
+    conflicts: []
+    enchantable-items: []
   coldsteel:
     enabled: true
     trigger-chance: 5
     table-chance: 10
-    displayname: "&d&lCold Steel %level%"
+    enchanted-item-lore-name: '&7Cold Steel %level%'
+    book-display-name: "&d&lCold Steel %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -161,11 +227,14 @@ enchants:
       - "&7Has a %trigger-chance% chance to inflict slowness."
       - ""
       - "&6Enchantable items: &aArmor"
+    conflicts: []
+    enchantable-items: []
   withering:
     enabled: true
     trigger-chance: 1
     table-chance: -1
-    displayname: "&d&lWithering %level%"
+    enchanted-item-lore-name: '&7Withering %level%'
+    book-display-name: "&d&lWithering %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -173,11 +242,14 @@ enchants:
       - "&7Has a %trigger-chance% chance to inflict wither effect."
       - ""
       - "&6Enchantable items: &aWeapons"
+    conflicts: []
+    enchantable-items: []
   armorbreaker:
     enabled: true
     trigger-chance: 5
     table-chance: -1
-    displayname: "&d&lArmor Breaker %level%"
+    enchanted-item-lore-name: '&7Armor Breaker %level%'
+    book-display-name: "&d&lArmor Breaker %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -185,11 +257,14 @@ enchants:
       - "&7Has a %trigger-chance% chance to deal extra durability damage."
       - ""
       - "&6Enchantable items: &aWeapons"
+    conflicts: []
+    enchantable-items: []
   barbarian:
     enabled: true
     trigger-chance: 5
     table-chance: -1
-    displayname: "&d&lBarbarian %level%"
+    enchanted-item-lore-name: '&7Barbarian %level%'
+    book-display-name: "&d&lBarbarian %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -197,11 +272,14 @@ enchants:
       - "&7Has a %trigger-chance% chance to deal 1.25x damage."
       - ""
       - "&6Enchantable items: &aWeapons"
+    conflicts: []
+    enchantable-items: []
   deathsiphon:
     enabled: true
     trigger-chance: 25
     table-chance: -1
-    displayname: "&d&lBarbarian %level%"
+    enchanted-item-lore-name: '&7Death Siphon %level%'
+    book-display-name: "&d&lBarbarian %level%"
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -210,10 +288,27 @@ enchants:
       - "&dRegeneration III&7 for 3 seconds."
       - ""
       - "&6Enchantable items: &aArmor"
+    conflicts: []
+    enchantable-items: []
+  batvision:
+    enabled: true
+    trigger-chance: -1
+    table-chance: -1
+    enchanted-item-lore-name: '&7Bat Vision %level%'
+    book-display-name: "&d&lBat Vision %level%"
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Grants night vision while equipped."
+      - ""
+      - "&6Enchantable items: &aHelmets"
+    conflicts: []
+    enchantable-items: []
 messages:
   no-permission: "&c&lYou do not have permission to do this!"
   player-not-found: "&c&lPlayer not found."
-  enchantment-list: "&9&lCurrent Enchants:\n&3&lTelepathy, Plow, Lava Walker, Bonded"
+  enchantment-list: "&9&lCurrent Enchants:\n&3&lTelepathy, Plow, Lava Walker, Bonded..."
   usage: "&c&lCommand usage: &d/&7ee <enchantment> <player>"
   enchant-removed: "&4%enchant_name% enchant has been removed"
   enchant-conflicts: "&cEnchant conflicts with one of the enchants shown below:"
