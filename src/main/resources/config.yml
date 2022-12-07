@@ -56,6 +56,8 @@ enchants:
       - "&7Will automatically plant seeds from hotbar."
       - "&7Will till a 3x1 area to the left of till."
       - ""
+      - "&7Level 2 does 6x1 area to the left and right."
+      - ""
       - "&6Enchantable items: &aHoes"
     conflicts: []
     enchantable-items:
@@ -70,8 +72,8 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more Info."
       - ""
-      - "&7Will automatically plant seeds from hotbar."
-      - "&7Will till a 3x1 area to the left of till."
+      - "&7Will automatically replace lava to obsidian"
+      - "&7when walking on it."
       - ""
       - "&6Enchantable items: &aBoots"
     conflicts: []
@@ -131,7 +133,8 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a 10% chance to mine all adjacent ores."
+      - "&7Has a %trigger-chance% chance to "
+      - "&7mine all adjacent ores."
       - ""
       - "&6Enchantable items: &aPickaxes"
     conflicts: []
@@ -146,8 +149,8 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a %trigger-chance% chance to drop some additional experience."
-      - "&7while mining blocks."
+      - "&7Has a %trigger-chance% chance to drop some"
+      - "&7additional experience while mining blocks."
       - ""
       - "&6Enchantable items: &aPickaxes"
     conflicts: []
@@ -162,8 +165,8 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a %trigger-chance% chance to heal yourself"
-      - "&7for 10% of the damage dealt."
+      - "&7Has a %trigger-chance% chance to heal"
+      - "&7yourself for 10% of the damage dealt."
       - ""
       - "&6Enchantable items: &aSwords"
     conflicts: []
@@ -224,7 +227,8 @@ enchants:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a %trigger-chance% chance to inflict slowness."
+      - "&7Has a %trigger-chance% chance to inflict"
+      - "&7slowness to attacker when being attacked."
       - ""
       - "&6Enchantable items: &aArmor"
     conflicts: []

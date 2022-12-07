@@ -34,9 +34,9 @@ public class CustomEnchants {
                             return;
                         }
 
-                        Constructor<? extends Enchantment> constructor = clazz.getConstructor(String.class, int.class);
+                        Constructor<? extends Enchantment> constructor = clazz.getConstructor(String.class, int.class, EEnchant.class);
 
-                        Enchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLvl());
+                        Enchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLvl(), eEnchant);
 
                         registerEnchantment(enchantment, list);
 

@@ -1,9 +1,5 @@
 package me.m0dii.extraenchants.utils;
 
-import com.bekvon.bukkit.residence.Residence;
-import com.bekvon.bukkit.residence.containers.Flags;
-import com.bekvon.bukkit.residence.protection.ClaimedResidence;
-import com.bekvon.bukkit.residence.protection.ResidencePermissions;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -14,8 +10,6 @@ import org.bukkit.entity.Player;
 import java.util.Random;
 
 public class Utils {
-    private static final Residence res = Residence.getInstance();
-
     private static final Random random = new Random();
 
     public static String format(String msg) {
@@ -39,22 +33,7 @@ public class Utils {
     }
 
     public static boolean allowed(Player p, Location loc) {
-        if (res == null) {
-            return true;
-        }
-
-        ClaimedResidence residence = res.getResidenceManager().getByLoc(loc);
-
-        if (residence == null) {
-            return true;
-        }
-
-        ResidencePermissions perms = residence.getPermissions();
-
-        return perms.playerHas(p, Flags.build, true)
-                || residence.isOwner(p)
-                || residence.isTrusted(p)
-                || res.isResAdminOn(p);
+        return true;
     }
 
     public static String arabicToRoman(int level) {

@@ -20,18 +20,25 @@ import java.util.Set;
 public class PlowWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
+    private final EEnchant enchant;
 
-    public PlowWrapper(final String name, final int lvl) {
+    public PlowWrapper(final String name, final int lvl, EEnchant enchant) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
+
+        this.enchant = enchant;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isHoe(item);
+        return Enchantables.isHoe(item) || enchant.canEnchantItem(item);
     }
 
-    public boolean conflictsWith(final Enchantment enchantment) {
+    public boolean conflictsWith(final @NotNull Enchantment enchantment) {
+        if(enchant.getCustomConflicts().contains(enchantment)) {
+            return true;
+        }
+
         return enchantment.equals(Enchantment.SILK_TOUCH) || EEnchant.PLOW.equals(enchantment);
     }
 
