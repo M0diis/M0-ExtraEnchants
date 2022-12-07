@@ -5,6 +5,9 @@ enchants:
     table-chance: -1 # Chance of getting this enchant on a table, -1 for disabled
     enchanted-item-lore-name: '&7Anti-Thorns %level%' # The lore name of the enchantment
     book-display-name: "&d&lAnti Thorns %level%" # The display name of the book which you get via the command
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE # COMMON, UNCOMMON, RARE, VERY_RARE
     lore: # The lore of the book which you get via the command
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -30,6 +33,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Telepathy %level%'
     book-display-name: "&b&lTelepathy %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -38,6 +44,9 @@ enchants:
       - "&7mined blocks to your inventory."
       - ""
       - "&6Enchantable items: &aTools"
+    default-conflicts: true
+    conflicts:
+      - SILK_TOUCH
     # Can be: TOOLS, ARMOR, WEAPONS, ALL
     # or specify the type of armor, e.g. HELMET, CHESTPLATE, LEGGINGS, BOOTS, ELYTRA, SHIELD
     # or specify the type of tool, e.g. PICKAXE, AXE, SHOVEL, HOE, SWORD, BOW, FISHING_ROD
@@ -45,15 +54,15 @@ enchants:
     # The default limitation still applies if you don't specify anything.
     enchantable-items:
       - TOOLS
-    default-conflicts: true
-    conflicts:
-      - SILK_TOUCH
   plow:
     enabled: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Plow %level%'
     book-display-name: "&d&lPlow %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -74,6 +83,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Lava Walker %level%'
     book-display-name: "&d&lLava Walker %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more Info."
@@ -91,6 +103,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Bonded %level%'
     book-display-name: "&d&lBonded %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -107,6 +122,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Smelt %level%'
     book-display-name: "&d&lSmelt %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -123,6 +141,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Haste-Miner %level%'
     book-display-name: "&d&lHaste Miner %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -139,6 +160,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Bonded %level%'
     book-display-name: "&d&lVein Miner %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -156,6 +180,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Experience Miner %level%'
     book-display-name: "&d&lXP Miner %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -173,6 +200,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Lifesteal %level%'
     book-display-name: "&d&lLifesteal %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -190,6 +220,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Tunnel %level%'
     book-display-name: "&d&lLifesteal %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -206,6 +239,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Berserk %level%'
     book-display-name: "&d&lBerserk %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -223,6 +259,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Disposer %level%'
     book-display-name: "&d&lDisposer %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -239,6 +278,9 @@ enchants:
     table-chance: 10
     enchanted-item-lore-name: '&7Cold Steel %level%'
     book-display-name: "&d&lCold Steel %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -256,6 +298,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Withering %level%'
     book-display-name: "&d&lWithering %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -272,6 +317,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Armor Breaker %level%'
     book-display-name: "&d&lArmor Breaker %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -288,6 +336,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Barbarian %level%'
     book-display-name: "&d&lBarbarian %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -304,6 +355,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Death Siphon %level%'
     book-display-name: "&d&lBarbarian %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -321,6 +375,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Bat Vision %level%'
     book-display-name: "&d&lBat Vision %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
