@@ -92,6 +92,10 @@ public enum EEnchant {
         return this.enchant.conflictsWith(enchant);
     }
 
+    public boolean defaultConflictsEnabled() {
+        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".default-conflicts");
+    }
+
     public boolean canEnchantItem(ItemStack item) {
         if (!getEnchantableTypes().isEmpty()) {
         for(Enchantables.ItemType type : getEnchantableTypes()) {
@@ -222,7 +226,21 @@ public enum EEnchant {
     public List<Enchantment> getCustomConflicts() {
         return instance.getCfg().getStringList("enchants." + getConfigName() + ".conflicts")
                 .stream()
-                .map(s -> Enchantment.getByName(s.toUpperCase()))
+                .map(s -> {
+                    Enchantment byName = Enchantment.getByName(s.toUpperCase());
+
+                    if(byName != null) {
+                        return byName;
+                    }
+
+                    EEnchant parsed = EEnchant.parse(s);
+
+                    if(parsed == null || parsed.getEnchantment() == null) {
+                        return null;
+                    }
+
+                    return parsed.getEnchantment();
+                })
                 .collect(Collectors.toList());
     }
 

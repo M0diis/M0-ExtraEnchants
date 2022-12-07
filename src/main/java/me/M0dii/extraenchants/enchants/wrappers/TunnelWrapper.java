@@ -39,6 +39,10 @@ public class TunnelWrapper extends Enchantment {
             return true;
         }
 
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return Enchantment.SILK_TOUCH.equals(enchantment);
     }
 

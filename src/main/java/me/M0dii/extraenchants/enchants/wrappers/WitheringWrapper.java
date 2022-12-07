@@ -39,6 +39,10 @@ public class WitheringWrapper extends Enchantment {
             return true;
         }
 
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return EEnchant.LIFESTEAL.equals(enchantment)
             || EEnchant.BERSERK.equals(enchantment)
             || Enchantment.FIRE_ASPECT.equals(enchantment);

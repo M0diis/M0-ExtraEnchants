@@ -39,6 +39,10 @@ public class ColdSteelWrapper extends Enchantment {
             return true;
         }
 
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return enchantment.equals(Enchantment.THORNS);
     }
 

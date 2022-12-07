@@ -38,6 +38,10 @@ public class BeheadingWrapper extends Enchantment {
             return true;
         }
 
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return enchantment.equals(Enchantment.LOOT_BONUS_MOBS);
     }
 

@@ -38,6 +38,10 @@ public class DisposerWrapper extends Enchantment {
             return true;
         }
 
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return enchantment.equals(Enchantment.SILK_TOUCH)
             || EEnchant.TELEPATHY.equals(enchantment)
             || EEnchant.SMELT.equals(enchantment);

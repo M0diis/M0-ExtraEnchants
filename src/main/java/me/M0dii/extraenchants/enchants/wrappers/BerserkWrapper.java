@@ -39,6 +39,10 @@ public class BerserkWrapper extends Enchantment {
             return true;
         }
 
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return EEnchant.LIFESTEAL.equals(enchantment)
             || EEnchant.ASSASSIN.equals(enchantment);
     }

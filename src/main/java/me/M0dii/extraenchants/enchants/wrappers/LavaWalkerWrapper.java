@@ -39,6 +39,10 @@ public class LavaWalkerWrapper extends Enchantment {
             return true;
         }
 
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return enchantment.equals(Enchantment.SILK_TOUCH);
     }
 
