@@ -20,18 +20,29 @@ import java.util.Set;
 public class BerserkWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
+    private final EEnchant enchant;
 
-    public BerserkWrapper(final String name, final int lvl) {
+    public BerserkWrapper(final String name, final int lvl, EEnchant enchant) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
+
+        this.enchant = enchant;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isSword(item);
+        return Enchantables.isSword(item) || enchant.canEnchantItem(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
+        if(enchant.getCustomConflicts().contains(enchantment)) {
+            return true;
+        }
+
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return EEnchant.LIFESTEAL.equals(enchantment)
             || EEnchant.ASSASSIN.equals(enchantment);
     }
@@ -53,11 +64,11 @@ public class BerserkWrapper extends Enchantment {
     }
 
     public boolean isCursed() {
-        return false;
+        return enchant.isCursed();
     }
 
     public boolean isTreasure() {
-        return false;
+        return enchant.isTreasure();
     }
 
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
@@ -73,7 +84,7 @@ public class BerserkWrapper extends Enchantment {
     }
 
     public @NotNull EnchantmentRarity getRarity() {
-        return EnchantmentRarity.VERY_RARE;
+        return enchant.getRarity();
     }
 
     public boolean isTradeable() {

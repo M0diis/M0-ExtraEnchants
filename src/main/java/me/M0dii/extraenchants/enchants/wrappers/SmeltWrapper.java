@@ -15,24 +15,34 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
 @Wrapper(name = "Smelt", maxLvl = 1)
 public class SmeltWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
+    private final EEnchant enchant;
 
-    public SmeltWrapper(final String name, final int lvl) {
+    public SmeltWrapper(final String name, final int lvl, EEnchant enchant) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
+
+        this.enchant = enchant;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isTool(item, false);
+        return Enchantables.isTool(item, false) || enchant.canEnchantItem(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
+        if(enchant.getCustomConflicts().contains(enchantment)) {
+            return true;
+        }
+
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return Enchantment.SILK_TOUCH.equals(enchantment)
             || EEnchant.TELEPATHY.equals(enchantment);
     }
@@ -54,11 +64,11 @@ public class SmeltWrapper extends Enchantment {
     }
 
     public boolean isCursed() {
-        return false;
+        return enchant.isCursed();
     }
 
     public boolean isTreasure() {
-        return false;
+        return enchant.isTreasure();
     }
 
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
@@ -74,7 +84,7 @@ public class SmeltWrapper extends Enchantment {
     }
 
     public @NotNull EnchantmentRarity getRarity() {
-        return EnchantmentRarity.VERY_RARE;
+        return enchant.getRarity();
     }
 
     public boolean isTradeable() {

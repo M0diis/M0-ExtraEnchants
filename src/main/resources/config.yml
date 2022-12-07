@@ -5,6 +5,9 @@ enchants:
     table-chance: -1 # Chance of getting this enchant on a table, -1 for disabled
     enchanted-item-lore-name: '&7Anti-Thorns %level%' # The lore name of the enchantment
     book-display-name: "&d&lAnti Thorns %level%" # The display name of the book which you get via the command
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE # COMMON, UNCOMMON, RARE, VERY_RARE
     lore: # The lore of the book which you get via the command
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -14,10 +17,14 @@ enchants:
       - "&7Having 4 pieces will deflect 100% of thorns damage."
       - ""
       - "&6Enchantable items: &aTools"
+    # If true, it will use the built-in enchantment conflicts, ex. you can't have antithorns and thorns on the same item
+    # If false, it will use the conflicts from the 'conflicts' section.
+    default-conflicts: true
     # Apart from the internal enchant conflicts, you can add your own here.
-    # Has to be valid enchantment names. (Currently supports only vanilla enchantments).
+    # Has to be valid enchantment names. (Works for vanilla and ExtraEnchants enchantments)
     # You can find a list of enchantment names here (field):
     # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/enchantments/Enchantment.html
+    enchantable-items: []
     conflicts:
       - THORNS
   telepathy:
@@ -26,6 +33,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Telepathy %level%'
     book-display-name: "&b&lTelepathy %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -34,6 +44,9 @@ enchants:
       - "&7mined blocks to your inventory."
       - ""
       - "&6Enchantable items: &aTools"
+    default-conflicts: true
+    conflicts:
+      - SILK_TOUCH
     # Can be: TOOLS, ARMOR, WEAPONS, ALL
     # or specify the type of armor, e.g. HELMET, CHESTPLATE, LEGGINGS, BOOTS, ELYTRA, SHIELD
     # or specify the type of tool, e.g. PICKAXE, AXE, SHOVEL, HOE, SWORD, BOW, FISHING_ROD
@@ -41,14 +54,15 @@ enchants:
     # The default limitation still applies if you don't specify anything.
     enchantable-items:
       - TOOLS
-    conflicts:
-      - SILK_TOUCH
   plow:
     enabled: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Plow %level%'
     book-display-name: "&d&lPlow %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -56,7 +70,10 @@ enchants:
       - "&7Will automatically plant seeds from hotbar."
       - "&7Will till a 3x1 area to the left of till."
       - ""
+      - "&7Level 2 does 6x1 area to the left and right."
+      - ""
       - "&6Enchantable items: &aHoes"
+    default-conflicts: true
     conflicts: []
     enchantable-items:
       - HOE
@@ -66,14 +83,18 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Lava Walker %level%'
     book-display-name: "&d&lLava Walker %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more Info."
       - ""
-      - "&7Will automatically plant seeds from hotbar."
-      - "&7Will till a 3x1 area to the left of till."
+      - "&7Will automatically replace lava to obsidian"
+      - "&7when walking on it."
       - ""
       - "&6Enchantable items: &aBoots"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   bonded:
@@ -82,6 +103,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Bonded %level%'
     book-display-name: "&d&lBonded %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -89,6 +113,7 @@ enchants:
       - "&7Will prevent the item from being dropped."
       - ""
       - "&6Enchantable items: &aTools & Armor"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   smelt:
@@ -97,6 +122,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Smelt %level%'
     book-display-name: "&d&lSmelt %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -104,6 +132,7 @@ enchants:
       - "&7Will automatically smelt mined ores and blocks."
       - ""
       - "&6Enchantable items: &aTools"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   hasteminer:
@@ -112,6 +141,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Haste-Miner %level%'
     book-display-name: "&d&lHaste Miner %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -119,6 +151,7 @@ enchants:
       - "&7Has a 10% chance to give Haste 1 effect for 5 seconds."
       - ""
       - "&6Enchantable items: &aPickaxes, Shovels"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   veinminer:
@@ -127,13 +160,18 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Bonded %level%'
     book-display-name: "&d&lVein Miner %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a 10% chance to mine all adjacent ores."
+      - "&7Has a %trigger-chance% chance to "
+      - "&7mine all adjacent ores."
       - ""
       - "&6Enchantable items: &aPickaxes"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   experienceminer:
@@ -142,14 +180,18 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Experience Miner %level%'
     book-display-name: "&d&lXP Miner %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a %trigger-chance% chance to drop some additional experience."
-      - "&7while mining blocks."
+      - "&7Has a %trigger-chance% chance to drop some"
+      - "&7additional experience while mining blocks."
       - ""
       - "&6Enchantable items: &aPickaxes"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   lifesteal:
@@ -158,14 +200,18 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Lifesteal %level%'
     book-display-name: "&d&lLifesteal %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a %trigger-chance% chance to heal yourself"
-      - "&7for 10% of the damage dealt."
+      - "&7Has a %trigger-chance% chance to heal"
+      - "&7yourself for 10% of the damage dealt."
       - ""
       - "&6Enchantable items: &aSwords"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   tunnel:
@@ -174,6 +220,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Tunnel %level%'
     book-display-name: "&d&lLifesteal %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -181,6 +230,7 @@ enchants:
       - "&7Can be helpful while tunnelling."
       - ""
       - "&6Enchantable items: &aPickaxes, Shovels"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   berserk:
@@ -189,6 +239,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Berserk %level%'
     book-display-name: "&d&lBerserk %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -197,6 +250,7 @@ enchants:
       - "&7does more damage on less health."
       - ""
       - "&6Enchantable items: &aSwords"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   disposer:
@@ -205,6 +259,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Disposer %level%'
     book-display-name: "&d&lDisposer %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -212,6 +269,7 @@ enchants:
       - "&7Automatically destroys mined blocks."
       - ""
       - "&6Enchantable items: &aPickaxes"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   coldsteel:
@@ -220,13 +278,18 @@ enchants:
     table-chance: 10
     enchanted-item-lore-name: '&7Cold Steel %level%'
     book-display-name: "&d&lCold Steel %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
       - ""
-      - "&7Has a %trigger-chance% chance to inflict slowness."
+      - "&7Has a %trigger-chance% chance to inflict"
+      - "&7slowness to attacker when being attacked."
       - ""
       - "&6Enchantable items: &aArmor"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   withering:
@@ -235,6 +298,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Withering %level%'
     book-display-name: "&d&lWithering %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -242,6 +308,7 @@ enchants:
       - "&7Has a %trigger-chance% chance to inflict wither effect."
       - ""
       - "&6Enchantable items: &aWeapons"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   armorbreaker:
@@ -250,6 +317,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Armor Breaker %level%'
     book-display-name: "&d&lArmor Breaker %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -257,6 +327,7 @@ enchants:
       - "&7Has a %trigger-chance% chance to deal extra durability damage."
       - ""
       - "&6Enchantable items: &aWeapons"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   barbarian:
@@ -265,6 +336,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Barbarian %level%'
     book-display-name: "&d&lBarbarian %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -272,6 +346,7 @@ enchants:
       - "&7Has a %trigger-chance% chance to deal 1.25x damage."
       - ""
       - "&6Enchantable items: &aWeapons"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   deathsiphon:
@@ -280,6 +355,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Death Siphon %level%'
     book-display-name: "&d&lBarbarian %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -288,6 +366,7 @@ enchants:
       - "&dRegeneration III&7 for 3 seconds."
       - ""
       - "&6Enchantable items: &aArmor"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   batvision:
@@ -296,6 +375,9 @@ enchants:
     table-chance: -1
     enchanted-item-lore-name: '&7Bat Vision %level%'
     book-display-name: "&d&lBat Vision %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
     lore:
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -303,6 +385,7 @@ enchants:
       - "&7Grants night vision while equipped."
       - ""
       - "&6Enchantable items: &aHelmets"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
 messages:

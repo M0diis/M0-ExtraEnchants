@@ -34,6 +34,11 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd,
                              @Nonnull String label, @Nonnull String[] args) {
         if (isArgument(0, args, "list") && sender instanceof Player player) {
+            if(!player.hasPermission("extraenchants.command.list")) {
+                player.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
+
+                return true;
+            }
             EnchantListGUI list = new EnchantListGUI();
 
             list.open(player);

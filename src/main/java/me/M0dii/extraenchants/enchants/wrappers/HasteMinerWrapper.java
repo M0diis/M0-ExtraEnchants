@@ -1,6 +1,7 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.Wrapper;
@@ -14,24 +15,34 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
-import java.util.stream.Stream;
 
 @Wrapper(name = "Haste Miner", maxLvl = 1)
 public class HasteMinerWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
+    private final EEnchant enchant;
 
-    public HasteMinerWrapper(final String name, final int lvl) {
+    public HasteMinerWrapper(final String name, final int lvl, EEnchant enchant) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
+
+        this.enchant = enchant;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isTool(item, false);
+        return Enchantables.isTool(item, false) || enchant.canEnchantItem(item);
     }
 
-    public boolean conflictsWith(final Enchantment enchantment) {
+    public boolean conflictsWith(final @NotNull Enchantment enchantment) {
+        if(enchant.getCustomConflicts().contains(enchantment)) {
+            return true;
+        }
+
+        if(!enchant.defaultConflictsEnabled()) {
+            return false;
+        }
+
         return enchantment.equals(Enchantment.SILK_TOUCH);
     }
 
@@ -52,11 +63,11 @@ public class HasteMinerWrapper extends Enchantment {
     }
 
     public boolean isCursed() {
-        return false;
+        return enchant.isCursed();
     }
 
     public boolean isTreasure() {
-        return false;
+        return enchant.isTreasure();
     }
 
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
@@ -72,7 +83,7 @@ public class HasteMinerWrapper extends Enchantment {
     }
 
     public @NotNull EnchantmentRarity getRarity() {
-        return EnchantmentRarity.VERY_RARE;
+        return enchant.getRarity();
     }
 
     public boolean isTradeable() {
