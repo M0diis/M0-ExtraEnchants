@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.enchants;
 
+import io.papermc.paper.enchantments.EnchantmentRarity;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Messenger;
@@ -78,6 +79,18 @@ public enum EEnchant {
 
     public int getEnchantChance() {
         return instance.getCfg().getInt("enchants." + getConfigName() + ".table-chance", -1);
+    }
+
+    public boolean isCursed() {
+        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".cursed", false);
+    }
+
+    public boolean isTreasure() {
+        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".treasure", false);
+    }
+
+    public EnchantmentRarity getRarity() {
+        return EnchantmentRarity.valueOf(instance.getCfg().getString("enchants." + getConfigName() + ".rarity", "COMMON").toUpperCase());
     }
 
     public String getDisplayInLore(int level, boolean formatted) {

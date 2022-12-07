@@ -54,11 +54,11 @@ public class BondedWrapper extends Enchantment {
     }
 
     public boolean isCursed() {
-        return false;
+        return enchant.isCursed();
     }
 
     public boolean isTreasure() {
-        return false;
+        return enchant.isTreasure();
     }
 
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
@@ -74,7 +74,7 @@ public class BondedWrapper extends Enchantment {
     }
 
     public @NotNull EnchantmentRarity getRarity() {
-        return EnchantmentRarity.VERY_RARE;
+        return enchant.getRarity();
     }
 
     public boolean isTradeable() {
