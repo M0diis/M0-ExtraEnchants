@@ -14,10 +14,14 @@ enchants:
       - "&7Having 4 pieces will deflect 100% of thorns damage."
       - ""
       - "&6Enchantable items: &aTools"
+    # If true, it will use the built-in enchantment conflicts, ex. you can't have antithorns and thorns on the same item
+    # If false, it will use the conflicts from the 'conflicts' section.
+    default-conflicts: true
     # Apart from the internal enchant conflicts, you can add your own here.
-    # Has to be valid enchantment names. (Currently supports only vanilla enchantments).
+    # Has to be valid enchantment names. (Works for vanilla and ExtraEnchants enchantments)
     # You can find a list of enchantment names here (field):
     # https://hub.spigotmc.org/javadocs/spigot/org/bukkit/enchantments/Enchantment.html
+    enchantable-items: []
     conflicts:
       - THORNS
   telepathy:
@@ -41,6 +45,7 @@ enchants:
     # The default limitation still applies if you don't specify anything.
     enchantable-items:
       - TOOLS
+    default-conflicts: true
     conflicts:
       - SILK_TOUCH
   plow:
@@ -59,6 +64,7 @@ enchants:
       - "&7Level 2 does 6x1 area to the left and right."
       - ""
       - "&6Enchantable items: &aHoes"
+    default-conflicts: true
     conflicts: []
     enchantable-items:
       - HOE
@@ -76,6 +82,7 @@ enchants:
       - "&7when walking on it."
       - ""
       - "&6Enchantable items: &aBoots"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   bonded:
@@ -91,6 +98,7 @@ enchants:
       - "&7Will prevent the item from being dropped."
       - ""
       - "&6Enchantable items: &aTools & Armor"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   smelt:
@@ -106,6 +114,7 @@ enchants:
       - "&7Will automatically smelt mined ores and blocks."
       - ""
       - "&6Enchantable items: &aTools"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   hasteminer:
@@ -121,6 +130,7 @@ enchants:
       - "&7Has a 10% chance to give Haste 1 effect for 5 seconds."
       - ""
       - "&6Enchantable items: &aPickaxes, Shovels"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   veinminer:
@@ -137,6 +147,7 @@ enchants:
       - "&7mine all adjacent ores."
       - ""
       - "&6Enchantable items: &aPickaxes"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   experienceminer:
@@ -153,6 +164,7 @@ enchants:
       - "&7additional experience while mining blocks."
       - ""
       - "&6Enchantable items: &aPickaxes"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   lifesteal:
@@ -169,6 +181,7 @@ enchants:
       - "&7yourself for 10% of the damage dealt."
       - ""
       - "&6Enchantable items: &aSwords"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   tunnel:
@@ -184,6 +197,7 @@ enchants:
       - "&7Can be helpful while tunnelling."
       - ""
       - "&6Enchantable items: &aPickaxes, Shovels"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   berserk:
@@ -200,6 +214,7 @@ enchants:
       - "&7does more damage on less health."
       - ""
       - "&6Enchantable items: &aSwords"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   disposer:
@@ -215,6 +230,7 @@ enchants:
       - "&7Automatically destroys mined blocks."
       - ""
       - "&6Enchantable items: &aPickaxes"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   coldsteel:
@@ -231,6 +247,7 @@ enchants:
       - "&7slowness to attacker when being attacked."
       - ""
       - "&6Enchantable items: &aArmor"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   withering:
@@ -246,6 +263,7 @@ enchants:
       - "&7Has a %trigger-chance% chance to inflict wither effect."
       - ""
       - "&6Enchantable items: &aWeapons"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   armorbreaker:
@@ -261,6 +279,7 @@ enchants:
       - "&7Has a %trigger-chance% chance to deal extra durability damage."
       - ""
       - "&6Enchantable items: &aWeapons"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   barbarian:
@@ -276,6 +295,7 @@ enchants:
       - "&7Has a %trigger-chance% chance to deal 1.25x damage."
       - ""
       - "&6Enchantable items: &aWeapons"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   deathsiphon:
@@ -292,6 +312,7 @@ enchants:
       - "&dRegeneration III&7 for 3 seconds."
       - ""
       - "&6Enchantable items: &aArmor"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
   batvision:
@@ -307,6 +328,7 @@ enchants:
       - "&7Grants night vision while equipped."
       - ""
       - "&6Enchantable items: &aHelmets"
+    default-conflicts: true
     conflicts: []
     enchantable-items: []
 messages:
