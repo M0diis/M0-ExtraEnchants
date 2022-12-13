@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public enum EEnchant {
@@ -110,7 +111,14 @@ public enum EEnchant {
     }
 
     public boolean canEnchantItem(ItemStack item) {
-        if (!getEnchantableTypes().isEmpty()) {
+        return this.enchant.canEnchantItem(item);
+    }
+
+    public boolean canEnchantItemCustom(ItemStack item) {
+        if (getEnchantableTypes().isEmpty()) {
+            return false;
+        }
+
         for(Enchantables.ItemType type : getEnchantableTypes()) {
             switch (type) {
                 case ALL:
@@ -210,13 +218,11 @@ public enum EEnchant {
                         return true;
                     }
                     break;
-                }
             }
         }
 
-        return this.enchant.canEnchantItem(item);
+        return false;
     }
-
     public boolean equals(Enchantment other) {
         return this.enchant.equals(other);
     }
@@ -233,6 +239,7 @@ public enum EEnchant {
         return instance.getCfg().getStringList("enchants." + getConfigName() + ".enchantable-items")
                 .stream()
                 .map(Enchantables.ItemType::parse)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

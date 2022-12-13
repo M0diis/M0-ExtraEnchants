@@ -31,7 +31,7 @@ public class ArmorBreakerWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isAxe(item) || Enchantables.isSword(item) || enchant.canEnchantItem(item);
+        return Enchantables.isAxe(item) || Enchantables.isSword(item) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {

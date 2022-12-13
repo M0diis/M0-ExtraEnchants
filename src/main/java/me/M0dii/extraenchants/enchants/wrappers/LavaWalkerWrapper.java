@@ -31,7 +31,7 @@ public class LavaWalkerWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isBoots(item) || enchant.canEnchantItem(item);
+        return Enchantables.isBoots(item) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {

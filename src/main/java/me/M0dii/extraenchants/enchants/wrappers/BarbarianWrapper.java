@@ -31,7 +31,7 @@ public class BarbarianWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isAxe(item) || enchant.canEnchantItem(item);
+        return Enchantables.isAxe(item) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {

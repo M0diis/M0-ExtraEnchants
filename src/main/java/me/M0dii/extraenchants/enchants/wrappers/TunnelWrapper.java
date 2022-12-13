@@ -31,7 +31,7 @@ public class TunnelWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isPickaxe(item) || Enchantables.isShovel(item) || enchant.canEnchantItem(item);
+        return Enchantables.isPickaxe(item) || Enchantables.isShovel(item) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {

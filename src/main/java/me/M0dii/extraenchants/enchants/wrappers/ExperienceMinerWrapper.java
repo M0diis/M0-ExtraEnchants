@@ -31,7 +31,7 @@ public class ExperienceMinerWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isPickaxe(item) || enchant.canEnchantItem(item);
+        return Enchantables.isPickaxe(item) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {

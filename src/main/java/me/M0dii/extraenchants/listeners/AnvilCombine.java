@@ -23,6 +23,7 @@ public class AnvilCombine implements Listener {
     public void onItemPrepare(final PrepareAnvilEvent event) {
         ItemStack srcItem = event.getInventory().getItem(0);
         ItemStack result = event.getResult();
+
         if (srcItem == null || result == null) {
             return;
         }

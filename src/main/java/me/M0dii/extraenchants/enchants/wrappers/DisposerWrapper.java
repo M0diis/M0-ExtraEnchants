@@ -30,7 +30,7 @@ public class DisposerWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isTool(item, true) || enchant.canEnchantItem(item);
+        return Enchantables.isTool(item, true) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
