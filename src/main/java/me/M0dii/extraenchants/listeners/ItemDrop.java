@@ -2,9 +2,7 @@ package me.m0dii.extraenchants.listeners;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.utils.Messenger;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -19,7 +17,7 @@ public class ItemDrop implements Listener {
     }
 
     @EventHandler
-    public void onDrop(PlayerDropItemEvent e) {
+    public void onDrop(final PlayerDropItemEvent e) {
         if (EEnchant.BONDED.isDisabled()) {
             return;
         }
@@ -44,17 +42,4 @@ public class ItemDrop implements Listener {
             e.setCancelled(true);
         }
     }
-    @EventHandler
-    public void onDropasdasd(PlayerDropItemEvent e) {
-        ItemMeta m = e.getItemDrop().getItemStack().getItemMeta();
-
-        if (m == null) {
-            return;
-        }
-
-        for(Enchantment ench : m.getEnchants().keySet()) {
-            Messenger.debug("Enchantment: " + ench.getKey().getKey());
-        }
-    }
-
 }
