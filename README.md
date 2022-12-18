@@ -4,12 +4,13 @@
 [resourceId]: 88737
 
 [ratingImage]: https://img.shields.io/badge/dynamic/json.svg?color=brightgreen&label=rating&query=%24.rating.average&suffix=%20%2F%205&url=https%3A%2F%2Fapi.spiget.org%2Fv2%2Fresources%2F88737
-[buildImage]: https://github.com/M0diis/M0-ExtraEnchants/actions/workflows/gradle_publish.yml/badge.svg
+[buildImage]: https://github.com/M0diis/M0-ExtraEnchants/actions/workflows/gradle-publish.yml/badge.svg
 [downloadsImage]: https://img.shields.io/badge/dynamic/json.svg?color=brightgreen&label=downloads%20%28spigotmc.org%29&query=%24.downloads&url=https%3A%2F%2Fapi.spiget.org%2Fv2%2Fresources%2F88737
 [updatedImage]: https://badges.pufler.dev/updated/M0diis/M0-ExtraEnchants
 
 <!-- End of variables block -->
 
+![build][buildImage]
 ![downloads][downloadsImage] ![rating][ratingImage]
 
 ## M0-ExtraEnchants
