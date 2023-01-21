@@ -31,7 +31,7 @@ public class HasteMinerWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isTool(item, false) || enchant.canEnchantItem(item);
+        return Enchantables.isTool(item, false) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {

@@ -30,7 +30,7 @@ public class BeheadingWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isSword(item) || enchant.canEnchantItem(item);
+        return Enchantables.isSword(item) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {

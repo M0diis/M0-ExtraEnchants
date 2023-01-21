@@ -53,15 +53,27 @@ public class InventoryUtils {
         return getEnchantLevel(item, enchant);
     }
 
-    public static void applyDurability(ItemStack hand) {
-        if(!(hand.getItemMeta() instanceof Damageable damageable)) {
+    public static void applyDurabilityChanced(ItemStack item, int chance) {
+        if(item == null || item.getType().isAir()) {
+            return;
+        }
+
+        if(random.nextInt(100) > chance) {
+            return;
+        }
+
+        applyDurability(item);
+    }
+
+    public static void applyDurability(ItemStack item) {
+        if(!(item.getItemMeta() instanceof Damageable damageable)) {
             return;
         }
 
         int unbreakingLevel = 0;
 
-        if (InventoryUtils.hasEnchant(hand, Enchantment.DURABILITY)) {
-            unbreakingLevel = hand.getItemMeta().getEnchants().get(Enchantment.DURABILITY);
+        if (InventoryUtils.hasEnchant(item, Enchantment.DURABILITY)) {
+            unbreakingLevel = item.getItemMeta().getEnchants().get(Enchantment.DURABILITY);
         }
 
         int chance = (100) / (1 + unbreakingLevel);
@@ -72,10 +84,10 @@ public class InventoryUtils {
             damageable.setDamage(damageable.getDamage() + 1);
         }
 
-        hand.setItemMeta(damageable);
+        item.setItemMeta(damageable);
 
-        if (damageable.getDamage() >= hand.getType().getMaxDurability()) {
-            hand.setType(Material.AIR);
+        if (damageable.getDamage() >= item.getType().getMaxDurability()) {
+            item.setType(Material.AIR);
         }
     }
 }

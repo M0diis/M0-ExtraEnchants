@@ -16,39 +16,30 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@Wrapper(name = "Disposer", maxLvl = 1)
-public class DisposerWrapper extends Enchantment {
+@Wrapper(name = "Gills", maxLvl = 1)
+public class GillsWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
     private final EEnchant enchant;
 
-    public DisposerWrapper(final String name, final int lvl, EEnchant enchant) {
+    public GillsWrapper(final String name, final int lvl, EEnchant enchant) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
+
         this.enchant = enchant;
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isTool(item, true) || enchant.canEnchantItemCustom(item);
+        return Enchantables.isHelmet(item) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
-        if(enchant.getCustomConflicts().contains(enchantment)) {
-            return true;
-        }
-
-        if(!enchant.defaultConflictsEnabled()) {
-            return false;
-        }
-
-        return enchantment.equals(Enchantment.SILK_TOUCH)
-            || EEnchant.TELEPATHY.equals(enchantment)
-            || EEnchant.SMELT.equals(enchantment);
+        return enchant.getCustomConflicts().contains(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {
-        return EnchantmentTarget.TOOL;
+        return EnchantmentTarget.ARMOR;
     }
 
     public int getMaxLevel() {
@@ -72,7 +63,9 @@ public class DisposerWrapper extends Enchantment {
     }
 
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
-        return Set.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND);
+        return Set.of(
+                EquipmentSlot.HEAD
+        );
     }
 
     public float getDamageIncrease(int value, @NotNull EntityCategory category) {

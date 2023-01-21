@@ -30,7 +30,7 @@ public class AntiThornsWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isArmor(item) || enchant.canEnchantItem(item);
+        return Enchantables.isArmor(item) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {

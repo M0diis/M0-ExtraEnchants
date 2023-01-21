@@ -3,11 +3,11 @@ enchants:
     enabled: true # Enable/Disable the enchantment
     trigger-chance: -1 # Chance of triggering the enchantment. -1 for disabled
     table-chance: -1 # Chance of getting this enchant on a table, -1 for disabled
-    enchanted-item-lore-name: '&7Anti-Thorns %level%' # The lore name of the enchantment
+    enchanted-item-lore-name: '&7Anti Thorns %level%' # The lore name of the enchantment
     book-display-name: "&d&lAnti Thorns %level%" # The display name of the book which you get via the command
-    cursed: false
-    treasure: false
-    rarity: VERY_RARE # COMMON, UNCOMMON, RARE, VERY_RARE
+    cursed: false # Doesn't do anything as of now, mostly used for the API.
+    treasure: false # Doesn't do anything as of now, mostly used for the API.
+    rarity: VERY_RARE # COMMON, UNCOMMON, RARE, VERY_RARE; Doesn't do anything as of now, mostly used for the API.
     lore: # The lore of the book which you get via the command
       - "&7Drag book and drop on item."
       - "&7Right click for more info."
@@ -158,7 +158,7 @@ enchants:
     enabled: true
     trigger-chance: 10
     table-chance: -1
-    enchanted-item-lore-name: '&7Bonded %level%'
+    enchanted-item-lore-name: '&7Vein Miner %level%'
     book-display-name: "&d&lVein Miner %level%"
     cursed: false
     treasure: false
@@ -219,7 +219,7 @@ enchants:
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Tunnel %level%'
-    book-display-name: "&d&lLifesteal %level%"
+    book-display-name: "&d&lTunnel %level%"
     cursed: false
     treasure: false
     rarity: VERY_RARE
@@ -354,7 +354,7 @@ enchants:
     trigger-chance: 25
     table-chance: -1
     enchanted-item-lore-name: '&7Death Siphon %level%'
-    book-display-name: "&d&lBarbarian %level%"
+    book-display-name: "&d&lDeath Siphon %level%"
     cursed: false
     treasure: false
     rarity: VERY_RARE

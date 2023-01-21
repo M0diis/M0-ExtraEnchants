@@ -31,7 +31,7 @@ public class PlowWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isHoe(item) || enchant.canEnchantItem(item);
+        return Enchantables.isHoe(item) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
