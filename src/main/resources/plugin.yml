@@ -3,6 +3,7 @@ name: M0-ExtraEnchants
 author: M0dii
 version: 3.4.0
 api-version: 1.16
+softdepend: [Residence]
 commands:
   extraenchant:
     permission: extraenchants.command.enchant

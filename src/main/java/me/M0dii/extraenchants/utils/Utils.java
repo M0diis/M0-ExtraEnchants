@@ -1,5 +1,7 @@
 package me.m0dii.extraenchants.utils;
 
+import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -44,7 +46,14 @@ public class Utils {
     }
 
     public static boolean allowed(Player p, Location loc) {
-        return true;
+        ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(loc);
+
+        if(res == null || p.hasPermission("residence.admin")) {
+            return true;
+        }
+
+        return res.getPermissions().playerHas(p, "build", true)
+            || res.getPermissions().getOwnerUUID().equals(p.getUniqueId());
     }
 
     public static String arabicToRoman(int level) {
