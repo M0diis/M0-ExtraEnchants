@@ -26,7 +26,9 @@ public class InventoryUtils {
 
         ItemMeta itemMeta = item.getItemMeta();
 
-        return itemMeta != null && itemMeta.getEnchants().containsKey(enchant.getEnchantment());
+        return (itemMeta != null &&
+                itemMeta.getEnchants().containsKey(enchant.getEnchantment())) ||
+                item.getEnchantments().containsKey(enchant.getEnchantment());
     }
 
     public static int getEnchantLevel(ItemStack item, EEnchant enchant) {

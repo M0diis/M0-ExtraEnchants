@@ -71,8 +71,7 @@ public class InventoryClick implements Listener {
 
         Player p = (Player) e.getWhoClicked();
 
-        for(Enchantment ench : cursor.getEnchantments().keySet())
-        {
+        for (Enchantment ench : cursor.getEnchantments().keySet()) {
             Messenger.debug("Meta has enchantment: " + ench.getKey().getKey());
         }
 
@@ -82,7 +81,7 @@ public class InventoryClick implements Listener {
                 .findFirst()
                 .ifPresent(enchantment -> {
                     Bukkit.getPluginManager().callEvent(
-                            new CombineEvent(p, e, enchantment, cursor.getEnchantmentLevel(enchantment)));
+                            new CombineEvent(p, e, enchantment, meta.getEnchantLevel(enchantment)));
                 });
     }
 
@@ -90,36 +89,36 @@ public class InventoryClick implements Listener {
     public void onInventoryClickEnchantList(final InventoryClickEvent e) {
         Inventory clickedInv = e.getClickedInventory();
 
-        if(clickedInv == null) {
+        if (clickedInv == null) {
             return;
         }
 
-        if(clickedInv.getHolder() instanceof EnchantListGUI list) {
+        if (clickedInv.getHolder() instanceof EnchantListGUI list) {
             e.setCancelled(true);
 
-            Player p = (Player)e.getWhoClicked();
+            Player p = (Player) e.getWhoClicked();
 
             ItemStack item = e.getCurrentItem();
 
-            if(item == null) {
+            if (item == null) {
                 return;
             }
 
             ItemMeta meta = item.getItemMeta();
 
-            if(meta == null) {
+            if (meta == null) {
                 return;
             }
 
             String name = Utils.stripColor(meta.displayName());
 
-            if(name == null) {
+            if (name == null) {
                 return;
             }
 
             EEnchant enchant = EEnchant.parse(name);
 
-            if(enchant == null) {
+            if (enchant == null) {
                 return;
             }
 
@@ -133,7 +132,7 @@ public class InventoryClick implements Listener {
     public void onInventoryClickEnchantInfo(final InventoryClickEvent e) {
         Inventory clickedInv = e.getClickedInventory();
 
-        if(clickedInv == null) {
+        if (clickedInv == null) {
             return;
         }
 
@@ -149,7 +148,7 @@ public class InventoryClick implements Listener {
             return;
         }
 
-        Player p = (Player)e.getWhoClicked();
+        Player p = (Player) e.getWhoClicked();
 
         EnchantListGUI gui = new EnchantListGUI();
 
@@ -172,7 +171,7 @@ public class InventoryClick implements Listener {
             return;
         }
 
-        Player p = (Player)e.getWhoClicked();
+        Player p = (Player) e.getWhoClicked();
 
         EnchantListGUI gui = new EnchantListGUI();
 
@@ -183,32 +182,32 @@ public class InventoryClick implements Listener {
     public void onInventoryDragEnchantList(final InventoryDragEvent e) {
         Inventory clickedInv = e.getInventory();
 
-        if(clickedInv.getHolder() instanceof EnchantListGUI list) {
+        if (clickedInv.getHolder() instanceof EnchantListGUI list) {
             e.setCancelled(true);
 
-            Player p = (Player)e.getWhoClicked();
+            Player p = (Player) e.getWhoClicked();
 
             ItemStack item = e.getOldCursor();
 
-            if(item == null) {
+            if (item == null) {
                 return;
             }
 
             ItemMeta meta = item.getItemMeta();
 
-            if(meta == null) {
+            if (meta == null) {
                 return;
             }
 
             String name = Utils.stripColor(meta.displayName());
 
-            if(name == null) {
+            if (name == null) {
                 return;
             }
 
             Enchantment enchant = EEnchant.toEnchant(name);
 
-            if(enchant == null) {
+            if (enchant == null) {
                 return;
             }
 
@@ -222,21 +221,21 @@ public class InventoryClick implements Listener {
     public void onInventoryClickFixEnchant(final InventoryClickEvent e) {
         ItemStack item = e.getCursor();
 
-        if(item == null) {
+        if (item == null) {
             Messenger.debug("Item is null.");
             return;
         }
 
         ItemMeta meta = item.getItemMeta();
 
-        if(meta == null) {
+        if (meta == null) {
             Messenger.debug("Item meta is null.");
             return;
         }
 
         List<Component> lore = meta.lore();
 
-        if(lore == null || lore.isEmpty()) {
+        if (lore == null || lore.isEmpty()) {
             Messenger.debug("Item lore is null or empty.");
             return;
         }
@@ -264,7 +263,8 @@ public class InventoryClick implements Listener {
                 meta.addEnchant(enchantment, 1, true);
 
                 item.setItemMeta(meta);
-            } catch (Exception ignored) { }
+            } catch (Exception ignored) {
+            }
         }
     }
 }

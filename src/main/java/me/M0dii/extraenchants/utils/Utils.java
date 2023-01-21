@@ -3,17 +3,28 @@ package me.m0dii.extraenchants.utils;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class Utils {
+    private static final Pattern HEX_PATTERN =
+            Pattern.compile("&#([A-Fa-f0-9])([A-Fa-f0-9])([A-Fa-f0-9])([A-Fa-f0-9])([A-Fa-f0-9])([A-Fa-f0-9])");
+
     private static final Random random = new Random();
 
-    public static String format(String msg) {
-        return ChatColor.translateAlternateColorCodes('&', msg);
+    public static String format(String text) {
+        if(text == null || text.isEmpty()) {
+            return "";
+        }
+
+        return ChatColor.translateAlternateColorCodes(
+                '&',
+                HEX_PATTERN.matcher(text).replaceAll("&x&$1&$2&$3&$4&$5&$6")
+        );
     }
 
     public static boolean shouldTrigger(EEnchant enchant) {

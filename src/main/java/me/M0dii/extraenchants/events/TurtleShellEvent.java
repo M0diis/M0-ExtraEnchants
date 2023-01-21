@@ -7,13 +7,13 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class ColdSteelEvent extends Event implements Cancellable {
+public class TurtleShellEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
     private final EntityDamageByEntityEvent event;
     private boolean isCancelled;
 
-    public ColdSteelEvent(Player p, EntityDamageByEntityEvent e) {
+    public TurtleShellEvent(Player p, EntityDamageByEntityEvent e) {
         this.player = p;
         this.event = e;
     }

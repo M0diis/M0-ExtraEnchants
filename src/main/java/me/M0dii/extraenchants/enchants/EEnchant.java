@@ -35,6 +35,8 @@ public enum EEnchant {
     ARMOR_BREAKER,
     COLD_STEEL,
     BAT_VISION,
+    TURTLE_SHELL,
+    REINFORCED,
     DEATH_SIPHON;
 
     private final ExtraEnchants instance = ExtraEnchants.getInstance();

@@ -46,6 +46,9 @@ public class ExtraEnchants extends JavaPlugin {
 
         getLogger().info("EnhancedEnchantments has been enabled.");
 
+        getConfig().options().copyDefaults(true);
+        saveDefaultConfig();
+
         registerEvents();
         registerCommands();
 

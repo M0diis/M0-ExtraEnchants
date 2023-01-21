@@ -100,6 +100,19 @@ public class EntityDamage implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityDamageTurtleShell(final EntityDamageByEntityEvent e) {
+        if(EEnchant.COLD_STEEL.isDisabled()) {
+            return;
+        }
+
+        if(!(e.getDamager() instanceof Player p)) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new TurtleShellEvent(p, e));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageArmorBreaker(final EntityDamageByEntityEvent e) {
         if(EEnchant.COLD_STEEL.isDisabled()) {
             return;
