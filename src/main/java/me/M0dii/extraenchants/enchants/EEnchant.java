@@ -111,7 +111,14 @@ public enum EEnchant {
     }
 
     public boolean canEnchantItem(ItemStack item) {
-        if (!getEnchantableTypes().isEmpty()) {
+        return this.enchant.canEnchantItem(item);
+    }
+
+    public boolean canEnchantItemCustom(ItemStack item) {
+        if (getEnchantableTypes().isEmpty()) {
+            return false;
+        }
+
         for(Enchantables.ItemType type : getEnchantableTypes()) {
             switch (type) {
                 case ALL:
@@ -213,9 +220,8 @@ public enum EEnchant {
                     break;
                 }
             }
-        }
 
-        return this.enchant.canEnchantItem(item);
+        return false;
     }
 
     public boolean equals(Enchantment other) {
