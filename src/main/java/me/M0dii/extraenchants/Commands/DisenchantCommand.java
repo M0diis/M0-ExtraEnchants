@@ -21,7 +21,6 @@ public class DisenchantCommand implements CommandExecutor {
     private final FileConfiguration cfg;
 
     public DisenchantCommand(ExtraEnchants plugin) {
-
         this.cfg = plugin.getCfg();
     }
 
@@ -62,9 +61,10 @@ public class DisenchantCommand implements CommandExecutor {
     }
 
     private void removeEnchant(@Nonnull CommandSender sender, ItemStack hand, Enchantment ench, ItemStack itemInMainHand, String enchName) {
-        hand.removeEnchantment(ench);
-
         ItemMeta meta = itemInMainHand.getItemMeta();
+
+        hand.removeEnchantment(ench);
+        meta.removeEnchant(ench);
 
         List<String> lore = new ArrayList<>();
 

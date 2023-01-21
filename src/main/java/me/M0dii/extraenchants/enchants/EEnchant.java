@@ -3,7 +3,6 @@ package me.m0dii.extraenchants.enchants;
 import io.papermc.paper.enchantments.EnchantmentRarity;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.utils.Enchantables;
-import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
@@ -73,7 +72,6 @@ public enum EEnchant {
     }
 
     public boolean isDisabled() {
-        Messenger.debug("Is disabled, path: 'enchants." + getConfigName() + ".enabled'");
         return !instance.getCfg().getBoolean("enchants." + getConfigName() + ".enabled", true);
     }
 
@@ -270,11 +268,14 @@ public enum EEnchant {
 
     public static Enchantment toEnchant(String value) {
         return Arrays.stream(EEnchant.values())
-                .filter(v -> v.getDisplayName().equalsIgnoreCase(value.trim())
-                        || v.getDisplayName().replace(" ", "").equalsIgnoreCase(value.trim())
-                        || v.getDisplayName().replace(" ", "_").equalsIgnoreCase(value.trim())
-                        || v.getConfigName().equalsIgnoreCase(value.trim())
-                )
+                .filter(v -> {
+                    String val = value.trim();
+
+                    return v.getDisplayName().equalsIgnoreCase(val)
+                            || v.getDisplayName().replace(" ", "").equalsIgnoreCase(val)
+                            || v.getConfigName().equalsIgnoreCase(val)
+                            || v.getConfigName().equalsIgnoreCase(val.replace(" ", ""));
+                })
                 .map(EEnchant::getEnchantment)
                 .findFirst()
                 .orElse(null);

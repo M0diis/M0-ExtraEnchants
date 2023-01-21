@@ -15,7 +15,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -24,8 +23,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class InventoryClick implements Listener {
 
@@ -140,36 +137,46 @@ public class InventoryClick implements Listener {
             return;
         }
 
-        if(clickedInv.getHolder() instanceof EnchantInfoGUI list) {
-            e.setCancelled(true);
-
-            ItemStack clicked = e.getCurrentItem();
-            if(clicked != null && clicked.getType().equals(Material.PAPER)) {
-                Player p = (Player)e.getWhoClicked();
-
-                EnchantListGUI gui = new EnchantListGUI();
-
-                gui.open(p);
-            }
+        if (!(clickedInv.getHolder() instanceof EnchantInfoGUI)) {
+            return;
         }
+
+        e.setCancelled(true);
+
+        ItemStack clicked = e.getCurrentItem();
+
+        if (clicked == null || !clicked.getType().equals(Material.PAPER)) {
+            return;
+        }
+
+        Player p = (Player)e.getWhoClicked();
+
+        EnchantListGUI gui = new EnchantListGUI();
+
+        gui.open(p);
     }
 
     @EventHandler
     public void onInventoryDragEnchantInfo(final InventoryDragEvent e) {
         Inventory clickedInv = e.getInventory();
 
-        if(clickedInv.getHolder() instanceof EnchantInfoGUI list) {
-            e.setCancelled(true);
-
-            ItemStack clicked = e.getOldCursor();
-            if(clicked != null && clicked.getType().equals(Material.PAPER)) {
-                Player p = (Player)e.getWhoClicked();
-
-                EnchantListGUI gui = new EnchantListGUI();
-
-                gui.open(p);
-            }
+        if (!(clickedInv.getHolder() instanceof EnchantInfoGUI list)) {
+            return;
         }
+
+        e.setCancelled(true);
+
+        ItemStack clicked = e.getOldCursor();
+
+        if (clicked == null || !clicked.getType().equals(Material.PAPER)) {
+            return;
+        }
+
+        Player p = (Player)e.getWhoClicked();
+
+        EnchantListGUI gui = new EnchantListGUI();
+
+        gui.open(p);
     }
 
     @EventHandler
@@ -215,15 +222,22 @@ public class InventoryClick implements Listener {
     public void onInventoryClickFixEnchant(final InventoryClickEvent e) {
         ItemStack item = e.getCursor();
 
+        if(item == null) {
+            Messenger.debug("Item is null.");
+            return;
+        }
+
         ItemMeta meta = item.getItemMeta();
 
         if(meta == null) {
+            Messenger.debug("Item meta is null.");
             return;
         }
 
         List<Component> lore = meta.lore();
 
         if(lore == null || lore.isEmpty()) {
+            Messenger.debug("Item lore is null or empty.");
             return;
         }
 
@@ -231,15 +245,25 @@ public class InventoryClick implements Listener {
             try {
                 String text = Utils.stripColor(comp);
 
-                String enchantName = text.split(" ")[0];
+                Messenger.debug("Stripped color: " + text);
+
+                String[] split = text.split(" ");
+
+                String level = split[split.length - 1];
+
+                String enchantName = text.substring(0, text.length() - level.length() - 1);
+
+                Messenger.debug("Enchant name: " + enchantName);
 
                 Enchantment enchantment = EEnchant.toEnchant(enchantName);
 
-                if (enchantment != null) {
-                    if (!meta.hasEnchant(enchantment)) {
-                        item.addUnsafeEnchantment(enchantment, 1);
-                    }
+                if (enchantment == null || meta.hasEnchant(enchantment)) {
+                    continue;
                 }
+
+                meta.addEnchant(enchantment, 1, true);
+
+                item.setItemMeta(meta);
             } catch (Exception ignored) { }
         }
     }
