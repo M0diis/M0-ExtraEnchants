@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.utils;
 
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -7,6 +8,10 @@ import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Random;
 import java.util.regex.Pattern;
 
@@ -77,5 +82,28 @@ public class Utils {
             case "X" -> "10";
             default -> roman;
         };
+    }
+
+    public static void copy(InputStream in, File file) {
+        if (in == null) {
+            return;
+        }
+
+        try {
+            OutputStream out = new FileOutputStream(file);
+
+            byte[] buf = new byte[1024];
+
+            int len;
+
+            while((len = in.read(buf)) > 0)
+                out.write(buf, 0, len);
+
+            out.close();
+            in.close();
+        }
+        catch(Exception ex) {
+            ExtraEnchants.getInstance().getLogger().warning("Error copying config file..");
+        }
     }
 }

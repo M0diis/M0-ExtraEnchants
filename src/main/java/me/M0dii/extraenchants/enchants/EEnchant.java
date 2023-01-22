@@ -38,6 +38,7 @@ public enum EEnchant {
     TURTLE_SHELL,
     REINFORCED,
     GILLS,
+    WEBBING,
     DEATH_SIPHON;
 
     private final ExtraEnchants instance = ExtraEnchants.getInstance();
@@ -88,6 +89,14 @@ public enum EEnchant {
 
     public boolean isTreasure() {
         return instance.getCfg().getBoolean("enchants." + getConfigName() + ".treasure", false);
+    }
+
+    public int getDuration() {
+        return instance.getCfg().getInt("enchants." + getConfigName() + ".extra.duration", 0);
+    }
+
+    public boolean isPlayerOnly() {
+        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".extra.player-only", false);
     }
 
     public EnchantmentRarity getRarity() {

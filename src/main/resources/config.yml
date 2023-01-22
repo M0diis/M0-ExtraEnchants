@@ -97,6 +97,8 @@ enchants:
     default-conflicts: true
     conflicts: []
     enchantable-items: []
+    extra:
+      duration: 4 # How long the obsidian will stay in seconds
   bonded:
     enabled: true
     trigger-chance: -1
@@ -139,7 +141,7 @@ enchants:
     enabled: true
     trigger-chance: 10
     table-chance: -1
-    enchanted-item-lore-name: '&7Haste-Miner %level%'
+    enchanted-item-lore-name: '&7Haste Miner %level%'
     book-display-name: "&d&lHaste Miner %level%"
     cursed: false
     treasure: false
@@ -369,6 +371,8 @@ enchants:
     default-conflicts: true
     conflicts: []
     enchantable-items: []
+    extra:
+      player-only: true
   batvision:
     enabled: true
     trigger-chance: -1
@@ -383,6 +387,25 @@ enchants:
       - "&7Right click for more info."
       - ""
       - "&7Grants night vision while equipped."
+      - ""
+      - "&6Enchantable items: &aHelmets"
+    default-conflicts: true
+    conflicts: []
+    enchantable-items: []
+  gills:
+    enabled: true
+    trigger-chance: -1
+    table-chance: -1
+    enchanted-item-lore-name: '&7Gills %level%'
+    book-display-name: "&d&lGills %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Grants water-breathing while equipped."
       - ""
       - "&6Enchantable items: &aHelmets"
     default-conflicts: true
@@ -407,6 +430,8 @@ enchants:
     default-conflicts: true
     conflicts: []
     enchantable-items: []
+    extra:
+      player-only: false
   turtleshell:
     enabled: true
     trigger-chance: -1
@@ -450,6 +475,29 @@ enchants:
     default-conflicts: true
     conflicts: []
     enchantable-items: []
+  webbing:
+    enabled: true
+    trigger-chance: 1
+    table-chance: -1
+    enchanted-item-lore-name: '&7Webbing %level%'
+    book-display-name: "&d&lWebbing %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a %trigger-chance% chance to place "
+      - "&7a web on opponents feet for %duration% seconds."
+      - ""
+      - "&6Enchantable items: &aWeapons"
+    default-conflicts: true
+    conflicts: []
+    enchantable-items: []
+    extra:
+      duration: 3
+      player-only: true
 messages:
   no-permission: "&c&lYou do not have permission to do this!"
   player-not-found: "&c&lPlayer not found."

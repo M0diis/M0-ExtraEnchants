@@ -3,6 +3,7 @@ package me.m0dii.extraenchants;
 import me.m0dii.extraenchants.commands.DisenchantCommand;
 import me.m0dii.extraenchants.commands.EnchantCommand;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
+import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.data.ConfigManager;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.CustomChart;
@@ -15,6 +16,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
 
+import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -54,6 +56,8 @@ public class ExtraEnchants extends JavaPlugin {
 
         setupMetrics();
         checkForUpdates();
+
+        Utils.copy(getResource("config.yml"), new File(getDataFolder(), "config_default.yml"));
 
         CustomEnchants.register();
     }

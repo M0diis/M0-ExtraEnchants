@@ -7,17 +7,15 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class WitheringEvent extends Event implements Cancellable {
+public class WebbingEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
     private final EntityDamageByEntityEvent event;
     private boolean isCancelled;
-    private final int enchantLevel;
 
-    public WitheringEvent(Player p, EntityDamageByEntityEvent e, int enchantLevel) {
+    public WebbingEvent(Player p, EntityDamageByEntityEvent e) {
         this.player = p;
         this.event = e;
-        this.enchantLevel = enchantLevel;
     }
 
     public static HandlerList getHandlerList() {
@@ -42,9 +40,5 @@ public class WitheringEvent extends Event implements Cancellable {
 
     public EntityDamageByEntityEvent getEntityDamageEvent() {
         return this.event;
-    }
-
-    public int getEnchantLevel() {
-        return this.enchantLevel;
     }
 }
