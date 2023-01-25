@@ -2,11 +2,11 @@ package me.m0dii.extraenchants.listeners.custom;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.AntiThornsEvent;
 import me.m0dii.extraenchants.events.DeathSiphonEvent;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Messenger;
-import me.m0dii.extraenchants.utils.Utils;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,6 +29,12 @@ public class OnDeathSiphon implements Listener {
         Messenger.debug("DeathSiphonEvent called");
 
         if (EEnchant.DEATH_SIPHON.isDisabled()) {
+            return;
+        }
+
+        Entity target = e.getEntityDeathEvent().getEntity();
+
+        if (EEnchant.DEATH_SIPHON.isPlayerOnly() && !(target instanceof Player)) {
             return;
         }
 

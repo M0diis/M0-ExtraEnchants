@@ -26,11 +26,15 @@ public class OnAssassin implements Listener {
             return;
         }
 
-        Player damager = e.getPlayer();
-
         EntityDamageEvent damageEvent = e.getEntityDamageEvent();
 
         Entity target = damageEvent.getEntity();
+
+        if (EEnchant.ASSASSIN.isPlayerOnly() && !(target instanceof Player)) {
+            return;
+        }
+
+        Player damager = e.getPlayer();
 
         double damage = damageEvent.getDamage();
 

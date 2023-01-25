@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public enum EEnchant {
@@ -124,113 +125,12 @@ public enum EEnchant {
     }
 
     public boolean canEnchantItemCustom(ItemStack item) {
-        if (getEnchantableTypes().isEmpty()) {
+        if (getEnchantableTypes().isEmpty() || item == null || item.getType().isAir()) {
             return false;
         }
 
-        for(Enchantables.ItemType type : getEnchantableTypes()) {
-            switch (type) {
-                case ALL:
-                    return true;
-                case ARMOR:
-                    if(Enchantables.isArmor(item)) {
-                        return true;
-                    }
-                    break;
-                case SWORD:
-                    if(Enchantables.isSword(item)) {
-                        return true;
-                    }
-                    break;
-                case AXE:
-                    if(Enchantables.isAxe(item)) {
-                        return true;
-                    }
-                    break;
-                case PICKAXE:
-                    if(Enchantables.isPickaxe(item)) {
-                        return true;
-                    }
-                    break;
-                case SHOVEL:
-                    if(Enchantables.isShovel(item)) {
-                        return true;
-                    }
-                    break;
-                case HOE:
-                    if(Enchantables.isHoe(item)) {
-                        return true;
-                    }
-                    break;
-                case BOW:
-                    if(Enchantables.isBow(item)) {
-                        return true;
-                    }
-                    break;
-                case FISHING_ROD:
-                    if(Enchantables.isFishingRod(item)) {
-                        return true;
-                    }
-                    break;
-                case TRIDENT:
-                    if(Enchantables.isTrident(item)) {
-                        return true;
-                    }
-                    break;
-                case CROSSBOW:
-                    if(Enchantables.isCrossbow(item)) {
-                        return true;
-                    }
-                    break;
-                case SHEARS:
-                    if(Enchantables.isShears(item)) {
-                        return true;
-                    }
-                    break;
-                case SHIELD:
-                    if(Enchantables.isShield(item)) {
-                        return true;
-                    }
-                    break;
-                case ELYTRA:
-                    if(Enchantables.isElytra(item)) {
-                        return true;
-                    }
-                    break;
-                case TOOL:
-                    if(Enchantables.isTool(item)) {
-                        return true;
-                    }
-                    break;
-                case WEAPON:
-                    if(Enchantables.isWeapon(item)) {
-                        return true;
-                    }
-                    break;
-                case HELMET:
-                    if(Enchantables.isHelmet(item)) {
-                        return true;
-                    }
-                    break;
-                case CHESTPLATE:
-                    if(Enchantables.isChestplate(item)) {
-                        return true;
-                    }
-                    break;
-                case LEGGINGS:
-                    if(Enchantables.isLeggings(item)) {
-                        return true;
-                    }
-                    break;
-                case BOOTS:
-                    if(Enchantables.isBoots(item)) {
-                        return true;
-                    }
-                    break;
-                }
-            }
-
-        return false;
+        return getEnchantableTypes().stream()
+                .anyMatch(type -> Enchantables.canEnchantItemCustom(item, type));
     }
 
     public boolean equals(Enchantment other) {
@@ -249,6 +149,7 @@ public enum EEnchant {
         return instance.getCfg().getStringList("enchants." + getConfigName() + ".enchantable-items")
                 .stream()
                 .map(Enchantables.ItemType::parse)
+                .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 

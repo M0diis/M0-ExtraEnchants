@@ -5,6 +5,7 @@ import me.m0dii.extraenchants.commands.EnchantCommand;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.data.ConfigManager;
+import net.milkbowl.vault.economy.Economy;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.CustomChart;
 import org.bstats.charts.MultiLineChart;
@@ -13,6 +14,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
 
@@ -59,10 +61,34 @@ public class ExtraEnchants extends JavaPlugin {
 
         Utils.copy(getResource("config.yml"), new File(getDataFolder(), "config_default.yml"));
 
+        if (!setupEconomy()) {
+            getLogger().severe("Vault not found, disabling economy features.");
+        }
+
         CustomEnchants.register();
     }
 
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+
+        if (rsp == null) {
+            return false;
+        }
+
+        economy = rsp.getProvider();
+
+        return economy != null;
+    }
+
     private void checkForUpdates() {
+        if(!configManager.getConfig().getBoolean("notify-update")) {
+            return;
+        }
+
         new UpdateChecker(this, 88737).getVersion(ver ->
         {
             String curr = this.getDescription().getVersion();
@@ -91,6 +117,12 @@ public class ExtraEnchants extends JavaPlugin {
         });
 
         metrics.addCustomChart(c);
+    }
+
+    private Economy economy = null;
+
+    public Economy getEconomy() {
+        return economy;
     }
 
     public void onDisable() {

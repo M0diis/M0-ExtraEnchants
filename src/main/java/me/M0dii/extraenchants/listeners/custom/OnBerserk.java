@@ -7,6 +7,7 @@ import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +24,12 @@ public class OnBerserk implements Listener {
     public void onBerserk(final BerserkEvent e) {
         Messenger.debug("BerserkEvent called");
         if (!Utils.shouldTrigger(EEnchant.BERSERK)) {
+            return;
+        }
+
+        Entity target = e.getEntityDamageEvent().getEntity();
+
+        if (EEnchant.BERSERK.isPlayerOnly() && !(target instanceof Player)) {
             return;
         }
 

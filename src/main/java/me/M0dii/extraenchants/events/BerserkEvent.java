@@ -4,16 +4,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class BerserkEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
-    private final EntityDamageEvent event;
+    private final EntityDamageByEntityEvent event;
     private boolean isCancelled;
 
-    public BerserkEvent(Player p, EntityDamageEvent e) {
+    public BerserkEvent(Player p, EntityDamageByEntityEvent e) {
         this.player = p;
         this.event = e;
     }
@@ -38,7 +38,7 @@ public class BerserkEvent extends Event implements Cancellable {
         return this.player;
     }
 
-    public EntityDamageEvent getEntityDamageEvent() {
+    public EntityDamageByEntityEvent getEntityDamageEvent() {
         return this.event;
     }
 }

@@ -6,46 +6,53 @@ import java.util.Arrays;
 
 public class Enchantables {
     public enum ItemType {
-        PICKAXE("PICKAXE"),
-        AXE("AXE"),
-        SHOVEL("SHOVEL"),
-        HOE("HOE"),
-        SWORD("SWORD"),
-        HELMET("HELMET"),
-        CHESTPLATE("CHESTPLATE"),
-        LEGGINGS("LEGGINGS"),
-        BOOTS("BOOTS"),
-        BOW("BOW"),
-        TRIDENT("TRIDENT"),
-        CROSSBOW("CROSSBOW"),
-        FISHING_ROD("FISHING_ROD"),
+        PICKAXE("PICKAXE", "PICKAXES"),
+        AXE("AXE", "AXES"),
+        SHOVEL("SHOVEL", "SHOVELS"),
+        HOE("HOE", "HOES"),
+        SWORD("SWORD", "SWORDS"),
+        HELMET("HELMET", "HELMETS"),
+        CHESTPLATE("CHESTPLATE", "CHESTPLATES"),
+        LEGGINGS("LEGGINGS", "PANTS"),
+        BOOTS("BOOTS", "SHOES"),
+        BOW("BOW", "BOWS"),
+        TRIDENT("TRIDENT", "TRIDENTS"),
+        CROSSBOW("CROSSBOW", "CROSSBOWS"),
+        FISHING_ROD("FISHING_ROD", "FISHING_RODS"),
         SHEARS("SHEARS"),
-        ALL("ALL"),
-        ARMOR("ARMOR"),
+        ALL("ALL", "EVERYTHING", "ANY"),
+        ARMOR("ARMOR", "ARMORS"),
         ELYTRA("ELYTRA"),
-        WEAPON("WEAPON"),
-        SHIELD("SHIELD"),
-        TOOL("TOOL");
+        WEAPON("WEAPON", "WEAPONS"),
+        SHIELD("SHIELD", "SHIELDS"),
+        TOOL("TOOL", "TOOLS");
 
-        private final String name;
+        private final String[] names;
 
-        ItemType(String name) {
-            this.name = name;
+        ItemType(String... names) {
+            this.names = names;
         }
 
-        public String getName() {
-            return this.name;
+        public String[] getNames() {
+            return this.names;
         }
 
         public static ItemType parse(String name) {
             return Arrays.stream(ItemType.values())
-                    .filter(type -> type.getName().equalsIgnoreCase(name))
-                    .findFirst()
-                    .orElse(null);
+                    .filter(type -> Arrays.stream(type.getNames())
+                            .anyMatch(n ->
+                                n.equalsIgnoreCase(name)
+                             || n.toUpperCase().contains(name.toUpperCase())
+                            ))
+                    .findFirst().orElse(null);
         }
+
+
     }
 
     public static boolean isPickaxe(ItemStack item) {
+        Messenger.debug(item.toString());
+
         return item.getType().name().toUpperCase().contains("PICKAXE");
     }
 
@@ -125,5 +132,112 @@ public class Enchantables {
 
     public static boolean isElytra(ItemStack item) {
         return item.getType().name().toUpperCase().contains("ELYTRA");
+    }
+
+    public static boolean canEnchantItemCustom(ItemStack item, ItemType type) {
+        switch (type) {
+            case ALL:
+                return true;
+            case ARMOR:
+                if(Enchantables.isArmor(item)) {
+                    return true;
+                }
+                break;
+            case SWORD:
+                if(Enchantables.isSword(item)) {
+                    return true;
+                }
+                break;
+            case AXE:
+                if(Enchantables.isAxe(item)) {
+                    return true;
+                }
+                break;
+            case PICKAXE:
+                if(Enchantables.isPickaxe(item)) {
+                    return true;
+                }
+                break;
+            case SHOVEL:
+                if(Enchantables.isShovel(item)) {
+                    return true;
+                }
+                break;
+            case HOE:
+                if(Enchantables.isHoe(item)) {
+                    return true;
+                }
+                break;
+            case BOW:
+                if(Enchantables.isBow(item)) {
+                    return true;
+                }
+                break;
+            case FISHING_ROD:
+                if(Enchantables.isFishingRod(item)) {
+                    return true;
+                }
+                break;
+            case TRIDENT:
+                if(Enchantables.isTrident(item)) {
+                    return true;
+                }
+                break;
+            case CROSSBOW:
+                if(Enchantables.isCrossbow(item)) {
+                    return true;
+                }
+                break;
+            case SHEARS:
+                if(Enchantables.isShears(item)) {
+                    return true;
+                }
+                break;
+            case SHIELD:
+                if(Enchantables.isShield(item)) {
+                    return true;
+                }
+                break;
+            case ELYTRA:
+                if(Enchantables.isElytra(item)) {
+                    return true;
+                }
+                break;
+            case TOOL:
+                if(Enchantables.isTool(item)) {
+                    return true;
+                }
+                break;
+            case WEAPON:
+                if(Enchantables.isWeapon(item)) {
+                    return true;
+                }
+                break;
+            case HELMET:
+                if(Enchantables.isHelmet(item)) {
+                    return true;
+                }
+                break;
+            case CHESTPLATE:
+                if(Enchantables.isChestplate(item)) {
+                    return true;
+                }
+                break;
+            case LEGGINGS:
+                if(Enchantables.isLeggings(item)) {
+                    return true;
+                }
+                break;
+            case BOOTS:
+                if(Enchantables.isBoots(item)) {
+                    return true;
+                }
+                break;
+
+            default:
+                break;
+        }
+
+        return false;
     }
 }

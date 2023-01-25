@@ -101,6 +101,6 @@ public class OnLavaWalk implements Listener {
             lavaWalkerBlocks.remove(current);
 
             current.setType(previous);
-        }, 100L);
+        }, 20L * EEnchant.LAVA_WALKER.getDuration());
     }
 }

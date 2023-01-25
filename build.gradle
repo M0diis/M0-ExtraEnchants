@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'me.m0dii'
-version '3.4.1'
+version '3.5.0'
 
 archivesBaseName = 'M0-ExtraEnchants'
 
@@ -28,17 +28,21 @@ repositories {
     }
 
     maven {
+        url 'https://jitpack.io'
+    }
+
+    maven {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
 }
 
 dependencies {
-
     implementation "org.bstats:bstats-bukkit:2.2.1"
     compileOnly 'io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT'
 
     implementation 'org.reflections:reflections:0.10.2'
 
+    compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
     compileOnly name: 'Residence5.0.1.5'
 }
 

@@ -498,6 +498,7 @@ enchants:
     extra:
       duration: 3
       player-only: true
+
 messages:
   no-permission: "&c&lYou do not have permission to do this!"
   player-not-found: "&c&lPlayer not found."
@@ -510,4 +511,40 @@ messages:
   hold-item: "&cYou must hold an item in your hand."
   reloaded: "&aSuccessfully reloaded config."
 
+
+# Enchant signs work similar to EssentialsX signs.
+# To create an enchant sign, use the following format
+# > ENCHANT <
+# ENCHANTABLE_ITEM_TYPE
+# ENCHANTMENT
+# COST : LEVEL
+#
+# Sign example:
+# > ENCHANT <
+#     ANY
+#  TELEPATHY
+#   1000 : 1
+#
+# Item type can be: TOOLS, ARMOR, WEAPONS, ALL
+# or specify the type of armor, e.g. HELMET, CHESTPLATE, LEGGINGS, BOOTS, ELYTRA, SHIELD
+# or specify the type of tool, e.g. PICKAXE, AXE, SHOVEL, HOE, SWORD, BOW, FISHING_ROD
+# or specify the type of weapon, e.g. SWORD, BOW, CROSSBOW
+# The default limitation still applies if you don't specify anything.
+enchant-signs:
+  enabled: true
+  # You can add own color codes when placing it. This should be plain.
+  # You can also add color format to other lines too.
+  first-line-format: "> ENCHANT <"
+  messages:
+    sign-created: "&aSuccessfully created enchant sign."
+    invalid-enchant: "&cInvalid enchantment."
+    invalid-item-type: "&cInvalid item type."
+    invalid-cost-level: "&cInvalid cost and level format."
+    not-enough-money: "&cYou do not have enough money to purchase this enchant."
+    no-item-in-hand: "&cYou must hold an item in your hand."
+    cannot-enchant-item: "&cYou cannot enchant this item with this sign."
+    enchant-applied: "&aSuccessfully applied enchantment."
+    already-enchanted: "&cThis item is already enchanted."
+
 debug: false
+notify-update: true

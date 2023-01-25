@@ -74,6 +74,15 @@ public class EntityDamage implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityDamageWebbing(final EntityDamageByEntityEvent e) {
+        if(shouldSkip(e, EEnchant.WEBBING)) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new WebbingEvent((Player)e.getDamager(), e));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageWithering(final EntityDamageByEntityEvent e) {
         if(shouldSkip(e, EEnchant.WITHERING)) {
             return;

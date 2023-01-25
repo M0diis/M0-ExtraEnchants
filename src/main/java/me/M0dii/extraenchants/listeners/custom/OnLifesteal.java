@@ -22,12 +22,18 @@ public class OnLifesteal implements Listener {
     }
 
     @EventHandler
-    public void onLifesteal(LifestealEvent e) {
+    public void onLifesteal(final LifestealEvent e) {
         if (!Utils.shouldTrigger(EEnchant.LIFESTEAL)) {
             return;
         }
 
         Player damager = e.getPlayer();
+
+        Entity target = e.getEntityDamageEvent().getEntity();
+
+        if (EEnchant.WEBBING.isPlayerOnly() && !(target instanceof Player)) {
+            return;
+        }
 
         double damage = e.getEntityDamageEvent().getDamage();
 
@@ -36,8 +42,6 @@ public class OnLifesteal implements Listener {
         if(damager.getHealth() + heal > 20) {
             return;
         }
-
-        Entity target = e.getEntityDamageEvent().getEntity();
 
         damager.setHealth(damager.getHealth() + heal);
 

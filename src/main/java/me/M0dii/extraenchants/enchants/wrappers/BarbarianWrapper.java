@@ -44,7 +44,8 @@ public class BarbarianWrapper extends Enchantment {
         }
 
         return EEnchant.LIFESTEAL.equals(enchantment)
-            || EEnchant.BERSERK.equals(enchantment);
+            || EEnchant.BERSERK.equals(enchantment)
+            || EEnchant.WEBBING.equals(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {

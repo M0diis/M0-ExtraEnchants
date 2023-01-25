@@ -46,6 +46,7 @@ public class Enchanter {
 
         for (String l : cfg.getStringList(String.format("enchants.%s.lore", name))) {
             String line = l.replace("%level%", Utils.arabicToRoman(level))
+                           .replace("%duration%", enchant.getDuration() + "")
                            .replace("%trigger-chance%", enchant.getTriggerChance() + "%");
 
             lore.add(Utils.format(line));

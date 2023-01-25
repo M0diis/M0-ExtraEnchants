@@ -28,9 +28,11 @@ public class OnWithering implements Listener {
 
         Entity target = e.getEntityDamageEvent().getEntity();
 
-        if (!(target instanceof Player targetPlayer)) {
+        if (EEnchant.WEBBING.isPlayerOnly() && !(target instanceof Player)) {
             return;
         }
+
+        Player targetPlayer = (Player)target;
 
         int level = e.getEnchantLevel();
 

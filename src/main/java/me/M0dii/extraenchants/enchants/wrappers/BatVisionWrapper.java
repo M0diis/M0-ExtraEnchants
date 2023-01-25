@@ -31,7 +31,8 @@ public class BatVisionWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isHelmet(item) || enchant.canEnchantItemCustom(item);
+        return Enchantables.isHelmet(item)
+            || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
