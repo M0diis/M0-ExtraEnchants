@@ -78,4 +78,8 @@ public class Enchanter {
             item.addUnsafeEnchantment(enchant.getEnchantment(), level);
         }
     }
+
+    public static void applyEnchant(ItemStack item, Enchantment enchant, int level) {
+        item.addUnsafeEnchantment(enchant, level);
+    }
 }

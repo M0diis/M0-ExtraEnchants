@@ -8,9 +8,11 @@ import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import net.milkbowl.vault.economy.Economy;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.WallSign;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -80,9 +82,9 @@ public class SignEnchantInteract implements Listener {
             return;
         }
 
-        String costString = Utils.stripColor(e.line(3));
+        String costAndLevel = Utils.stripColor(e.line(3));
 
-        String[] costSplit = costString.split(":");
+        String[] costSplit = costAndLevel.split(":");
 
         if (costSplit.length != 2) {
             player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.invalid-cost-level")));
@@ -160,9 +162,10 @@ public class SignEnchantInteract implements Listener {
 
         EEnchant enchant = EEnchant.parse(enchantmentString);
 
-        if (enchant == null) {
-            player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.invalid-enchant")));
-            return;
+        Enchantment enchantment = null;
+
+        if(enchant == null) {
+            enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantmentString.toLowerCase()));
         }
 
         String costString = Utils.stripColor(sign.line(3));
@@ -172,6 +175,9 @@ public class SignEnchantInteract implements Listener {
         if (costSplit.length != 2) {
             return;
         }
+
+        boolean isXP = costSplit[0].trim().toUpperCase().endsWith("XP");
+        boolean isLevel = costSplit[0].trim().toUpperCase().endsWith("L") || costSplit[0].trim().toUpperCase().endsWith("LVL");
 
         String cost = costSplit[0].trim()
                 .replaceAll("\\D", "");
@@ -192,9 +198,25 @@ public class SignEnchantInteract implements Listener {
 
         Economy econ = plugin.getEconomy();
 
-        if(!econ.has(player, costInt)) {
-            player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.not-enough-money")));
-            return;
+        if(!isXP && !isLevel) {
+            if(!econ.has(player, costInt)) {
+                player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.not-enough-money")));
+                return;
+            }
+        }
+
+        if(isXP) {
+            if(player.getTotalExperience() < costInt) {
+                player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.not-enough-xp")));
+                return;
+            }
+        }
+
+        if(isLevel) {
+            if(player.getLevel() < costInt) {
+                player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.not-enough-levels")));
+                return;
+            }
         }
 
         ItemStack hand = player.getInventory().getItemInMainHand();
@@ -209,13 +231,51 @@ public class SignEnchantInteract implements Listener {
             return;
         }
 
-        if(InventoryUtils.hasEnchant(hand, enchant)) {
-            player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.already-enchanted")));
+        if (enchantment != null) {
+            if(InventoryUtils.hasEnchant(hand, enchantment)) {
+                player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.already-enchanted")));
+                return;
+            }
+
+            if(isXP) {
+                player.giveExp(-costInt);
+                Enchanter.applyEnchant(hand, enchantment, levelInt);
+            }
+            else if(isLevel) {
+                player.setLevel(player.getLevel() - costInt);
+                Enchanter.applyEnchant(hand, enchantment, levelInt);
+            } else {
+                if(econ.withdrawPlayer(player, costInt).transactionSuccess()) {
+                    Enchanter.applyEnchant(hand, enchantment, levelInt);
+                }
+            }
+
+            player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.enchant-applied")));
+            return;
+        }
+        else if(enchant != null) {
+            if(InventoryUtils.hasEnchant(hand, enchant)) {
+                player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.already-enchanted")));
+                return;
+            }
+
+            if(isXP) {
+                player.giveExp(-costInt);
+                Enchanter.applyEnchant(hand, enchant, levelInt, false);
+            }
+            else if(isLevel) {
+                player.setLevel(player.getLevel() - costInt);
+                Enchanter.applyEnchant(hand, enchant, levelInt, false);
+            } else {
+                if(econ.withdrawPlayer(player, costInt).transactionSuccess()) {
+                    Enchanter.applyEnchant(hand, enchant, levelInt, false);
+                }
+            }
+
+            player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.enchant-applied")));
             return;
         }
 
-        if(econ.withdrawPlayer(player, costInt).transactionSuccess()) {
-            Enchanter.applyEnchant(hand, enchant, levelInt, false);
-        }
+        player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.invalid-enchant")));
     }
 }

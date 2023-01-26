@@ -513,7 +513,8 @@ messages:
 
 
 # Enchant signs work similar to EssentialsX signs.
-# To create an enchant sign, use the following format
+# It supports the ExtraEnchants enchantments and vanilla ones.
+# To create an enchant sign, use the following format (first line should match enchant-signs.first-line-format).
 # > ENCHANT <
 # ENCHANTABLE_ITEM_TYPE
 # ENCHANTMENT
@@ -530,6 +531,16 @@ messages:
 # or specify the type of tool, e.g. PICKAXE, AXE, SHOVEL, HOE, SWORD, BOW, FISHING_ROD
 # or specify the type of weapon, e.g. SWORD, BOW, CROSSBOW
 # The default limitation still applies if you don't specify anything.
+#
+# Cost can be defined in money, experience or levels. (The currency symbol can be anything)
+# The following formats are supported:
+# - 100 : 1
+# - 100$ : 1
+# - 100 $ : 1
+# - 100L : 1
+# - 100 L : 1
+# - 100XP : 1
+# - 100 XP : 1
 enchant-signs:
   enabled: true
   # You can add own color codes when placing it. This should be plain.
@@ -545,6 +556,8 @@ enchant-signs:
     cannot-enchant-item: "&cYou cannot enchant this item with this sign."
     enchant-applied: "&aSuccessfully applied enchantment."
     already-enchanted: "&cThis item is already enchanted."
+    not-enough-xp: "&cYou do not have enough XP to purchase this enchant."
+    not-enough-levels: "&cYou do not have enough levels to purchase this enchant."
 
 debug: false
 notify-update: true
