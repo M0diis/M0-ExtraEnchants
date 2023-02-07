@@ -1,7 +1,6 @@
 package me.m0dii.extraenchants.utils;
 
 import me.m0dii.extraenchants.ExtraEnchants;
-import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -12,11 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class EnchantInfoGUI implements InventoryHolder {
-    private final static ExtraEnchants plugin = ExtraEnchants.getPlugin(ExtraEnchants.class);
     private final Inventory inventory;
 
     private final Enchantment enchant;
@@ -34,8 +29,7 @@ public class EnchantInfoGUI implements InventoryHolder {
         return this.inventory;
     }
 
-    public void open(Player p)
-    {
+    public void open(Player p) {
         p.openInventory(this.inventory);
     }
 

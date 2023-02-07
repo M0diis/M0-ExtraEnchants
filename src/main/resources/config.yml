@@ -511,7 +511,6 @@ messages:
   hold-item: "&cYou must hold an item in your hand."
   reloaded: "&aSuccessfully reloaded config."
 
-
 # Enchant signs work similar to EssentialsX signs.
 # It supports the ExtraEnchants enchantments and vanilla ones.
 # To create an enchant sign, use the following format (first line should match enchant-signs.first-line-format).

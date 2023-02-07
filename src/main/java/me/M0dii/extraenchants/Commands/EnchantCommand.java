@@ -39,6 +39,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
                 return true;
             }
+
             EnchantListGUI list = new EnchantListGUI();
 
             list.open(player);

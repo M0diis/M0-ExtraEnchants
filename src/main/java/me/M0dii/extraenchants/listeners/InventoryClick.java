@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.listeners;
 
+import com.google.common.base.Preconditions;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
@@ -13,16 +14,21 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 public class InventoryClick implements Listener {
 
@@ -129,31 +135,134 @@ public class InventoryClick implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClickEnchantInfo(final InventoryClickEvent e) {
-        Inventory clickedInv = e.getClickedInventory();
-
-        if (clickedInv == null) {
+    public void onInventoryClickEnchantInfo(final InventoryClickEvent event) {
+        if (!(event.getInventory().getHolder() instanceof final EnchantInfoGUI gui)) {
             return;
         }
 
-        if (!(clickedInv.getHolder() instanceof EnchantInfoGUI)) {
+        ItemStack clicked = event.getCurrentItem();
+
+        if (clicked != null && clicked.getType().equals(Material.PAPER)) {
+            Player p = (Player) event.getWhoClicked();
+
+            EnchantListGUI list = new EnchantListGUI();
+
+            list.open(p);
+
             return;
         }
 
-        e.setCancelled(true);
-
-        ItemStack clicked = e.getCurrentItem();
-
-        if (clicked == null || !clicked.getType().equals(Material.PAPER)) {
-            return;
+        if ((isPlaceItemEvent(event)) || (!isTakeItemEvent(event)) || (isSwapItemEvent(event))
+                || (isDropItemEvent(event)) || (!isOtherEvent(event))) {
+            event.setCancelled(true);
+            event.setResult(Event.Result.DENY);
         }
-
-        Player p = (Player) e.getWhoClicked();
-
-        EnchantListGUI gui = new EnchantListGUI();
-
-        gui.open(p);
     }
+
+    private boolean isTakeItemEvent(final InventoryClickEvent event) {
+        final Inventory inventory = event.getInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final InventoryAction action = event.getAction();
+
+        if (clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER || inventory.getType() == InventoryType.PLAYER) {
+            return false;
+        }
+
+        return action == InventoryAction.MOVE_TO_OTHER_INVENTORY || isTakeAction(action);
+    }
+
+    private boolean isPlaceItemEvent(final InventoryClickEvent event) {
+        final Inventory inventory = event.getInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final InventoryAction action = event.getAction();
+
+        if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY
+                && clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER
+                && inventory.getType() != clickedInventory.getType()) {
+            return true;
+        }
+
+        return isPlaceAction(action)
+                && (clickedInventory == null || clickedInventory.getType() != InventoryType.PLAYER)
+                && inventory.getType() != InventoryType.PLAYER;
+    }
+
+    private boolean isSwapItemEvent(final InventoryClickEvent event) {
+        Preconditions.checkNotNull(event, "event cannot be null");
+
+        final Inventory inventory = event.getInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final InventoryAction action = event.getAction();
+
+        return isSwapAction(action)
+                && (clickedInventory == null || clickedInventory.getType() != InventoryType.PLAYER)
+                && inventory.getType() != InventoryType.PLAYER;
+    }
+
+    private boolean isDropItemEvent(final InventoryClickEvent event) {
+        Preconditions.checkNotNull(event, "event cannot be null");
+
+        final Inventory inventory = event.getInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final InventoryAction action = event.getAction();
+
+        return isDropAction(action)
+                && (clickedInventory != null || inventory.getType() != InventoryType.PLAYER);
+    }
+
+    private boolean isOtherEvent(final InventoryClickEvent event) {
+        Preconditions.checkNotNull(event, "event cannot be null");
+
+        final Inventory inventory = event.getInventory();
+        final Inventory clickedInventory = event.getClickedInventory();
+        final InventoryAction action = event.getAction();
+
+        return isOtherAction(action)
+                && (clickedInventory != null || inventory.getType() != InventoryType.PLAYER);
+    }
+
+    private boolean isDraggingOnGui(final InventoryDragEvent event) {
+        final int topSlots = event.getView().getTopInventory().getSize();
+        return event.getRawSlots().stream().anyMatch(slot -> slot < topSlots);
+    }
+
+    private boolean isTakeAction(final InventoryAction action) {
+        return ITEM_TAKE_ACTIONS.contains(action);
+    }
+
+    private boolean isPlaceAction(final InventoryAction action) {
+        return ITEM_PLACE_ACTIONS.contains(action);
+    }
+
+    private boolean isSwapAction(final InventoryAction action) {
+        return ITEM_SWAP_ACTIONS.contains(action);
+    }
+
+    private boolean isDropAction(final InventoryAction action) {
+        return ITEM_DROP_ACTIONS.contains(action);
+    }
+
+    private boolean isOtherAction(final InventoryAction action) {
+        return action == InventoryAction.CLONE_STACK || action == InventoryAction.UNKNOWN;
+    }
+
+    private static final Set<InventoryAction> ITEM_TAKE_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_ALL, InventoryAction.COLLECT_TO_CURSOR, InventoryAction.HOTBAR_SWAP, InventoryAction.MOVE_TO_OTHER_INVENTORY));
+
+    /**
+     * Holds all the actions that should be considered "place" actions
+     */
+    private static final Set<InventoryAction> ITEM_PLACE_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME, InventoryAction.PLACE_ALL));
+
+    /**
+     * Holds all actions relating to swapping items
+     */
+    private static final Set<InventoryAction> ITEM_SWAP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.HOTBAR_SWAP, InventoryAction.SWAP_WITH_CURSOR, InventoryAction.HOTBAR_MOVE_AND_READD));
+
+    /**
+     * Holds all actions relating to dropping items
+     */
+    private static final Set<InventoryAction> ITEM_DROP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ONE_CURSOR, InventoryAction.DROP_ALL_CURSOR));
+
 
     @EventHandler
     public void onInventoryDragEnchantInfo(final InventoryDragEvent e) {
@@ -167,7 +276,7 @@ public class InventoryClick implements Listener {
 
         ItemStack clicked = e.getOldCursor();
 
-        if (clicked == null || !clicked.getType().equals(Material.PAPER)) {
+        if (!clicked.getType().equals(Material.PAPER)) {
             return;
         }
 

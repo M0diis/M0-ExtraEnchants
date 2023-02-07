@@ -30,8 +30,7 @@ public class EnchantListGUI implements InventoryHolder {
         return this.inventory;
     }
 
-    public void open(Player p)
-    {
+    public void open(Player p) {
         p.openInventory(this.inventory);
     }
 

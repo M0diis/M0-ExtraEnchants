@@ -39,11 +39,6 @@ public class SignEnchantInteract implements Listener {
 
         Player player = e.getPlayer();
 
-        if(!player.hasPermission("extraenchants.signs.create")) {
-            player.sendMessage(Utils.format(plugin.getCfg().getString("messages.no-permission")));
-            e.getBlock().breakNaturally();
-            return;
-        }
 
         Block block = e.getBlock();
 
@@ -52,13 +47,18 @@ public class SignEnchantInteract implements Listener {
         }
 
         if (!(sign.getBlockData() instanceof WallSign ws)) {
-            e.getBlock().breakNaturally();
             return;
         }
 
         String firstLine = Utils.stripColor(e.line(0));
 
-        if (!firstLine.equalsIgnoreCase("[Enchant]")) {
+        if (!firstLine.equalsIgnoreCase(plugin.getCfg().getString("enchant-signs.first-line-format"))) {
+            return;
+        }
+
+        if(!player.hasPermission("extraenchants.signs.create")) {
+            player.sendMessage(Utils.format(plugin.getCfg().getString("messages.no-permission")));
+            e.getBlock().breakNaturally();
             return;
         }
 
@@ -76,7 +76,13 @@ public class SignEnchantInteract implements Listener {
 
         EEnchant enchant = EEnchant.parse(enchantmentString);
 
-        if (enchant == null) {
+        Enchantment enchantment = enchant == null ? null : enchant.getEnchantment();
+
+        if(enchant == null) {
+            enchantment = Enchantment.getByKey(NamespacedKey.minecraft(enchantmentString.toLowerCase()));
+        }
+
+        if (enchantment == null) {
             player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.invalid-enchant")));
             e.getBlock().breakNaturally();
             return;
