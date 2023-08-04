@@ -213,19 +213,21 @@ public class OnPlow implements Listener {
             return;
         }
 
-        if (Utils.allowed(p, plant.getLocation())) {
-            if (plant.getType().equals(Material.AIR) && amount >= 1 &&
-                    (block.getType().equals(Material.DIRT) ||
-                            block.getType().equals(Material.GRASS_BLOCK))) {
-                block.setType(Material.FARMLAND);
-                plant.setType(seed);
+        if (!Utils.allowed(p, plant.getLocation())) {
+            return;
+        }
 
-                --amount;
-                fee.setAmount(amount);
-                p.getInventory().setItem(slot, fee);
+        if (plant.getType().equals(Material.AIR) && amount >= 1 &&
+                (block.getType().equals(Material.DIRT) ||
+                        block.getType().equals(Material.GRASS_BLOCK))) {
+            block.setType(Material.FARMLAND);
+            plant.setType(seed);
 
-                p.updateInventory();
-            }
+            --amount;
+            fee.setAmount(amount);
+            p.getInventory().setItem(slot, fee);
+
+            p.updateInventory();
         }
     }
 }

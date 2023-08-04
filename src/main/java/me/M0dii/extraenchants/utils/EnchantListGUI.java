@@ -60,7 +60,8 @@ public class EnchantListGUI implements InventoryHolder {
 
             for (String l : plugin.getCfg().getStringList(String.format("enchants.%s.lore", e.getConfigName()))) {
                 String line = l.replace("%level%", "")
-                        .replace("%trigger-chance%", e.getTriggerChance() + "%");
+                        .replace("%trigger-chance%", e.getTriggerChance() + "%")
+                        .replace("%duration%", String.valueOf(e.getDuration()));
 
                 lore.add(Utils.format(line));
             }

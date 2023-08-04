@@ -39,7 +39,9 @@ public class OnHasteMine implements Listener {
 
         int level = e.getEnchantLevel();
 
-        p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (level * 100), level - 1));
+        int duration = (level == 0 ? 1 : level) * 100;
+
+        p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, duration, level - 1));
 
         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_HIT, 0.1F, 0.1F);
     }

@@ -58,7 +58,7 @@ public class Utils {
         }
 
         return res.getPermissions().playerHas(p, "build", true)
-                || res.getPermissions().getOwnerUUID().equals(p.getUniqueId());
+            || res.getPermissions().getOwnerUUID().equals(p.getUniqueId());
     }
 
     public static String arabicToRoman(int level) {

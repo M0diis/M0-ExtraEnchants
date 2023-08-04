@@ -130,11 +130,6 @@ public class SignEnchantInteract implements Listener {
 
         Player player = e.getPlayer();
 
-        if(!player.hasPermission("extraenchants.signs.use")) {
-            player.sendMessage(Utils.format(plugin.getCfg().getString("messages.no-permission")));
-            return;
-        }
-
         Block block = e.getClickedBlock();
 
         if(block == null) {
@@ -152,6 +147,11 @@ public class SignEnchantInteract implements Listener {
         String firstLine = Utils.stripColor(sign.line(0));
 
         if (!firstLine.equalsIgnoreCase(plugin.getCfg().getString("enchant-signs.first-line-format"))) {
+            return;
+        }
+
+        if(!player.hasPermission("extraenchants.signs.use")) {
+            player.sendMessage(Utils.format(plugin.getCfg().getString("messages.no-permission")));
             return;
         }
 

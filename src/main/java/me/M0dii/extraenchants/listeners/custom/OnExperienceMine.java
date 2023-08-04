@@ -36,6 +36,8 @@ public class OnExperienceMine implements Listener {
 
         source.setMetadata("EXPERIENCE_MINER", new FixedMetadataValue(this.plugin, true));
 
-        e.getBlockBreakEvent().setExpToDrop(rnd.nextInt(p.getLevel() + 1) + 1);
+        int bound = (int)Math.floor(Math.sqrt(p.getLevel()) + 1);
+
+        e.getBlockBreakEvent().setExpToDrop(rnd.nextInt(bound) + 1);
     }
 }

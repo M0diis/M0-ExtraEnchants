@@ -36,7 +36,7 @@ public class InventoryUtils {
             return 0;
         }
 
-        return item.getEnchantmentLevel(enchant.getEnchantment());
+        return item.getItemMeta().getEnchantLevel(enchant.getEnchantment());
     }
 
     public static int getEnchantLevelHand(Player p, EEnchant enchant) {
