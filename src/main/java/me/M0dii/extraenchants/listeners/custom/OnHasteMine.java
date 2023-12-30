@@ -37,7 +37,7 @@ public class OnHasteMine implements Listener {
             return;
         }
 
-        int level = e.getEnchantLevel();
+        int level = Math.max(1, e.getEnchantLevel());
 
         p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (level * 100), level - 1));
 

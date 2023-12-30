@@ -22,9 +22,11 @@ import org.bukkit.inventory.ItemStack;
 
 public class SignEnchantInteract implements Listener {
     private final ExtraEnchants plugin;
+    private final Economy econ;
 
     public SignEnchantInteract(ExtraEnchants plugin) {
         this.plugin = plugin;
+        this.econ = plugin.getEconomy();
     }
 
     @EventHandler
@@ -201,8 +203,6 @@ public class SignEnchantInteract implements Listener {
         int costInt = Integer.parseInt(cost);
 
         int levelInt = Integer.parseInt(level);
-
-        Economy econ = plugin.getEconomy();
 
         if(!isXP && !isLevel) {
             if(!econ.has(player, costInt)) {

@@ -1,10 +1,11 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
+
 import io.papermc.paper.enchantments.EnchantmentRarity;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.utils.EnchantWrapper;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Utils;
-import me.m0dii.extraenchants.utils.EnchantWrapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -16,13 +17,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@EnchantWrapper(name = "Experience Miner", maxLvl = 1)
-public class ExperienceMinerWrapper extends Enchantment {
+@EnchantWrapper(name = "Stat Track", maxLvl = 1)
+public class StatTrackWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
     private final EEnchant enchant;
 
-    public ExperienceMinerWrapper(final String name, final int lvl, EEnchant enchant) {
+    public StatTrackWrapper(final String name, final int lvl, EEnchant enchant) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
         this.maxLvl = lvl;
@@ -31,19 +32,11 @@ public class ExperienceMinerWrapper extends Enchantment {
     }
 
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isPickaxe(item) || enchant.canEnchantItemCustom(item);
+        return Enchantables.isTool(item, false) || enchant.canEnchantItemCustom(item);
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
-        if(enchant.getCustomConflicts().contains(enchantment)) {
-            return true;
-        }
-
-        if(!enchant.defaultConflictsEnabled()) {
-            return false;
-        }
-
-        return enchantment.equals(Enchantment.SILK_TOUCH);
+        return enchant.getCustomConflicts().contains(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {
@@ -59,7 +52,7 @@ public class ExperienceMinerWrapper extends Enchantment {
     }
 
     public int getStartLevel() {
-        return 0;
+        return 1;
     }
 
     public boolean isCursed() {

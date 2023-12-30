@@ -25,6 +25,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class BlockBreak implements Listener {
     private final List<String> heads = Arrays.asList("PLAYER_HEAD", "SKELETON_SKULL", "CREEPER_HEAD", "WITHER_SKELETON_SKULL",
@@ -60,6 +61,29 @@ public class BlockBreak implements Listener {
             Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, e, drops));
         }
     }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onBlockBreakStatTrack(final BlockBreakEvent e) {
+        if(shouldSkip(e, EEnchant.STAT_TRACK)) {
+            return;
+        }
+
+        Player p = e.getPlayer();
+        Block b = e.getBlock();
+
+        ItemStack hand = p.getInventory().getItemInMainHand();
+
+        Collection<ItemStack> drops = b.getDrops(hand);
+
+        if (drops.isEmpty()) {
+            return;
+        }
+
+        e.setDropItems(false);
+
+        Bukkit.getPluginManager().callEvent(new StatTrackEvent(p, e, drops));
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreakSmelt(final BlockBreakEvent e) {
         if(shouldSkip(e, EEnchant.SMELT)) {

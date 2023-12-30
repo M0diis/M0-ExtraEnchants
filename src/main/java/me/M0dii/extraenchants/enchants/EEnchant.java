@@ -40,7 +40,8 @@ public enum EEnchant {
     REINFORCED,
     GILLS,
     WEBBING,
-    DEATH_SIPHON;
+    DEATH_SIPHON,
+    STAT_TRACK;
 
     private final ExtraEnchants instance = ExtraEnchants.getInstance();
 

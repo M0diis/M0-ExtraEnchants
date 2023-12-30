@@ -3,7 +3,7 @@ package me.m0dii.extraenchants.enchants.wrappers;
 import io.papermc.paper.enchantments.EnchantmentRarity;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.Utils;
-import me.m0dii.extraenchants.utils.Wrapper;
+import me.m0dii.extraenchants.utils.EnchantWrapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@Wrapper(name = "Bonded", maxLvl = 1)
+@EnchantWrapper(name = "Bonded", maxLvl = 1)
 public class BondedWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
@@ -71,6 +71,16 @@ public class BondedWrapper extends Enchantment {
 
     public boolean isDiscoverable() {
         return false;
+    }
+
+    @Override
+    public int getMinModifiedCost(int level) {
+        return 0;
+    }
+
+    @Override
+    public int getMaxModifiedCost(int level) {
+        return 1;
     }
 
     public @NotNull EnchantmentRarity getRarity() {

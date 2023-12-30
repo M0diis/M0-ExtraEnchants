@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Wrapper {
+public @interface EnchantWrapper {
     String name();
     int maxLvl();
 }

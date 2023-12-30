@@ -1,7 +1,7 @@
 package me.m0dii.extraenchants.enchants;
 
 import me.m0dii.extraenchants.ExtraEnchants;
-import me.m0dii.extraenchants.utils.Wrapper;
+import me.m0dii.extraenchants.utils.EnchantWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.reflections.Reflections;
@@ -22,11 +22,11 @@ public class CustomEnchants {
                 .getSubTypesOf(Enchantment.class)
                 .forEach(clazz -> {
                     try {
-                        if (!clazz.isAnnotationPresent(Wrapper.class)) {
+                        if (!clazz.isAnnotationPresent(EnchantWrapper.class)) {
                             return;
                         }
 
-                        Wrapper wrapper = clazz.getAnnotation(Wrapper.class);
+                        EnchantWrapper wrapper = clazz.getAnnotation(EnchantWrapper.class);
 
                         EEnchant eEnchant = EEnchant.parse(wrapper.name());
 

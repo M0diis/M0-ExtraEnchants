@@ -3,8 +3,9 @@ package me.m0dii.extraenchants.utils;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -46,6 +47,14 @@ public class Utils {
 
     public static String stripColor(Component component) {
         return ChatColor.stripColor(PlainTextComponentSerializer.plainText().serializeOr(component, ""));
+    }
+
+    public static TextComponent colorize(String text) {
+        if (text == null || text.isEmpty()) {
+            return Component.empty();
+        }
+
+        return Component.text(ChatColor.translateAlternateColorCodes('&', text));
     }
 
     public static boolean allowed(Player p, Location loc) {

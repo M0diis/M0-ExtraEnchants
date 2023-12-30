@@ -47,6 +47,43 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
+        if(isArgument(0, args, "debugitem")) {
+            if(!sender.hasPermission("extraenchants.command.debugitem")) {
+                sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
+
+                return true;
+            }
+
+            if(!(sender instanceof Player player)) {
+                sender.sendMessage(Utils.format("&cOnly players can use this command!"));
+
+                return true;
+            }
+
+            ItemStack item = player.getInventory().getItemInMainHand();
+
+            if(item.getType() == Material.AIR) {
+                sender.sendMessage(Utils.format("&cYou must be holding an item!"));
+
+                return true;
+            }
+
+            sender.sendMessage(Utils.format("&7&m----------------------------------------"));
+            sender.sendMessage(Utils.format("&6&lItem Data"));
+            sender.sendMessage(Utils.format("&7&m----------------------------------------"));
+            sender.sendMessage(Utils.format("&eItem: &f" + item.getType().name()));
+            sender.sendMessage(Utils.format("&eAmount: &f" + item.getAmount()));
+            sender.sendMessage(Utils.format("&eDurability: &f" + item.getDurability()));
+            sender.sendMessage(Utils.format("&eMax Durability: &f" + item.getType().getMaxDurability()));
+            sender.sendMessage(Utils.format("&eDisplay Name: &f" + item.getItemMeta().getDisplayName()));
+            sender.sendMessage(Utils.format("&eLore: &f" + item.getItemMeta().getLore()));
+            sender.sendMessage(Utils.format("&eEnchantments: &f" + item.getEnchantments()));
+            sender.sendMessage(Utils.format("&eItem Flags: &f" + item.getItemMeta().getItemFlags()));
+            sender.sendMessage(Utils.format("&eItem Type: &f" + item.getType().name()));
+            sender.sendMessage(Utils.format("&eItem Data: &f" + item.getData()));
+            sender.sendMessage(Utils.format("&7&m----------------------------------------"));
+        }
+
         if(isArgument(0, args, "reload")) {
             if(!sender.hasPermission("extraenchants.command.reload")) {
                 sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
