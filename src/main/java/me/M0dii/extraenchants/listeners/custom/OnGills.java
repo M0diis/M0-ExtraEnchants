@@ -3,7 +3,6 @@ package me.m0dii.extraenchants.listeners.custom;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.BatVisionEvent;
 import me.m0dii.extraenchants.events.GillsEvent;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
@@ -48,23 +47,25 @@ public class OnGills implements Listener {
     public void onPlayerMoveGills(final PlayerMoveEvent e) {
         Player p = e.getPlayer();
 
-        ItemStack helmet = p.getInventory().getHelmet();
-
         Block block = p.getLocation().getBlock();
 
         if (!block.isLiquid() || !block.getType().equals(Material.WATER)) {
             p.removePotionEffect(PotionEffectType.WATER_BREATHING);
+
+            return;
         }
+
+        ItemStack helmet = p.getInventory().getHelmet();
 
         if(helmet == null) {
             return;
         }
 
-        if (!InventoryUtils.hasEnchant(helmet, EEnchant.BAT_VISION)) {
+        if (!InventoryUtils.hasEnchant(helmet, EEnchant.GILLS)) {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new BatVisionEvent(p, e));
+        Bukkit.getPluginManager().callEvent(new GillsEvent(p, e));
     }
 
     @EventHandler
@@ -77,7 +78,7 @@ public class OnGills implements Listener {
 
         ItemStack previous = e.getOldItem();
 
-        if(previous != null && previous.containsEnchantment(EEnchant.GILLS.getEnchantment())) {
+        if(InventoryUtils.hasEnchant(previous, EEnchant.GILLS)) {
             p.removePotionEffect(PotionEffectType.WATER_BREATHING);
         }
     }

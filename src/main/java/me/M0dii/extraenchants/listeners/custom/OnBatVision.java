@@ -68,7 +68,7 @@ public class OnBatVision implements Listener {
 
         ItemStack previous = e.getOldItem();
 
-        if(previous != null && previous.containsEnchantment(EEnchant.BAT_VISION.getEnchantment())) {
+        if(InventoryUtils.hasEnchant(previous, EEnchant.BAT_VISION)) {
             p.removePotionEffect(PotionEffectType.NIGHT_VISION);
         }
     }
