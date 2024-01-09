@@ -5,13 +5,10 @@ import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.CombineEvent;
-import me.m0dii.extraenchants.utils.EnchantInfoGUI;
-import me.m0dii.extraenchants.utils.EnchantListGUI;
-import me.m0dii.extraenchants.utils.Messenger;
-import me.m0dii.extraenchants.utils.Utils;
-import net.kyori.adventure.text.Component;
+import me.m0dii.extraenchants.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -24,14 +21,29 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 public class InventoryClick implements Listener {
-
+    private static final NamespacedKey enchantKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant");
+    private static final NamespacedKey enchantLevelKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant_level");
+    private static final Set<InventoryAction> ITEM_TAKE_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_ALL, InventoryAction.COLLECT_TO_CURSOR, InventoryAction.HOTBAR_SWAP, InventoryAction.MOVE_TO_OTHER_INVENTORY));
+    /**
+     * Holds all the actions that should be considered "place" actions
+     */
+    private static final Set<InventoryAction> ITEM_PLACE_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME, InventoryAction.PLACE_ALL));
+    /**
+     * Holds all actions relating to swapping items
+     */
+    private static final Set<InventoryAction> ITEM_SWAP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.HOTBAR_SWAP, InventoryAction.SWAP_WITH_CURSOR, InventoryAction.HOTBAR_MOVE_AND_READD));
+    /**
+     * Holds all actions relating to dropping items
+     */
+    private static final Set<InventoryAction> ITEM_DROP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ONE_CURSOR, InventoryAction.DROP_ALL_CURSOR));
     private final ExtraEnchants plugin;
 
     public InventoryClick(ExtraEnchants plugin) {
@@ -246,24 +258,6 @@ public class InventoryClick implements Listener {
         return action == InventoryAction.CLONE_STACK || action == InventoryAction.UNKNOWN;
     }
 
-    private static final Set<InventoryAction> ITEM_TAKE_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.PICKUP_ONE, InventoryAction.PICKUP_SOME, InventoryAction.PICKUP_HALF, InventoryAction.PICKUP_ALL, InventoryAction.COLLECT_TO_CURSOR, InventoryAction.HOTBAR_SWAP, InventoryAction.MOVE_TO_OTHER_INVENTORY));
-
-    /**
-     * Holds all the actions that should be considered "place" actions
-     */
-    private static final Set<InventoryAction> ITEM_PLACE_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.PLACE_ONE, InventoryAction.PLACE_SOME, InventoryAction.PLACE_ALL));
-
-    /**
-     * Holds all actions relating to swapping items
-     */
-    private static final Set<InventoryAction> ITEM_SWAP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.HOTBAR_SWAP, InventoryAction.SWAP_WITH_CURSOR, InventoryAction.HOTBAR_MOVE_AND_READD));
-
-    /**
-     * Holds all actions relating to dropping items
-     */
-    private static final Set<InventoryAction> ITEM_DROP_ACTIONS = Collections.unmodifiableSet(EnumSet.of(InventoryAction.DROP_ONE_SLOT, InventoryAction.DROP_ALL_SLOT, InventoryAction.DROP_ONE_CURSOR, InventoryAction.DROP_ALL_CURSOR));
-
-
     @EventHandler
     public void onInventoryDragEnchantInfo(final InventoryDragEvent e) {
         Inventory clickedInv = e.getInventory();
@@ -338,42 +332,37 @@ public class InventoryClick implements Listener {
         ItemMeta meta = item.getItemMeta();
 
         if (meta == null) {
-            Messenger.debug("Item meta is null.");
+            meta = Bukkit.getItemFactory().getItemMeta(item.getType());
+        }
+
+        if (meta == null) {
+            Messenger.debug("Meta is null.");
             return;
         }
 
-        List<Component> lore = meta.lore();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        if (lore == null || lore.isEmpty()) {
-            Messenger.debug("Item lore is null or empty.");
+        if (!pdc.has(enchantKey, PersistentDataType.STRING)) {
+            Messenger.debug("Item does not have enchant key.");
             return;
         }
 
-        for (Component comp : lore) {
-            try {
-                String text = Utils.stripColor(comp);
+        String enchantName = pdc.get(enchantKey, PersistentDataType.STRING);
 
-                Messenger.debug("Stripped color: " + text);
+        EEnchant enchant = EEnchant.parse(enchantName);
 
-                String[] split = text.split(" ");
-
-                String level = split[split.length - 1];
-
-                String enchantName = text.substring(0, text.length() - level.length() - 1);
-
-                Messenger.debug("Enchant name: " + enchantName);
-
-                Enchantment enchantment = EEnchant.toEnchant(enchantName);
-
-                if (enchantment == null || meta.hasEnchant(enchantment)) {
-                    continue;
-                }
-
-                meta.addEnchant(enchantment, 1, true);
-
-                item.setItemMeta(meta);
-            } catch (Exception ignored) {
-            }
+        if (enchant == null) {
+            Messenger.debug("Failed to parse enchant.");
+            return;
         }
+
+        if (InventoryUtils.hasEnchant(item, enchant)) {
+            Messenger.debug("Item already has enchant.");
+            return;
+        }
+
+        int level = pdc.getOrDefault(enchantLevelKey, PersistentDataType.INTEGER, 1);
+
+        Enchanter.applyEnchantWithoutLore(item, enchant, level);
     }
 }

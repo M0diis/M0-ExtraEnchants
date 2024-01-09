@@ -4,16 +4,12 @@ import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.*;
 import me.m0dii.extraenchants.listeners.custom.OnLavaWalk;
+import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
-import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.GameRule;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -21,13 +17,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class BlockBreak implements Listener {
+    private static final NamespacedKey enchantKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant");
+    private static final NamespacedKey enchantLevelKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant_level");
+
     private final List<String> heads = Arrays.asList("PLAYER_HEAD", "SKELETON_SKULL", "CREEPER_HEAD", "WITHER_SKELETON_SKULL",
             "ZOMBIE_HEAD", "CREEPER_WALL_HEAD", "PLAYER_WALL_HEAD", "DRAGON_HEAD", "DRAGON_WALL_HEAD", "ZOMBIE_WALL_HEAD",
             "SKELETON_WALL_SKULL", "WITHER_SKELETON_WALL_SKULL");
@@ -40,7 +41,7 @@ public class BlockBreak implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreakTelepathy(final BlockBreakEvent e) {
-        if(shouldSkip(e, EEnchant.TELEPATHY)) {
+        if (shouldSkip(e, EEnchant.TELEPATHY)) {
             return;
         }
 
@@ -64,7 +65,7 @@ public class BlockBreak implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreakStatTrack(final BlockBreakEvent e) {
-        if(shouldSkip(e, EEnchant.STAT_TRACK)) {
+        if (shouldSkip(e, EEnchant.STAT_TRACK)) {
             return;
         }
 
@@ -86,7 +87,7 @@ public class BlockBreak implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreakSmelt(final BlockBreakEvent e) {
-        if(shouldSkip(e, EEnchant.SMELT)) {
+        if (shouldSkip(e, EEnchant.SMELT)) {
             return;
         }
 
@@ -104,7 +105,7 @@ public class BlockBreak implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreakHasteMiner(final BlockBreakEvent e) {
-        if(shouldSkip(e, EEnchant.HASTE_MINER)) {
+        if (shouldSkip(e, EEnchant.HASTE_MINER)) {
             return;
         }
 
@@ -115,7 +116,7 @@ public class BlockBreak implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreakExperienceMiner(final BlockBreakEvent e) {
-        if(shouldSkip(e, EEnchant.EXPERIENCE_MINER)) {
+        if (shouldSkip(e, EEnchant.EXPERIENCE_MINER)) {
             return;
         }
 
@@ -124,7 +125,7 @@ public class BlockBreak implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreakVeinMiner(final BlockBreakEvent e) {
-        if(shouldSkip(e, EEnchant.VEIN_MINER)) {
+        if (shouldSkip(e, EEnchant.VEIN_MINER)) {
             return;
         }
 
@@ -133,7 +134,7 @@ public class BlockBreak implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreakTunnel(final BlockBreakEvent e) {
-        if(shouldSkip(e, EEnchant.TUNNEL)) {
+        if (shouldSkip(e, EEnchant.TUNNEL)) {
             return;
         }
 
@@ -145,14 +146,14 @@ public class BlockBreak implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreakDisposer(final BlockBreakEvent e) {
-        if(shouldSkip(e, EEnchant.DISPOSER)) {
+        if (shouldSkip(e, EEnchant.DISPOSER)) {
             return;
         }
 
         Bukkit.getPluginManager().callEvent(new DisposerEvent(e.getPlayer(), e));
     }
 
-    private boolean shouldSkip(BlockBreakEvent e, EEnchant enchant) {
+    private boolean shouldSkip(final BlockBreakEvent e, @NotNull EEnchant enchant) {
         if (e.isCancelled()) {
             return true;
         }
@@ -172,8 +173,8 @@ public class BlockBreak implements Listener {
         Material type = block.getType();
 
         if (type.equals(Material.SPAWNER)
-         || type.name().toUpperCase().contains("BED")
-         || type.name().toUpperCase().contains("SPAWNER")) {
+                || type.name().toUpperCase().contains("BED")
+                || type.name().toUpperCase().contains("SPAWNER")) {
             return true;
         }
 
@@ -189,7 +190,7 @@ public class BlockBreak implements Listener {
 
         ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
 
-        if (hand == null || hand.getType().isAir()) {
+        if (hand.getType().isAir()) {
             return true;
         }
 
@@ -197,45 +198,45 @@ public class BlockBreak implements Listener {
             return true;
         }
 
-        if(!Utils.allowed(p, e.getBlock().getLocation())) {
+        if (!Utils.allowed(p, e.getBlock().getLocation())) {
             return true;
         }
 
         return (p.getGameMode() == GameMode.CREATIVE)
-            || (p.getGameMode() == GameMode.SPECTATOR);
+                || (p.getGameMode() == GameMode.SPECTATOR);
     }
 
     @EventHandler
-    public void onBlockBreakFixEnchant(BlockBreakEvent e) {
+    public void onBlockBreakFixEnchant(final BlockBreakEvent e) {
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
 
         ItemMeta meta = item.getItemMeta();
 
-        if(meta == null) {
+        if (meta == null) {
             return;
         }
 
-        List<Component> lore = meta.lore();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        if(lore == null || lore.isEmpty()) {
+        if (!pdc.has(enchantKey, PersistentDataType.STRING)) {
             return;
         }
 
-        for (Component comp : lore) {
-            try {
-                String text = Utils.stripColor(comp);
+        String enchantName = pdc.get(enchantKey, PersistentDataType.STRING);
 
-                String enchantName = text.split(" ")[0];
+        EEnchant enchant = EEnchant.parse(enchantName);
 
-                Enchantment enchantment = EEnchant.toEnchant(enchantName);
-
-                if (enchantment != null) {
-                    if (!meta.hasEnchant(enchantment)) {
-                        item.addUnsafeEnchantment(enchantment, 1);
-                    }
-                }
-            } catch (Exception ignored) {
-            }
+        if (enchant == null) {
+            return;
         }
+
+        if (InventoryUtils.hasEnchant(item, enchant)) {
+            return;
+        }
+
+        int level = pdc.getOrDefault(enchantLevelKey, PersistentDataType.INTEGER, 1);
+
+        Enchanter.applyEnchantWithoutLore(item, enchant, level);
     }
+
 }

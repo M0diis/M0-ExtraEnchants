@@ -17,6 +17,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@Nonnull CommandSender sender, @Nonnull Command cmd,
                              @Nonnull String label, @Nonnull String[] args) {
         if (isArgument(0, args, "list") && sender instanceof Player player) {
-            if(!player.hasPermission("extraenchants.command.list")) {
+            if (!player.hasPermission("extraenchants.command.list")) {
                 player.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
 
                 return true;
@@ -47,14 +49,14 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if(isArgument(0, args, "debugitem")) {
-            if(!sender.hasPermission("extraenchants.command.debugitem")) {
+        if (isArgument(0, args, "debugitem")) {
+            if (!sender.hasPermission("extraenchants.command.debugitem")) {
                 sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
 
                 return true;
             }
 
-            if(!(sender instanceof Player player)) {
+            if (!(sender instanceof Player player)) {
                 sender.sendMessage(Utils.format("&cOnly players can use this command!"));
 
                 return true;
@@ -62,11 +64,16 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
             ItemStack item = player.getInventory().getItemInMainHand();
 
-            if(item.getType() == Material.AIR) {
+            if (item.getType() == Material.AIR) {
                 sender.sendMessage(Utils.format("&cYou must be holding an item!"));
 
                 return true;
             }
+
+            ItemMeta meta = item.getItemMeta();
+
+            PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
 
             sender.sendMessage(Utils.format("&7&m----------------------------------------"));
             sender.sendMessage(Utils.format("&6&lItem Data"));
@@ -75,17 +82,21 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(Utils.format("&eAmount: &f" + item.getAmount()));
             sender.sendMessage(Utils.format("&eDurability: &f" + item.getDurability()));
             sender.sendMessage(Utils.format("&eMax Durability: &f" + item.getType().getMaxDurability()));
-            sender.sendMessage(Utils.format("&eDisplay Name: &f" + item.getItemMeta().getDisplayName()));
+            sender.sendMessage(Utils.format("&eDisplay Name: &f" + meta.getDisplayName()));
             sender.sendMessage(Utils.format("&eLore: &f" + item.getItemMeta().getLore()));
             sender.sendMessage(Utils.format("&eEnchantments: &f" + item.getEnchantments()));
-            sender.sendMessage(Utils.format("&eItem Flags: &f" + item.getItemMeta().getItemFlags()));
+            sender.sendMessage(Utils.format("&eItem Flags: &f" + meta.getItemFlags()));
             sender.sendMessage(Utils.format("&eItem Type: &f" + item.getType().name()));
             sender.sendMessage(Utils.format("&eItem Data: &f" + item.getData()));
+            sender.sendMessage(Utils.format("&ePDC Keys:"));
+            pdc.getKeys().forEach(key -> {
+                sender.sendMessage(Utils.format("&e- &f" + key.toString()));
+            });
             sender.sendMessage(Utils.format("&7&m----------------------------------------"));
         }
 
-        if(isArgument(0, args, "reload")) {
-            if(!sender.hasPermission("extraenchants.command.reload")) {
+        if (isArgument(0, args, "reload")) {
+            if (!sender.hasPermission("extraenchants.command.reload")) {
                 sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
 
                 return true;
@@ -109,7 +120,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
             EEnchant enchant = EEnchant.parse(enchantName);
 
-            if(enchant == null) {
+            if (enchant == null) {
                 sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
 
                 return true;
@@ -117,7 +128,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
             Enchantment enchantment = enchant.getEnchantment();
 
-            if(enchantment == null) {
+            if (enchantment == null) {
                 sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
 
                 return true;
@@ -125,7 +136,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
             ItemStack item = target.getInventory().getItemInMainHand();
 
-            if(item.getType() == Material.AIR) {
+            if (item.getType() == Material.AIR) {
                 sender.sendMessage(Utils.format(cfg.getString("messages.hold-item")));
 
                 return true;
@@ -138,7 +149,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             return true;
         }
 
-        if(isArgument(0, args, "give") && args.length >= 3) {
+        if (isArgument(0, args, "give") && args.length >= 3) {
             if (!sender.hasPermission("extraenchants.command.give")) {
                 sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
 
@@ -149,7 +160,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
             String enchantName = args[2].replace("_", "");
 
-            if(target == null) {
+            if (target == null) {
                 sender.sendMessage(Utils.format(cfg.getString("messages.player-not-found")));
 
                 return true;
@@ -158,10 +169,11 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             int level = 1;
 
             try {
-                if(args.length >= 4) {
+                if (args.length >= 4) {
                     level = Integer.parseInt(args[3]);
                 }
-            } catch (NumberFormatException ignored) { }
+            } catch (NumberFormatException ignored) {
+            }
 
             if (giveBook(enchantName, target, level)) {
                 return true;
@@ -182,7 +194,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
         ItemStack item = Enchanter.getBook(enchantName, level);
 
-        if(item == null) {
+        if (item == null) {
             return false;
         }
 
@@ -194,33 +206,34 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
         return true;
     }
+
     @Override
     public List<String> onTabComplete(@Nonnull CommandSender sender, @Nonnull Command cmd,
                                       @Nonnull String alias, @Nonnull String[] args) {
         List<String> completes = new ArrayList<>();
 
 
-        if(args.length == 1) {
-            if("list".contains(args[0].toLowerCase())) {
+        if (args.length == 1) {
+            if ("list".contains(args[0].toLowerCase())) {
                 completes.add("list");
             }
 
-            if("apply".contains(args[0].toLowerCase())) {
+            if ("apply".contains(args[0].toLowerCase())) {
                 completes.add("apply");
             }
 
-            if("give".contains(args[0].toLowerCase())) {
+            if ("give".contains(args[0].toLowerCase())) {
                 completes.add("give");
             }
 
-            if("reload".contains(args[0].toLowerCase())) {
+            if ("reload".contains(args[0].toLowerCase())) {
                 completes.add("reload");
             }
         }
 
         // /extraenchants apply <enchant> <level>
         if (args.length == 2 && args[0].equalsIgnoreCase("apply")) {
-            if(sender.hasPermission("extraenchants.command.apply")) {
+            if (sender.hasPermission("extraenchants.command.apply")) {
                 CustomEnchants.getAllEnchants()
                         .stream()
                         .map(s -> s.getKey().getKey())
@@ -230,7 +243,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
         }
 
         // /extraenchants give <player> <enchant> <level>
-        if(args.length == 2 && args[0].equalsIgnoreCase("give")) {
+        if (args.length == 2 && args[0].equalsIgnoreCase("give")) {
             Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
                     .filter(s -> StringUtils.startsWithIgnoreCase(s, args[1]))
@@ -239,7 +252,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
         // /extraenchants give <player> <enchant> <level>
         if (args.length == 3 && args[0].equalsIgnoreCase("give")) {
-            if(sender.hasPermission("extraenchants.command.give")) {
+            if (sender.hasPermission("extraenchants.command.give")) {
                 CustomEnchants.getAllEnchants()
                         .stream()
                         .map(s -> s.getKey().getKey())
@@ -248,7 +261,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             }
         }
 
-        if(args.length == 4) {
+        if (args.length == 4) {
             completes.add("1");
             completes.add("2");
         }
@@ -257,7 +270,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
     }
 
     private boolean isArgument(int index, String[] args, String argument) {
-        if(args.length == 0 || args.length < index) {
+        if (args.length == 0 || args.length < index) {
             return false;
         }
 
