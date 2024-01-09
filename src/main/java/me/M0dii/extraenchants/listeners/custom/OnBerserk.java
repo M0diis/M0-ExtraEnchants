@@ -38,7 +38,7 @@ public class OnBerserk implements Listener {
         double healthHas = damager.getHealth();
         AttributeInstance attribute = damager.getAttribute(Attribute.GENERIC_MAX_HEALTH);
 
-        if(attribute == null) {
+        if (attribute == null) {
             return;
         }
 

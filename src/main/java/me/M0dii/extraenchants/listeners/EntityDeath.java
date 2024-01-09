@@ -30,13 +30,13 @@ public class EntityDeath implements Listener {
 
         ItemStack hand = e.getEntity().getKiller().getInventory().getItemInMainHand();
 
-        if(hand == null || hand.getType().isAir()) {
+        if (hand == null || hand.getType().isAir()) {
             return;
         }
 
         ItemMeta itemMeta = hand.getItemMeta();
 
-        if(itemMeta == null) {
+        if (itemMeta == null) {
             return;
         }
 
@@ -49,7 +49,7 @@ public class EntityDeath implements Listener {
     public void onEntityDeathDeathSiphon(final EntityDeathEvent e) {
         Messenger.debug("EntityDeathEvent called");
 
-        if(EEnchant.DEATH_SIPHON.isDisabled()) {
+        if (EEnchant.DEATH_SIPHON.isDisabled()) {
             return;
         }
 

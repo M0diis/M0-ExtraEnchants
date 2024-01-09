@@ -20,7 +20,7 @@ public class InventoryUtils {
     }
 
     public static boolean hasEnchant(ItemStack item, EEnchant enchant) {
-        if(item == null) {
+        if (item == null) {
             return false;
         }
 
@@ -32,7 +32,7 @@ public class InventoryUtils {
     }
 
     public static int getEnchantLevel(ItemStack item, EEnchant enchant) {
-        if(item == null) {
+        if (item == null) {
             return 0;
         }
 
@@ -40,13 +40,13 @@ public class InventoryUtils {
     }
 
     public static int getEnchantLevelHand(Player p, EEnchant enchant) {
-        if(p == null) {
+        if (p == null) {
             return 0;
         }
 
         ItemStack item = p.getInventory().getItemInMainHand();
 
-        if(item == null || item.getType().isAir()) {
+        if (item == null || item.getType().isAir()) {
             return 0;
         }
 
@@ -54,11 +54,11 @@ public class InventoryUtils {
     }
 
     public static void applyDurabilityChanced(ItemStack item, int chance) {
-        if(item == null || item.getType().isAir()) {
+        if (item == null || item.getType().isAir()) {
             return;
         }
 
-        if(random.nextInt(100) > chance) {
+        if (random.nextInt(100) > chance) {
             return;
         }
 
@@ -66,7 +66,7 @@ public class InventoryUtils {
     }
 
     public static void applyDurability(ItemStack item) {
-        if(!(item.getItemMeta() instanceof Damageable damageable)) {
+        if (!(item.getItemMeta() instanceof Damageable damageable)) {
             return;
         }
 

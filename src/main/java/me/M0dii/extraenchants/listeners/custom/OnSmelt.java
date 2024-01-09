@@ -69,8 +69,7 @@ public class OnSmelt implements Listener {
                 for (int i = 0; i <= extraDrops; i++) {
                     results.add(furnaceRecipe.getResult());
                 }
-            }
-            else results.add(furnaceRecipe.getResult());
+            } else results.add(furnaceRecipe.getResult());
 
             break;
         }
@@ -88,10 +87,9 @@ public class OnSmelt implements Listener {
 
         if (InventoryUtils.hasEnchant(tool, EEnchant.TELEPATHY)) {
             Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, e.getBlockBreakEvent(), results));
-        }
-        else {
+        } else {
             for (ItemStack drop : results) {
-                if(drop == null || drop.getType().isAir()) {
+                if (drop == null || drop.getType().isAir()) {
                     continue;
                 }
                 b.getWorld().dropItemNaturally(b.getLocation(), drop);

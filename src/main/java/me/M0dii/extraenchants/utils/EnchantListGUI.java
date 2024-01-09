@@ -18,8 +18,7 @@ public class EnchantListGUI implements InventoryHolder {
     private final static ExtraEnchants plugin = ExtraEnchants.getPlugin(ExtraEnchants.class);
     private final Inventory inventory;
 
-    public EnchantListGUI()
-    {
+    public EnchantListGUI() {
         this.inventory = Bukkit.createInventory(this, 9 * 3, Utils.format("&8&lEnchant List"));
 
         init();

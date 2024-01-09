@@ -13,8 +13,8 @@ public class TunnelEvent extends Event implements Cancellable {
     private final Player player;
     private final BlockBreakEvent event;
     private final Block block;
-    private boolean isCancelled;
     private final int enchantLevel;
+    private boolean isCancelled;
 
     public TunnelEvent(Player p, BlockBreakEvent e, int enchantLevel) {
         this.player = p;

@@ -24,7 +24,7 @@ public class TillInteract implements Listener {
 
     @EventHandler
     public void onPlayerInteractPlow(final PlayerInteractEvent e) {
-        if(EEnchant.PLOW.isDisabled()) {
+        if (EEnchant.PLOW.isDisabled()) {
             return;
         }
 
@@ -52,7 +52,7 @@ public class TillInteract implements Listener {
         }
 
         if ((p.getGameMode() == GameMode.CREATIVE)
-         || (p.getGameMode() == GameMode.SPECTATOR)) {
+                || (p.getGameMode() == GameMode.SPECTATOR)) {
             return;
         }
 
@@ -67,7 +67,7 @@ public class TillInteract implements Listener {
 
     @EventHandler
     public void onPlayerInteractReplanter(final PlayerInteractEvent e) {
-        if(EEnchant.REPLANTER.isDisabled()) {
+        if (EEnchant.REPLANTER.isDisabled()) {
             return;
         }
 
@@ -95,7 +95,7 @@ public class TillInteract implements Listener {
         }
 
         if ((p.getGameMode() == GameMode.CREATIVE)
-         || (p.getGameMode() == GameMode.SPECTATOR)) {
+                || (p.getGameMode() == GameMode.SPECTATOR)) {
             return;
         }
 

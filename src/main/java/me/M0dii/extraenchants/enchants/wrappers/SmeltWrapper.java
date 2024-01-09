@@ -2,9 +2,9 @@ package me.m0dii.extraenchants.enchants.wrappers;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.utils.EnchantWrapper;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Utils;
-import me.m0dii.extraenchants.utils.EnchantWrapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -35,16 +35,16 @@ public class SmeltWrapper extends Enchantment {
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
-        if(enchant.getCustomConflicts().contains(enchantment)) {
+        if (enchant.getCustomConflicts().contains(enchantment)) {
             return true;
         }
 
-        if(!enchant.defaultConflictsEnabled()) {
+        if (!enchant.defaultConflictsEnabled()) {
             return false;
         }
 
         return Enchantment.SILK_TOUCH.equals(enchantment)
-            || EEnchant.TELEPATHY.equals(enchantment);
+                || EEnchant.TELEPATHY.equals(enchantment);
     }
 
     public @NotNull EnchantmentTarget getItemTarget() {

@@ -48,7 +48,7 @@ public class EnchantItem implements Listener {
         if (e.getEnchantsToAdd().keySet()
                 .stream()
                 .anyMatch(add -> eenchant.conflictsWith(add)
-                       || add.conflictsWith(eenchant.getEnchantment()))) {
+                        || add.conflictsWith(eenchant.getEnchantment()))) {
             return;
         }
 

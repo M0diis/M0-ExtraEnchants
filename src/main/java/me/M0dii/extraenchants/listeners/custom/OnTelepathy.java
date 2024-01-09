@@ -47,7 +47,7 @@ public class OnTelepathy implements Listener {
         boolean fits = doesFit(inv, drops);
 
         if (b.getType().equals(Material.SPAWNER)
-         || b.getType().name().toUpperCase().contains("SPAWNER"))
+                || b.getType().name().toUpperCase().contains("SPAWNER"))
             return;
 
         if (!fits) {
@@ -70,26 +70,22 @@ public class OnTelepathy implements Listener {
                     for (ItemStack i : drops) {
                         inv.addItem(i);
                     }
-                }
-                else {
+                } else {
                     Material m = Material.getMaterial(name.replace("WALL_", ""));
 
                     if (m != null)
                         inv.addItem(new ItemStack(m));
                 }
-            }
-            else {
+            } else {
                 inv.addItem(itm);
             }
-        }
-        else if (inv.firstEmpty() == -1) {
+        } else if (inv.firstEmpty() == -1) {
             ItemStack item = drops.iterator().next();
 
             if (inv.contains(item)) {
                 addToStack(player, drops);
             }
-        }
-        else {
+        } else {
             for (ItemStack i : drops) {
                 inv.addItem(i);
             }

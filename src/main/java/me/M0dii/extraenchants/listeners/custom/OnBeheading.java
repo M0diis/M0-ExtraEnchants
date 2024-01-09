@@ -74,7 +74,7 @@ public class OnBeheading implements Listener {
             if (died.getName().equalsIgnoreCase(hn)) {
                 Material mat = Material.getMaterial(hn);
 
-                if(mat == null) {
+                if (mat == null) {
                     continue;
                 }
 

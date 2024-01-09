@@ -33,7 +33,7 @@ public class OnHasteMine implements Listener {
                 .filter(effect -> effect.getType().equals(PotionEffectType.FAST_DIGGING))
                 .findFirst();
 
-        if(current.isPresent()) {
+        if (current.isPresent()) {
             return;
         }
 

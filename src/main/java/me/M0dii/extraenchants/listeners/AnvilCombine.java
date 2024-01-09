@@ -19,21 +19,6 @@ public class AnvilCombine implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler
-    public void onItemPrepare(final PrepareAnvilEvent event) {
-        ItemStack srcItem = event.getInventory().getItem(0);
-        ItemStack result = event.getResult();
-
-        if (srcItem == null || result == null) {
-            return;
-        }
-
-        if(InventoryUtils.hasEnchant(srcItem, EEnchant.ANTI_THORNS.getEnchantment())
-        || InventoryUtils.hasEnchant(result, EEnchant.ANTI_THORNS.getEnchantment())) {
-            event.setResult(null);
-        }
-    }
-
     public static void removeFromItem(ItemStack item, Enchantment enchantment, int level) {
         if (!item.hasItemMeta()) {
             return;
@@ -44,11 +29,11 @@ public class AnvilCombine implements Listener {
         if (meta != null && meta.hasLore()) {
             List<String> lore = meta.getLore();
 
-            if(lore == null) {
+            if (lore == null) {
                 return;
             }
 
-            for(int i = 0; i < lore.size(); i++) {
+            for (int i = 0; i < lore.size(); i++) {
                 String line = lore.get(i);
                 if (line.contains(enchantment.getName())) {
                     lore.remove(i);
@@ -61,5 +46,20 @@ public class AnvilCombine implements Listener {
         }
 
         item.removeEnchantment(enchantment);
+    }
+
+    @EventHandler
+    public void onItemPrepare(final PrepareAnvilEvent event) {
+        ItemStack srcItem = event.getInventory().getItem(0);
+        ItemStack result = event.getResult();
+
+        if (srcItem == null || result == null) {
+            return;
+        }
+
+        if (InventoryUtils.hasEnchant(srcItem, EEnchant.ANTI_THORNS.getEnchantment())
+                || InventoryUtils.hasEnchant(result, EEnchant.ANTI_THORNS.getEnchantment())) {
+            event.setResult(null);
+        }
     }
 }

@@ -46,7 +46,7 @@ public class OnReplanter implements Listener {
 
         Block blockPlant = e.getInteractEvent().getClickedBlock();
 
-        if(blockPlant == null) {
+        if (blockPlant == null) {
             return;
         }
 
@@ -62,7 +62,7 @@ public class OnReplanter implements Listener {
 
         Player player = e.getPlayer();
 
-        if(!Utils.allowed(player, blockPlant.getLocation())) {
+        if (!Utils.allowed(player, blockPlant.getLocation())) {
             return;
         }
 

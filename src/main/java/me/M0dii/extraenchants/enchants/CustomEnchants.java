@@ -9,7 +9,8 @@ import org.reflections.Reflections;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class CustomEnchants {
 
@@ -30,7 +31,7 @@ public class CustomEnchants {
 
                         EEnchant eEnchant = EEnchant.parse(wrapper.name());
 
-                        if(eEnchant == null) {
+                        if (eEnchant == null) {
                             return;
                         }
 

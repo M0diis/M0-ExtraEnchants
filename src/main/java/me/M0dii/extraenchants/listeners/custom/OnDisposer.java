@@ -16,7 +16,7 @@ public class OnDisposer implements Listener {
 
     @EventHandler
     public void onDisposer(final DisposerEvent e) {
-        if(!Utils.shouldTrigger(EEnchant.DISPOSER)) {
+        if (!Utils.shouldTrigger(EEnchant.DISPOSER)) {
             return;
         }
 

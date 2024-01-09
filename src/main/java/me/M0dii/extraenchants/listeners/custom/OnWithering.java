@@ -32,7 +32,7 @@ public class OnWithering implements Listener {
             return;
         }
 
-        Player targetPlayer = (Player)target;
+        Player targetPlayer = (Player) target;
 
         int level = e.getEnchantLevel();
 
@@ -41,7 +41,7 @@ public class OnWithering implements Listener {
                 .filter(effect -> effect.getType().equals(PotionEffectType.WITHER))
                 .findFirst();
 
-        if(current.isPresent()) {
+        if (current.isPresent()) {
             return;
         }
 

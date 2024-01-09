@@ -39,7 +39,7 @@ public class OnLifesteal implements Listener {
 
         double heal = damage * 0.1;
 
-        if(damager.getHealth() + heal > 20) {
+        if (damager.getHealth() + heal > 20) {
             return;
         }
 

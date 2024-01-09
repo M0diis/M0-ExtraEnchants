@@ -5,7 +5,6 @@ import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.StatTrackEvent;
 import me.m0dii.extraenchants.utils.Utils;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.EventHandler;

@@ -27,11 +27,11 @@ public class OnTurtleShell implements Listener {
             return;
         }
 
-        if(!(e.getEntityDamageEvent().getEntity() instanceof Player receiver)) {
+        if (!(e.getEntityDamageEvent().getEntity() instanceof Player receiver)) {
             return;
         }
 
-        if(!(e.getEntityDamageEvent().getDamager() instanceof Player attacker)) {
+        if (!(e.getEntityDamageEvent().getDamager() instanceof Player attacker)) {
             return;
         }
 
@@ -39,7 +39,7 @@ public class OnTurtleShell implements Listener {
 
         Messenger.debug("Dot: " + dot);
 
-        if(dot < 0.8) {
+        if (dot < 0.8) {
             Messenger.debug("Dot is less than 0.75.");
             return;
         }
@@ -51,7 +51,7 @@ public class OnTurtleShell implements Listener {
         ItemStack leggings = receiver.getInventory().getLeggings();
         ItemStack boots = receiver.getInventory().getBoots();
 
-        if(InventoryUtils.hasEnchant(helmet, EEnchant.TURTLE_SHELL)) {
+        if (InventoryUtils.hasEnchant(helmet, EEnchant.TURTLE_SHELL)) {
             if (Utils.shouldTrigger(EEnchant.TURTLE_SHELL)) {
                 InventoryUtils.applyDurability(helmet);
 
@@ -59,7 +59,7 @@ public class OnTurtleShell implements Listener {
             }
         }
 
-        if(InventoryUtils.hasEnchant(chestplate, EEnchant.TURTLE_SHELL)) {
+        if (InventoryUtils.hasEnchant(chestplate, EEnchant.TURTLE_SHELL)) {
             if (Utils.shouldTrigger(EEnchant.TURTLE_SHELL)) {
                 InventoryUtils.applyDurability(chestplate);
 
@@ -67,15 +67,15 @@ public class OnTurtleShell implements Listener {
             }
         }
 
-        if(InventoryUtils.hasEnchant(leggings, EEnchant.TURTLE_SHELL)) {
-            if(Utils.shouldTrigger(EEnchant.TURTLE_SHELL)) {
+        if (InventoryUtils.hasEnchant(leggings, EEnchant.TURTLE_SHELL)) {
+            if (Utils.shouldTrigger(EEnchant.TURTLE_SHELL)) {
                 InventoryUtils.applyDurability(leggings);
 
                 percentage += 0.025;
             }
         }
 
-        if(InventoryUtils.hasEnchant(boots, EEnchant.TURTLE_SHELL)) {
+        if (InventoryUtils.hasEnchant(boots, EEnchant.TURTLE_SHELL)) {
             if (Utils.shouldTrigger(EEnchant.TURTLE_SHELL)) {
                 InventoryUtils.applyDurability(boots);
 
@@ -83,7 +83,7 @@ public class OnTurtleShell implements Listener {
             }
         }
 
-        if(percentage == 0) {
+        if (percentage == 0) {
             return;
         }
 

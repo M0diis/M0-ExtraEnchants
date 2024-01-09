@@ -33,42 +33,42 @@ public class OnAntiThorns implements Listener {
 
         int deflectPercentage = 0;
 
-        if(helmet != null) {
-            if(helmet.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
+        if (helmet != null) {
+            if (helmet.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
                 InventoryUtils.applyDurability(helmet);
 
                 deflectPercentage += 25;
             }
         }
 
-        if(chestplate != null) {
-            if(chestplate.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
+        if (chestplate != null) {
+            if (chestplate.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
                 InventoryUtils.applyDurability(chestplate);
 
                 deflectPercentage += 25;
             }
         }
 
-        if(leggings != null) {
-            if(leggings.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
+        if (leggings != null) {
+            if (leggings.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
                 InventoryUtils.applyDurability(leggings);
 
                 deflectPercentage += 25;
             }
         }
 
-        if(boots != null) {
-            if(boots.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
+        if (boots != null) {
+            if (boots.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
                 InventoryUtils.applyDurability(boots);
 
                 deflectPercentage += 25;
             }
         }
 
-        if(deflectPercentage == 100) {
+        if (deflectPercentage == 100) {
             e.getEntityDamageEvent().setCancelled(true);
         } else {
-            if(random.nextInt(100) < deflectPercentage) {
+            if (random.nextInt(100) < deflectPercentage) {
                 e.getEntityDamageEvent().setCancelled(true);
             }
         }

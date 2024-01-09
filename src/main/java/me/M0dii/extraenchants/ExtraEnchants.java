@@ -28,6 +28,7 @@ public class ExtraEnchants extends JavaPlugin {
     private static ExtraEnchants instance;
     private PluginManager pm;
     private ConfigManager configManager;
+    private Economy economy = null;
 
     public static ExtraEnchants getInstance() {
         return instance;
@@ -85,7 +86,7 @@ public class ExtraEnchants extends JavaPlugin {
     }
 
     private void checkForUpdates() {
-        if(!configManager.getConfig().getBoolean("notify-update")) {
+        if (!configManager.getConfig().getBoolean("notify-update")) {
             return;
         }
 
@@ -119,8 +120,6 @@ public class ExtraEnchants extends JavaPlugin {
         metrics.addCustomChart(c);
     }
 
-    private Economy economy = null;
-
     public Economy getEconomy() {
         return economy;
     }
@@ -141,9 +140,8 @@ public class ExtraEnchants extends JavaPlugin {
                         this.pm.registerEvents(listener, this);
 
                         Bukkit.getLogger().info("Registered listener: " + listener.getClass().getSimpleName());
-                    }
-                    catch (IllegalAccessException | InstantiationException |
-                           NoSuchMethodException | InvocationTargetException ex) {
+                    } catch (IllegalAccessException | InstantiationException |
+                             NoSuchMethodException | InvocationTargetException ex) {
                         ex.printStackTrace();
                     }
                 });

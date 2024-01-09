@@ -32,7 +32,7 @@ public class OnBatVision implements Listener {
 
         PotionEffect current = p.getPotionEffect(PotionEffectType.NIGHT_VISION);
 
-        if(current != null && current.getDuration() > 1200) {
+        if (current != null && current.getDuration() > 1200) {
             return;
         }
 
@@ -47,7 +47,7 @@ public class OnBatVision implements Listener {
 
         ItemStack helmet = p.getInventory().getHelmet();
 
-        if(helmet == null) {
+        if (helmet == null) {
             return;
         }
 
@@ -62,13 +62,13 @@ public class OnBatVision implements Listener {
     public void onArmorChangeBatVision(final PlayerArmorChangeEvent e) {
         Player p = e.getPlayer();
 
-        if(e.getSlotType() != PlayerArmorChangeEvent.SlotType.HEAD) {
+        if (e.getSlotType() != PlayerArmorChangeEvent.SlotType.HEAD) {
             return;
         }
 
         ItemStack previous = e.getOldItem();
 
-        if(InventoryUtils.hasEnchant(previous, EEnchant.BAT_VISION)) {
+        if (InventoryUtils.hasEnchant(previous, EEnchant.BAT_VISION)) {
             p.removePotionEffect(PotionEffectType.NIGHT_VISION);
         }
     }

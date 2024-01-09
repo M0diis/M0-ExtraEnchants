@@ -22,15 +22,15 @@ public class EntityDamage implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageAntiThorns(final EntityDamageEvent e) {
-        if(EEnchant.ANTI_THORNS.isDisabled()) {
+        if (EEnchant.ANTI_THORNS.isDisabled()) {
             return;
         }
 
-        if(!(e.getEntity() instanceof Player p)) {
+        if (!(e.getEntity() instanceof Player p)) {
             return;
         }
 
-        if(!e.getCause().equals(EntityDamageEvent.DamageCause.THORNS)) {
+        if (!e.getCause().equals(EntityDamageEvent.DamageCause.THORNS)) {
             return;
         }
 
@@ -39,52 +39,52 @@ public class EntityDamage implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageLifesteal(final EntityDamageByEntityEvent e) {
-        if(shouldSkip(e, EEnchant.LIFESTEAL)) {
+        if (shouldSkip(e, EEnchant.LIFESTEAL)) {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new LifestealEvent((Player)e.getDamager(), e));
+        Bukkit.getPluginManager().callEvent(new LifestealEvent((Player) e.getDamager(), e));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageAssassin(EntityDamageByEntityEvent e) {
-        if(shouldSkip(e, EEnchant.ASSASSIN)) {
+        if (shouldSkip(e, EEnchant.ASSASSIN)) {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new AssassinEvent((Player)e.getDamager(), e));
+        Bukkit.getPluginManager().callEvent(new AssassinEvent((Player) e.getDamager(), e));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageBerserk(final EntityDamageByEntityEvent e) {
-        if(shouldSkip(e, EEnchant.BERSERK)) {
+        if (shouldSkip(e, EEnchant.BERSERK)) {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new BerserkEvent((Player)e.getDamager(), e));
+        Bukkit.getPluginManager().callEvent(new BerserkEvent((Player) e.getDamager(), e));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageBarbarian(final EntityDamageByEntityEvent e) {
-        if(shouldSkip(e, EEnchant.BARBARIAN)) {
+        if (shouldSkip(e, EEnchant.BARBARIAN)) {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new BarbarianEvent((Player)e.getDamager(), e));
+        Bukkit.getPluginManager().callEvent(new BarbarianEvent((Player) e.getDamager(), e));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageWebbing(final EntityDamageByEntityEvent e) {
-        if(shouldSkip(e, EEnchant.WEBBING)) {
+        if (shouldSkip(e, EEnchant.WEBBING)) {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new WebbingEvent((Player)e.getDamager(), e));
+        Bukkit.getPluginManager().callEvent(new WebbingEvent((Player) e.getDamager(), e));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageWithering(final EntityDamageByEntityEvent e) {
-        if(shouldSkip(e, EEnchant.WITHERING)) {
+        if (shouldSkip(e, EEnchant.WITHERING)) {
             return;
         }
 
@@ -97,11 +97,11 @@ public class EntityDamage implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageColdSteel(final EntityDamageByEntityEvent e) {
-        if(EEnchant.COLD_STEEL.isDisabled()) {
+        if (EEnchant.COLD_STEEL.isDisabled()) {
             return;
         }
 
-        if(!(e.getDamager() instanceof Player p)) {
+        if (!(e.getDamager() instanceof Player p)) {
             return;
         }
 
@@ -110,11 +110,11 @@ public class EntityDamage implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageTurtleShell(final EntityDamageByEntityEvent e) {
-        if(EEnchant.COLD_STEEL.isDisabled()) {
+        if (EEnchant.COLD_STEEL.isDisabled()) {
             return;
         }
 
-        if(!(e.getDamager() instanceof Player p)) {
+        if (!(e.getDamager() instanceof Player p)) {
             return;
         }
 
@@ -123,15 +123,15 @@ public class EntityDamage implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageArmorBreaker(final EntityDamageByEntityEvent e) {
-        if(EEnchant.COLD_STEEL.isDisabled()) {
+        if (EEnchant.COLD_STEEL.isDisabled()) {
             return;
         }
 
-        if(!(e.getDamager() instanceof Player p)) {
+        if (!(e.getDamager() instanceof Player p)) {
             return;
         }
 
-        if(!(e.getEntity() instanceof Player)) {
+        if (!(e.getEntity() instanceof Player)) {
             return;
         }
 
@@ -141,15 +141,15 @@ public class EntityDamage implements Listener {
     }
 
     private boolean shouldSkip(EntityDamageByEntityEvent e, EEnchant enchant) {
-        if(enchant.isDisabled()) {
+        if (enchant.isDisabled()) {
             return true;
         }
 
-        if(e.isCancelled()) {
+        if (e.isCancelled()) {
             return true;
         }
 
-        if(!(e.getDamager() instanceof Player p)) {
+        if (!(e.getDamager() instanceof Player p)) {
             return true;
         }
 

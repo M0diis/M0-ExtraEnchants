@@ -1,6 +1,5 @@
 package me.m0dii.extraenchants.utils;
 
-import me.m0dii.extraenchants.ExtraEnchants;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -16,8 +15,7 @@ public class EnchantInfoGUI implements InventoryHolder {
 
     private final Enchantment enchant;
 
-    public EnchantInfoGUI(Enchantment enchant)
-    {
+    public EnchantInfoGUI(Enchantment enchant) {
         this.inventory = Bukkit.createInventory(this, 9 * 6, Utils.format("&8&lEnchant Information"));
         this.enchant = enchant;
 
@@ -76,10 +74,8 @@ public class EnchantInfoGUI implements InventoryHolder {
 
         this.inventory.setItem(49, backButton);
 
-        for(int i = 0; i < this.inventory.getSize(); i++)
-        {
-            if(this.inventory.getItem(i) == null)
-            {
+        for (int i = 0; i < this.inventory.getSize(); i++) {
+            if (this.inventory.getItem(i) == null) {
                 ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
                 ItemMeta glassMeta = glass.getItemMeta();
 
@@ -99,7 +95,7 @@ public class EnchantInfoGUI implements InventoryHolder {
 
         meta.setDisplayName(Utils.format("&a&lCan Enchant"));
 
-        if(!enchant.canEnchantItem(item)) {
+        if (!enchant.canEnchantItem(item)) {
             itemStack.setType(Material.RED_STAINED_GLASS_PANE);
 
             meta.setDisplayName(Utils.format("&c&lCan't Enchant"));

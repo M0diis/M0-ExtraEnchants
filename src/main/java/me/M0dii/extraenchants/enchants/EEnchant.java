@@ -47,9 +47,41 @@ public enum EEnchant {
 
     private Enchantment enchant;
 
+    public static EEnchant parse(String value) {
+        return Arrays.stream(EEnchant.values())
+                .filter(v -> v.getDisplayName().equalsIgnoreCase(value.trim())
+                        || v.getDisplayName().replace(" ", "").equalsIgnoreCase(value.trim())
+                        || v.getDisplayName().replace(" ", "_").equalsIgnoreCase(value.trim())
+                        || v.getConfigName().equalsIgnoreCase(value.trim())
+                )
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static Enchantment toEnchant(String value) {
+        return Arrays.stream(EEnchant.values())
+                .filter(v -> {
+                    String val = value.trim();
+
+                    return v.getDisplayName().equalsIgnoreCase(val)
+                            || v.getDisplayName().replace(" ", "").equalsIgnoreCase(val)
+                            || v.getConfigName().equalsIgnoreCase(val)
+                            || v.getConfigName().equalsIgnoreCase(val.replace(" ", ""));
+                })
+                .map(EEnchant::getEnchantment)
+                .findFirst()
+                .orElse(null);
+    }
+
+    public static EEnchant fromEnchant(Enchantment enchant) {
+        return Arrays.stream(EEnchant.values())
+                .filter(v -> v.getEnchantment().equals(enchant))
+                .findFirst()
+                .orElse(null);
+    }
 
     public String getDisplayName() {
-        if(!this.name().contains("_")) {
+        if (!this.name().contains("_")) {
             return StringUtils.capitalize(this.name().toLowerCase());
         }
 
@@ -112,7 +144,6 @@ public enum EEnchant {
         return formatted ? ChatColor.translateAlternateColorCodes('&', name) : name;
     }
 
-
     public boolean conflictsWith(Enchantment enchant) {
         return this.enchant.conflictsWith(enchant);
     }
@@ -160,51 +191,18 @@ public enum EEnchant {
                 .map(s -> {
                     Enchantment byName = Enchantment.getByName(s.toUpperCase());
 
-                    if(byName != null) {
+                    if (byName != null) {
                         return byName;
                     }
 
                     EEnchant parsed = EEnchant.parse(s);
 
-                    if(parsed == null || parsed.getEnchantment() == null) {
+                    if (parsed == null || parsed.getEnchantment() == null) {
                         return null;
                     }
 
                     return parsed.getEnchantment();
                 })
                 .collect(Collectors.toList());
-    }
-
-    public static EEnchant parse(String value) {
-        return Arrays.stream(EEnchant.values())
-                .filter(v -> v.getDisplayName().equalsIgnoreCase(value.trim())
-                        || v.getDisplayName().replace(" ", "").equalsIgnoreCase(value.trim())
-                        || v.getDisplayName().replace(" ", "_").equalsIgnoreCase(value.trim())
-                        || v.getConfigName().equalsIgnoreCase(value.trim())
-                )
-                .findFirst()
-                .orElse(null);
-    }
-
-    public static Enchantment toEnchant(String value) {
-        return Arrays.stream(EEnchant.values())
-                .filter(v -> {
-                    String val = value.trim();
-
-                    return v.getDisplayName().equalsIgnoreCase(val)
-                            || v.getDisplayName().replace(" ", "").equalsIgnoreCase(val)
-                            || v.getConfigName().equalsIgnoreCase(val)
-                            || v.getConfigName().equalsIgnoreCase(val.replace(" ", ""));
-                })
-                .map(EEnchant::getEnchantment)
-                .findFirst()
-                .orElse(null);
-    }
-
-    public static EEnchant fromEnchant(Enchantment enchant) {
-        return Arrays.stream(EEnchant.values())
-                .filter(v -> v.getEnchantment().equals(enchant))
-                .findFirst()
-                .orElse(null);
     }
 }

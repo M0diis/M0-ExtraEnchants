@@ -43,34 +43,34 @@ public class OnDeathSiphon implements Listener {
         ItemStack leggings = e.getPlayer().getInventory().getLeggings();
         ItemStack boots = e.getPlayer().getInventory().getBoots();
 
-        if(InventoryUtils.hasEnchant(helmet, EEnchant.DEATH_SIPHON)) {
+        if (InventoryUtils.hasEnchant(helmet, EEnchant.DEATH_SIPHON)) {
             InventoryUtils.applyDurability(helmet);
 
-            if(random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
+            if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
             }
         }
 
-        if(InventoryUtils.hasEnchant(chestplate, EEnchant.DEATH_SIPHON)) {
+        if (InventoryUtils.hasEnchant(chestplate, EEnchant.DEATH_SIPHON)) {
             InventoryUtils.applyDurability(chestplate);
 
-            if(random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
+            if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
             }
         }
 
-        if(InventoryUtils.hasEnchant(leggings, EEnchant.DEATH_SIPHON)) {
+        if (InventoryUtils.hasEnchant(leggings, EEnchant.DEATH_SIPHON)) {
             InventoryUtils.applyDurability(leggings);
 
-            if(random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
+            if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
             }
         }
 
-        if(InventoryUtils.hasEnchant(boots, EEnchant.DEATH_SIPHON)) {
+        if (InventoryUtils.hasEnchant(boots, EEnchant.DEATH_SIPHON)) {
             InventoryUtils.applyDurability(boots);
 
-            if(random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
+            if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
             }
         }

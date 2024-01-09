@@ -27,11 +27,11 @@ public class OnReinforced implements Listener {
             return;
         }
 
-        if(!(e.getEntityDamageEvent().getEntity() instanceof Player receiver)) {
+        if (!(e.getEntityDamageEvent().getEntity() instanceof Player receiver)) {
             return;
         }
 
-        if(!(e.getEntityDamageEvent().getDamager() instanceof Player)) {
+        if (!(e.getEntityDamageEvent().getDamager() instanceof Player)) {
             return;
         }
 
@@ -44,7 +44,7 @@ public class OnReinforced implements Listener {
         ItemStack leggings = receiver.getInventory().getLeggings();
         ItemStack boots = receiver.getInventory().getBoots();
 
-        if(InventoryUtils.hasEnchant(helmet, EEnchant.REINFORCED)) {
+        if (InventoryUtils.hasEnchant(helmet, EEnchant.REINFORCED)) {
             if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
                 InventoryUtils.applyDurability(helmet);
 
@@ -52,7 +52,7 @@ public class OnReinforced implements Listener {
             }
         }
 
-        if(InventoryUtils.hasEnchant(chestplate, EEnchant.REINFORCED)) {
+        if (InventoryUtils.hasEnchant(chestplate, EEnchant.REINFORCED)) {
             if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
                 InventoryUtils.applyDurability(chestplate);
 
@@ -60,15 +60,15 @@ public class OnReinforced implements Listener {
             }
         }
 
-        if(InventoryUtils.hasEnchant(leggings, EEnchant.REINFORCED)) {
-            if(Utils.shouldTrigger(EEnchant.REINFORCED)) {
+        if (InventoryUtils.hasEnchant(leggings, EEnchant.REINFORCED)) {
+            if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
                 InventoryUtils.applyDurability(leggings);
 
                 maxCount++;
             }
         }
 
-        if(InventoryUtils.hasEnchant(boots, EEnchant.REINFORCED)) {
+        if (InventoryUtils.hasEnchant(boots, EEnchant.REINFORCED)) {
             if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
                 InventoryUtils.applyDurability(boots);
 
@@ -76,7 +76,7 @@ public class OnReinforced implements Listener {
             }
         }
 
-        if(maxCount == 1) {
+        if (maxCount == 1) {
             return;
         }
 

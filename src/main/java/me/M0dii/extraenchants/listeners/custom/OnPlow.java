@@ -52,7 +52,7 @@ public class OnPlow implements Listener {
         }
 
         if (!block1.getType().equals(Material.DIRT)
-        && !block1.getType().equals(Material.GRASS_BLOCK)) {
+                && !block1.getType().equals(Material.GRASS_BLOCK)) {
             return;
         }
 
@@ -79,8 +79,7 @@ public class OnPlow implements Listener {
             plant3 = clickedLocation.clone().add(-2.0, 0.0, 0.0).getBlock();
             block3 = clickedLocation.clone().add(-2.0, -1.0, 0.0).getBlock();
 
-            if(event.getEnchantLevel() == 2)
-            {
+            if (event.getEnchantLevel() == 2) {
                 plant4 = clickedLocation.clone().add(1.0, 0.0, 0.0).getBlock();
                 block4 = clickedLocation.clone().add(1.0, -1.0, 0.0).getBlock();
 
@@ -94,8 +93,7 @@ public class OnPlow implements Listener {
             plant3 = clickedLocation.clone().add(2.0, 0.0, 0.0).getBlock();
             block3 = clickedLocation.clone().add(2.0, -1.0, 0.0).getBlock();
 
-            if(event.getEnchantLevel() == 2)
-            {
+            if (event.getEnchantLevel() == 2) {
                 plant4 = clickedLocation.clone().add(-1.0, 0.0, 0.0).getBlock();
                 block4 = clickedLocation.clone().add(-1.0, -1.0, 0.0).getBlock();
 
@@ -109,8 +107,7 @@ public class OnPlow implements Listener {
             plant3 = clickedLocation.clone().add(0.0, 0.0, -2.0).getBlock();
             block3 = clickedLocation.clone().add(0.0, -1.0, -2.0).getBlock();
 
-            if(event.getEnchantLevel() == 2)
-            {
+            if (event.getEnchantLevel() == 2) {
                 plant4 = clickedLocation.clone().add(0.0, 0.0, 1.0).getBlock();
                 block4 = clickedLocation.clone().add(0.0, -1.0, 1.0).getBlock();
 
@@ -124,8 +121,7 @@ public class OnPlow implements Listener {
             plant3 = clickedLocation.clone().add(0.0, 0.0, 2.0).getBlock();
             block3 = clickedLocation.clone().add(0.0, -1.0, 2.0).getBlock();
 
-            if(event.getEnchantLevel() == 2)
-            {
+            if (event.getEnchantLevel() == 2) {
                 plant4 = clickedLocation.clone().add(0.0, 0.0, -1.0).getBlock();
                 block4 = clickedLocation.clone().add(0.0, -1.0, -1.0).getBlock();
 
@@ -180,7 +176,8 @@ public class OnPlow implements Listener {
                     setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.CARROTS);
             case POTATO ->
                     setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.POTATOES);
-            default -> { }
+            default -> {
+            }
         }
     }
 
@@ -209,7 +206,7 @@ public class OnPlow implements Listener {
     }
 
     private void setSeed(Player p, Block plant, Block block, int amount, int slot, ItemStack fee, Material seed) {
-        if(plant == null || block == null) {
+        if (plant == null || block == null) {
             return;
         }
 

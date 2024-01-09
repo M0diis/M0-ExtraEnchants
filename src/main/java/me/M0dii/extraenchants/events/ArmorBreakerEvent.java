@@ -11,8 +11,8 @@ public class ArmorBreakerEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
     private final EntityDamageEvent event;
-    private boolean isCancelled;
     private final int enchantLevel;
+    private boolean isCancelled;
 
     public ArmorBreakerEvent(Player p, EntityDamageEvent e, int enchantLevel) {
         this.player = p;

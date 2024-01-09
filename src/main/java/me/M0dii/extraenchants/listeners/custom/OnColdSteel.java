@@ -36,7 +36,7 @@ public class OnColdSteel implements Listener {
         ItemStack leggings = e.getPlayer().getInventory().getLeggings();
         ItemStack boots = e.getPlayer().getInventory().getBoots();
 
-        if(InventoryUtils.hasEnchant(helmet, EEnchant.COLD_STEEL)) {
+        if (InventoryUtils.hasEnchant(helmet, EEnchant.COLD_STEEL)) {
             if (Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
                 InventoryUtils.applyDurability(helmet);
 
@@ -44,7 +44,7 @@ public class OnColdSteel implements Listener {
             }
         }
 
-        if(InventoryUtils.hasEnchant(chestplate, EEnchant.COLD_STEEL)) {
+        if (InventoryUtils.hasEnchant(chestplate, EEnchant.COLD_STEEL)) {
             if (Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
                 InventoryUtils.applyDurability(chestplate);
 
@@ -52,15 +52,15 @@ public class OnColdSteel implements Listener {
             }
         }
 
-        if(InventoryUtils.hasEnchant(leggings, EEnchant.COLD_STEEL)) {
-            if(Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
+        if (InventoryUtils.hasEnchant(leggings, EEnchant.COLD_STEEL)) {
+            if (Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
                 InventoryUtils.applyDurability(leggings);
 
                 apply = true;
             }
         }
 
-        if(InventoryUtils.hasEnchant(boots, EEnchant.COLD_STEEL)) {
+        if (InventoryUtils.hasEnchant(boots, EEnchant.COLD_STEEL)) {
             if (Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
                 InventoryUtils.applyDurability(boots);
 
@@ -68,11 +68,11 @@ public class OnColdSteel implements Listener {
             }
         }
 
-        if(!apply) {
+        if (!apply) {
             return;
         }
 
-        if(!(e.getEntityDamageEvent().getEntity() instanceof Player receiver)) {
+        if (!(e.getEntityDamageEvent().getEntity() instanceof Player receiver)) {
             return;
         }
 

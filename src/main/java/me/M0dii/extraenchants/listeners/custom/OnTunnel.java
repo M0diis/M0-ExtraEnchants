@@ -39,13 +39,13 @@ public class OnTunnel implements Listener {
 
         Messenger.debug("Player facing: " + facing);
 
-        if(level == 1) {
+        if (level == 1) {
             Block opposite = source.getRelative(facing);
 
             destroy(p, opposite);
         }
 
-        if(level == 2) {
+        if (level == 2) {
             Block opposite = source.getRelative(facing);
 
             destroy(p, opposite);
@@ -61,7 +61,7 @@ public class OnTunnel implements Listener {
             return;
         }
 
-        if(!Utils.allowed(p, b.getLocation())) {
+        if (!Utils.allowed(p, b.getLocation())) {
             Messenger.debug("Player not allowed, skipping tunnel.");
             return;
         }
@@ -79,7 +79,7 @@ public class OnTunnel implements Listener {
                 .findFirst()
                 .orElse(null);
 
-        if(conflict != null) {
+        if (conflict != null) {
             Messenger.debug("Block is a conflict, skipping tunnel.");
             return;
         }

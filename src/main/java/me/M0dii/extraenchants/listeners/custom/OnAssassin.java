@@ -43,35 +43,35 @@ public class OnAssassin implements Listener {
 
         double distance = loc.distance(loc2);
 
-        if(distance <= 0.15) {
+        if (distance <= 0.15) {
             damageEvent.setDamage(damage * 1.20);
         }
 
-        if(distance > 0.15 && distance <= 0.5) {
+        if (distance > 0.15 && distance <= 0.5) {
             damageEvent.setDamage(damage * 1.15);
         }
 
-        if(distance > 0.5 && distance <= 1) {
+        if (distance > 0.5 && distance <= 1) {
             damageEvent.setDamage(damage * 1.10);
         }
 
-        if(distance > 1 && distance <= 1.5) {
+        if (distance > 1 && distance <= 1.5) {
             damageEvent.setDamage(damage * 1.05);
         }
 
-        if(distance > 1.5 && distance <= 2) {
+        if (distance > 1.5 && distance <= 2) {
             damageEvent.setDamage(damage * 0.90);
         }
 
-        if(distance > 2 && distance <= 2.5) {
+        if (distance > 2 && distance <= 2.5) {
             damageEvent.setDamage(damage * 0.85);
         }
 
-        if(distance > 2.5 && distance <= 3) {
+        if (distance > 2.5 && distance <= 3) {
             damageEvent.setDamage(damage * 0.80);
         }
 
-        if(distance > 3) {
+        if (distance > 3) {
             damageEvent.setDamage(damage * 0.7);
         }
 

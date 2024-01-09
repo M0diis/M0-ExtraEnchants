@@ -1,7 +1,7 @@
 package me.m0dii.extraenchants.commands;
 
-import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DisenchantCommand implements CommandExecutor {
     private final FileConfiguration cfg;
@@ -66,13 +66,12 @@ public class DisenchantCommand implements CommandExecutor {
         hand.removeEnchantment(ench);
         meta.removeEnchant(ench);
 
-        List<String> lore = new ArrayList<>();
+        List<String> lore;
 
         if (meta.getLore() != null) {
-            for (String l : meta.getLore()) {
-                if (!l.contains(enchName))
-                    lore.add(l);
-            }
+            lore = meta.getLore().stream()
+                    .filter(l -> !l.contains(enchName))
+                    .collect(Collectors.toList());
 
             meta.setLore(lore);
         }
@@ -81,7 +80,7 @@ public class DisenchantCommand implements CommandExecutor {
 
         String removed = cfg.getString("messages.enchant-removed");
 
-        if(removed == null) {
+        if (removed == null) {
             return;
         }
 

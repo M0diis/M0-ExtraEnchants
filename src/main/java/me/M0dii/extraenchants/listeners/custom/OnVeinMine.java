@@ -34,7 +34,7 @@ public class OnVeinMine implements Listener {
     public void onVeinMine(final VeinMinerEvent e) {
         Messenger.debug("VeinMiner event called.");
 
-        if(!Utils.shouldTrigger(EEnchant.VEIN_MINER)) {
+        if (!Utils.shouldTrigger(EEnchant.VEIN_MINER)) {
             return;
         }
 
@@ -42,7 +42,7 @@ public class OnVeinMine implements Listener {
 
         Block source = e.getBlock();
 
-        if(source.hasMetadata(META_BLOCK_VEINED)) {
+        if (source.hasMetadata(META_BLOCK_VEINED)) {
             return;
         }
 
@@ -51,7 +51,7 @@ public class OnVeinMine implements Listener {
 
         int limit = 15;
 
-        if(prepare.size() == 0) {
+        if (prepare.size() == 0) {
             return;
         }
 

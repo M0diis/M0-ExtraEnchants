@@ -75,7 +75,7 @@ public class CustomCombine implements Listener {
 
         meta.getEnchants().keySet().stream().filter(enchant::conflictsWith)
                 .forEach((conflict) -> {
-                    p.sendMessage(Utils.format( "&8• &7" + conflict.getName().replace("_", " ")));
+                    p.sendMessage(Utils.format("&8• &7" + conflict.getName().replace("_", " ")));
                 });
 
         return true;
@@ -86,27 +86,27 @@ public class CustomCombine implements Listener {
                 .filter(enchantment -> enchantment.equals(newEnchant))
                 .findFirst()
                 .ifPresent((oldEnchant -> {
-            int currentLevel = meta.getEnchantLevel(oldEnchant);
+                    int currentLevel = meta.getEnchantLevel(oldEnchant);
 
-            if(enchantLevel <= currentLevel) {
-                return;
-            }
+                    if (enchantLevel <= currentLevel) {
+                        return;
+                    }
 
-            meta.removeEnchant(oldEnchant);
+                    meta.removeEnchant(oldEnchant);
 
-            List<String> lore = new ArrayList<>();
+                    List<String> lore = new ArrayList<>();
 
-            if (meta.getLore() != null) {
-                for (String l : meta.getLore()) {
-                    if (!l.contains(oldEnchant.getName()))
-                        lore.add(l);
-                }
+                    if (meta.getLore() != null) {
+                        for (String l : meta.getLore()) {
+                            if (!l.contains(oldEnchant.getName()))
+                                lore.add(l);
+                        }
 
-                meta.setLore(lore);
-            }
+                        meta.setLore(lore);
+                    }
 
-            curr.setItemMeta(meta);
-        }));
+                    curr.setItemMeta(meta);
+                }));
     }
 
     private boolean combine(CombineEvent event, ItemStack curr, Enchantment enchant, int level) {

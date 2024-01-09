@@ -19,12 +19,11 @@ import java.util.List;
 
 public class OnWebbing implements Listener {
     private final ExtraEnchants plugin;
+    private final List<Block> webs = new ArrayList<>();
 
     public OnWebbing(ExtraEnchants plugin) {
         this.plugin = plugin;
     }
-
-    private final List<Block> webs = new ArrayList<>();
 
     @EventHandler
     public void onWithering(final WebbingEvent e) {

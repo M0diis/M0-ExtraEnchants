@@ -23,7 +23,7 @@ public class Utils {
     private static final Random random = new Random();
 
     public static String format(String text) {
-        if(text == null || text.isEmpty()) {
+        if (text == null || text.isEmpty()) {
             return "";
         }
 
@@ -34,11 +34,11 @@ public class Utils {
     }
 
     public static boolean shouldTrigger(EEnchant enchant) {
-        if(enchant.isDisabled()) {
+        if (enchant.isDisabled()) {
             return false;
         }
 
-        if(enchant.getTriggerChance() == -1 || enchant.getTriggerChance() == 100) {
+        if (enchant.getTriggerChance() == -1 || enchant.getTriggerChance() == 100) {
             return true;
         }
 
@@ -105,13 +105,12 @@ public class Utils {
 
             int len;
 
-            while((len = in.read(buf)) > 0)
+            while ((len = in.read(buf)) > 0)
                 out.write(buf, 0, len);
 
             out.close();
             in.close();
-        }
-        catch(Exception ex) {
+        } catch (Exception ex) {
             ExtraEnchants.getInstance().getLogger().warning("Error copying config file..");
         }
     }

@@ -14,8 +14,8 @@ public class CombineEvent extends Event implements Cancellable {
     private final @NotNull InventoryClickEvent event;
     private final @NotNull Enchantment enchant;
     private final String enchantName;
-    private boolean isCancelled;
     private final int enchantLevel;
+    private boolean isCancelled;
 
     public CombineEvent(@NotNull Player p, @NotNull InventoryClickEvent e, Enchantment enchant, int level) {
         this.player = p;

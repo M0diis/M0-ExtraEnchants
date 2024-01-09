@@ -1,7 +1,7 @@
 package me.m0dii.extraenchants.listeners;
 
-import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 public class PlayerInteract implements Listener {
     private final ExtraEnchants plugin;
@@ -49,6 +48,7 @@ public class PlayerInteract implements Listener {
             e.getPlayer().sendMessage(Utils.format(l));
         }
     }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEnchantUpdateGrindstoneClick(InventoryClickEvent e) {
         Inventory inventory = e.getInventory();
@@ -77,7 +77,7 @@ public class PlayerInteract implements Listener {
 
                 List<String> lore = meta.getLore();
 
-                if(lore != null) {
+                if (lore != null) {
                     lore.removeIf(s -> s.toUpperCase().contains(enchantment.getName().toUpperCase()));
                 }
 

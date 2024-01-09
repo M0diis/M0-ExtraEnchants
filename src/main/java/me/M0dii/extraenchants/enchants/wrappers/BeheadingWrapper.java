@@ -2,9 +2,9 @@ package me.m0dii.extraenchants.enchants.wrappers;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.utils.EnchantWrapper;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Utils;
-import me.m0dii.extraenchants.utils.EnchantWrapper;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -21,6 +21,7 @@ public class BeheadingWrapper extends Enchantment {
     private final String name;
     private final int maxLvl;
     private final EEnchant enchant;
+
     public BeheadingWrapper(final String name, final int lvl, EEnchant enchant) {
         super(NamespacedKey.minecraft(name.toLowerCase().replace(" ", "_")));
         this.name = name;
@@ -34,11 +35,11 @@ public class BeheadingWrapper extends Enchantment {
     }
 
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
-        if(enchant.getCustomConflicts().contains(enchantment)) {
+        if (enchant.getCustomConflicts().contains(enchantment)) {
             return true;
         }
 
-        if(!enchant.defaultConflictsEnabled()) {
+        if (!enchant.defaultConflictsEnabled()) {
             return false;
         }
 
