@@ -56,7 +56,7 @@ public class OnStatTrack implements Listener {
         for (int i = 0; i < currentLore.size(); i++) {
             Component line = currentLore.get(i);
 
-            if (Utils.stripColor(line).contains("• Iškasta:")) {
+            if (Utils.stripColor(line).contains("• Mined:")) {
                 memoryLineIndex = i;
                 break;
             }
@@ -64,10 +64,10 @@ public class OnStatTrack implements Listener {
 
         if (memoryLineIndex == -1) {
             currentLore.add(Component.text(" "));
-            currentLore.add(Utils.colorize("&8• &7Iškasta: &3" + (memory + 1)));
+            currentLore.add(Utils.colorize("&8• &7Mined: &3" + (memory + 1)));
         } else {
             currentLore.remove(memoryLineIndex);
-            currentLore.add(memoryLineIndex, Utils.colorize("&8• &7Iškasta: &3" + (memory + 1)));
+            currentLore.add(memoryLineIndex, Utils.colorize("&8• &7Mined: &3" + (memory + 1)));
         }
 
         meta.lore(currentLore);

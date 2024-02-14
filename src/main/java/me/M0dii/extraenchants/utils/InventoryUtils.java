@@ -1,22 +1,38 @@
 package me.m0dii.extraenchants.utils;
 
+import com.jeff_media.morepersistentdatatypes.DataType;
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class InventoryUtils {
+    private static final NamespacedKey enchantKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant");
+
     private static final Random random = new Random();
 
     public static boolean hasEnchant(ItemStack item, Enchantment enchant) {
         ItemMeta itemMeta = item.getItemMeta();
 
-        return itemMeta != null && itemMeta.getEnchants().containsKey(enchant);
+        if(itemMeta == null) {
+            return false;
+        }
+
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+
+        Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+
+        return itemMeta.getEnchants().containsKey(enchant) || current.containsKey(enchant.translationKey());
     }
 
     public static boolean hasEnchant(ItemStack item, EEnchant enchant) {
@@ -26,14 +42,35 @@ public class InventoryUtils {
 
         ItemMeta itemMeta = item.getItemMeta();
 
-        return (itemMeta != null &&
-                itemMeta.getEnchants().containsKey(enchant.getEnchantment())) ||
-                item.getEnchantments().containsKey(enchant.getEnchantment());
+        if(itemMeta == null) {
+            return false;
+        }
+
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+
+        Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+
+        return itemMeta.getEnchants().containsKey(enchant.getEnchantment()) || item.getEnchantments().containsKey(enchant.getEnchantment())
+                || current.containsKey(enchant.getEnchantment().translationKey());
     }
 
     public static int getEnchantLevel(ItemStack item, EEnchant enchant) {
         if (item == null) {
             return 0;
+        }
+
+        ItemMeta itemMeta = item.getItemMeta();
+
+        if(itemMeta == null) {
+            return 0;
+        }
+
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+
+        Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+
+        if(current.containsKey(enchant.getEnchantment().translationKey())) {
+            return current.get(enchant.getEnchantment().translationKey());
         }
 
         return item.getEnchantmentLevel(enchant.getEnchantment());

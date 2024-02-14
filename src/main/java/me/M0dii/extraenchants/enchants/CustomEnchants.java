@@ -1,24 +1,18 @@
 package me.m0dii.extraenchants.enchants;
 
-import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.utils.EnchantWrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
 public class CustomEnchants {
 
-    private static final ExtraEnchants plugin = ExtraEnchants.getInstance();
-
     public static void register() {
-        List<Enchantment> list = Arrays.stream(Enchantment.values()).toList();
-
         new Reflections("me.m0dii.extraenchants.enchants.wrappers")
                 .getSubTypesOf(Enchantment.class)
                 .forEach(clazz -> {
@@ -39,8 +33,6 @@ public class CustomEnchants {
 
                         Enchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLvl(), eEnchant);
 
-                        registerEnchantment(enchantment, list);
-
                         Bukkit.getLogger().info("Registering enchant wrapper: " + enchantment.getClass().getSimpleName());
 
                         eEnchant.setEnchantment(enchantment);
@@ -52,23 +44,12 @@ public class CustomEnchants {
     }
 
     public static List<Enchantment> getAllEnchants() {
-        return Arrays.stream(EEnchant.values()).map(EEnchant::getEnchantment).toList();
+        return Arrays.stream(EEnchant.values())
+                .map(EEnchant::getEnchantment)
+                .toList();
     }
 
-    private static void registerEnchantment(final Enchantment enchantment, List<Enchantment> list) {
-        if (list.contains(enchantment)) {
-            return;
-        }
-
-        try {
-            final Field f = Enchantment.class.getDeclaredField("acceptingNew");
-
-            f.setAccessible(true);
-            f.set(null, true);
-
-            Enchantment.registerEnchantment(enchantment);
-        } catch (Exception ex) {
-            Bukkit.getLogger().severe("[M0-ExtraEnchants] Could not register enchantment: " + enchantment.getKey());
-        }
+    public static List<EEnchant> getAllEEnchants() {
+        return Arrays.stream(EEnchant.values()).toList();
     }
 }

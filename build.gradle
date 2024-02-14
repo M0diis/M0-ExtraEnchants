@@ -4,12 +4,13 @@ plugins {
 }
 
 group 'me.m0dii'
-version '3.6.2'
+version '3.7.0'
 
 archivesBaseName = 'M0-ExtraEnchants'
 
 shadowJar {
     relocate 'org.bstats', 'me.m0dii.ExtraEnchants'
+    relocate 'com.jeff_media.morepersistentdatatypes', 'me.m0dii.morepersistentdatatypes'
     minimize()
 
     archiveFileName = "M0-ExtraEnchants-${version}.jar"
@@ -34,16 +35,22 @@ repositories {
     maven {
         url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
+
+    maven {
+        url = 'https://hub.jeff-media.com/nexus/repository/jeff-media-public/'
+    }
 }
 
 dependencies {
     implementation "org.bstats:bstats-bukkit:2.2.1"
-    compileOnly 'io.papermc.paper:paper-api:1.20.2-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
 
     implementation 'org.reflections:reflections:0.10.2'
 
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
     compileOnly name: 'Residence5.0.1.5'
+
+    implementation 'com.jeff_media:MorePersistentDataTypes:2.4.0'
 }
 
 compileJava.options.encoding = 'UTF-8'

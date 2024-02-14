@@ -1,21 +1,24 @@
 package me.m0dii.extraenchants.listeners.custom;
 
+import com.jeff_media.morepersistentdatatypes.DataType;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.CombineEvent;
 import me.m0dii.extraenchants.utils.Utils;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CustomCombine implements Listener {
+
+    private static final NamespacedKey enchantKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant");
 
     private final ExtraEnchants plugin;
 
@@ -125,6 +128,17 @@ public class CustomCombine implements Listener {
         }
 
         meta.setLore(lore);
+
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
+        Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+
+        Map<String, Integer> map = Map.of(enchant.translationKey(), level);
+
+        current.putAll(map);
+
+        pdc.set(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), current);
+
         tool.setItemMeta(meta);
 
         tool.addUnsafeEnchantment(enchant, level);
