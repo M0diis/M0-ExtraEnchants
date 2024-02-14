@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.utils;
 
+import com.jeff_media.morepersistentdatatypes.DataType;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.Material;
@@ -9,14 +10,14 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Enchanter {
     private static final NamespacedKey enchantKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant");
-    private static final NamespacedKey enchantLevelKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant_level");
 
     private static final ExtraEnchants plugin = ExtraEnchants.getInstance();
     private static final FileConfiguration cfg = plugin.getCfg();
@@ -62,8 +63,13 @@ public class Enchanter {
 
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        pdc.set(enchantKey, PersistentDataType.STRING, enchant.name());
-        pdc.set(enchantLevelKey, PersistentDataType.INTEGER, level);
+        Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+
+        Map<String, Integer> map = Map.of(enchant.getEnchantment().translationKey(), level);
+
+        current.putAll(map);
+
+        pdc.set(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), current);
 
         item.setItemMeta(meta);
 
@@ -91,8 +97,13 @@ public class Enchanter {
 
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        pdc.set(enchantKey, PersistentDataType.STRING, enchant.name());
-        pdc.set(enchantLevelKey, PersistentDataType.INTEGER, level);
+        Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+
+        Map<String, Integer> map = Map.of(enchant.getEnchantment().translationKey(), level);
+
+        current.putAll(map);
+
+        pdc.set(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), current);
 
         item.setItemMeta(meta);
     }
@@ -104,8 +115,13 @@ public class Enchanter {
 
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        pdc.set(enchantKey, PersistentDataType.STRING, enchant.name());
-        pdc.set(enchantLevelKey, PersistentDataType.INTEGER, level);
+        Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+
+        Map<String, Integer> map = Map.of(enchant.getEnchantment().translationKey(), level);
+
+        current.putAll(map);
+
+        pdc.set(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), current);
 
         item.setItemMeta(meta);
     }

@@ -4,7 +4,6 @@ import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.*;
 import me.m0dii.extraenchants.listeners.custom.OnLavaWalk;
-import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.*;
@@ -16,9 +15,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -26,8 +22,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class BlockBreak implements Listener {
-    private static final NamespacedKey enchantKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant");
-    private static final NamespacedKey enchantLevelKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant_level");
+//    private static final NamespacedKey enchantKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant");
 
     private final List<String> heads = Arrays.asList("PLAYER_HEAD", "SKELETON_SKULL", "CREEPER_HEAD", "WITHER_SKELETON_SKULL",
             "ZOMBIE_HEAD", "CREEPER_WALL_HEAD", "PLAYER_WALL_HEAD", "DRAGON_HEAD", "DRAGON_WALL_HEAD", "ZOMBIE_WALL_HEAD",
@@ -206,37 +201,36 @@ public class BlockBreak implements Listener {
                 || (p.getGameMode() == GameMode.SPECTATOR);
     }
 
-    @EventHandler
-    public void onBlockBreakFixEnchant(final BlockBreakEvent e) {
-        ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
-
-        ItemMeta meta = item.getItemMeta();
-
-        if (meta == null) {
-            return;
-        }
-
-        PersistentDataContainer pdc = meta.getPersistentDataContainer();
-
-        if (!pdc.has(enchantKey, PersistentDataType.STRING)) {
-            return;
-        }
-
-        String enchantName = pdc.get(enchantKey, PersistentDataType.STRING);
-
-        EEnchant enchant = EEnchant.parse(enchantName);
-
-        if (enchant == null) {
-            return;
-        }
-
-        if (InventoryUtils.hasEnchant(item, enchant)) {
-            return;
-        }
-
-        int level = pdc.getOrDefault(enchantLevelKey, PersistentDataType.INTEGER, 1);
-
-        Enchanter.applyEnchantWithoutLore(item, enchant, level);
-    }
-
+//    @EventHandler
+//    public void onBlockBreakFixEnchant(final BlockBreakEvent e) {
+//        ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
+//
+//        ItemMeta meta = item.getItemMeta();
+//
+//        if (meta == null) {
+//            return;
+//        }
+//
+//        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+//
+//        if (!pdc.has(enchantKey, PersistentDataType.STRING)) {
+//            return;
+//        }
+//
+//        String enchantName = pdc.get(enchantKey, PersistentDataType.STRING);
+//
+//        EEnchant enchant = EEnchant.parse(enchantName);
+//
+//        if (enchant == null) {
+//            return;
+//        }
+//
+//        if (InventoryUtils.hasEnchant(item, enchant)) {
+//            return;
+//        }
+//
+//        int level = pdc.getOrDefault(enchantLevelKey, PersistentDataType.INTEGER, 1);
+//
+//        Enchanter.applyEnchantWithoutLore(item, enchant, level);
+//    }
 }
