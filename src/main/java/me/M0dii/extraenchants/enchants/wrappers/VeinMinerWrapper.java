@@ -12,16 +12,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@EnchantWrapper(name = "Vein Miner", maxLvl = 1)
+@EnchantWrapper(name = "Vein Miner", maxLevel = 1)
 public class VeinMinerWrapper extends CustomEnchantment {
+
     public VeinMinerWrapper(final String name, final int lvl, EEnchant enchant) {
         super(name, lvl, enchant);
     }
 
+    @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
         return Enchantables.isPickaxe(item) || enchant.canEnchantItemCustom(item);
     }
 
+    @Override
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
         if (enchant.getCustomConflicts().contains(enchantment)) {
             return true;

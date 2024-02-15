@@ -31,7 +31,7 @@ public class CustomEnchants {
 
                         Constructor<? extends Enchantment> constructor = clazz.getConstructor(String.class, int.class, EEnchant.class);
 
-                        Enchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLvl(), eEnchant);
+                        Enchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLevel(), eEnchant);
 
                         Bukkit.getLogger().info("Registering enchant wrapper: " + enchantment.getClass().getSimpleName());
 

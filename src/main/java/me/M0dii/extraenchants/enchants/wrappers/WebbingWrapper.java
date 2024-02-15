@@ -12,17 +12,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@EnchantWrapper(name = "Webbing", maxLvl = 1)
+@EnchantWrapper(name = "Webbing", maxLevel = 1)
 public class WebbingWrapper extends CustomEnchantment {
 
     public WebbingWrapper(final String name, final int lvl, EEnchant enchant) {
         super(name, lvl, enchant);
     }
 
+    @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
         return Enchantables.isSword(item) || enchant.canEnchantItemCustom(item);
     }
 
+    @Override
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
         if (enchant.getCustomConflicts().contains(enchantment)) {
             return true;

@@ -4,6 +4,7 @@ import com.jeff_media.morepersistentdatatypes.DataType;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.CombineEvent;
+import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -131,11 +132,9 @@ public class CustomCombine implements Listener {
 
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-        Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+        Map<String, Integer> current = InventoryUtils.getEnchantmentMapFromPDC(curr);
 
-        Map<String, Integer> map = Map.of(enchant.translationKey(), level);
-
-        current.putAll(map);
+        current.put(enchant.translationKey(), level);
 
         pdc.set(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), current);
 

@@ -12,16 +12,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@EnchantWrapper(name = "Bat Vision", maxLvl = 1)
+@EnchantWrapper(name = "Bat Vision", maxLevel = 1)
 public class BatVisionWrapper extends CustomEnchantment {
+
     public BatVisionWrapper(final String name, final int lvl, EEnchant enchant) {
         super(name, lvl, enchant);
     }
 
+    @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
         return Enchantables.isHelmet(item) || enchant.canEnchantItemCustom(item);
     }
-
+    @Override
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
         return enchant.getCustomConflicts().contains(enchantment);
     }

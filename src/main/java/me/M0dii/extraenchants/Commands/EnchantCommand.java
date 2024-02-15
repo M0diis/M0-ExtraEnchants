@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
     private final ExtraEnchants plugin;
     private final FileConfiguration cfg;
 
-    public EnchantCommand(ExtraEnchants plugin) {
+    public EnchantCommand(@NotNull ExtraEnchants plugin) {
         this.cfg = plugin.getCfg();
         this.plugin = plugin;
     }
@@ -73,7 +74,6 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
             ItemMeta meta = item.getItemMeta();
 
             PersistentDataContainer pdc = meta.getPersistentDataContainer();
-
 
             sender.sendMessage(Utils.format("&7&m----------------------------------------"));
             sender.sendMessage(Utils.format("&6&lItem Data"));
@@ -228,6 +228,10 @@ public class EnchantCommand implements CommandExecutor, TabCompleter {
 
             if ("reload".contains(args[0].toLowerCase())) {
                 completes.add("reload");
+            }
+
+            if ("debugitem".contains(args[0].toLowerCase())) {
+                completes.add("debugitem");
             }
         }
 

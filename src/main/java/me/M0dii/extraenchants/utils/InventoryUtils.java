@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -126,5 +127,17 @@ public class InventoryUtils {
         if (damageable.getDamage() >= item.getType().getMaxDurability()) {
             item.setType(Material.AIR);
         }
+    }
+
+    public static Map<String, Integer> getEnchantmentMapFromPDC(@Nonnull ItemStack item) {
+        ItemMeta itemMeta = item.getItemMeta();
+
+        if(itemMeta == null) {
+            return new HashMap<>();
+        }
+
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+
+        return pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
     }
 }

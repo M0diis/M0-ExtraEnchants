@@ -12,17 +12,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@EnchantWrapper(name = "Reinforced", maxLvl = 1)
+@EnchantWrapper(name = "Reinforced", maxLevel = 1)
 public class ReinforcedWrapper extends CustomEnchantment {
 
     public ReinforcedWrapper(final String name, final int lvl, EEnchant enchant) {
         super(name, lvl, enchant);
     }
 
+    @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
         return Enchantables.isArmor(item) || enchant.canEnchantItemCustom(item);
     }
 
+    @Override
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
         if (enchant.getCustomConflicts().contains(enchantment)) {
             return true;

@@ -7,5 +7,5 @@ import java.lang.annotation.RetentionPolicy;
 public @interface EnchantWrapper {
     String name();
 
-    int maxLvl();
+    int maxLevel();
 }

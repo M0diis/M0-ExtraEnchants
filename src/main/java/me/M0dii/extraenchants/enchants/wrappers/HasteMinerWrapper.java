@@ -12,17 +12,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@EnchantWrapper(name = "Haste Miner", maxLvl = 1)
+@EnchantWrapper(name = "Haste Miner", maxLevel = 1)
 public class HasteMinerWrapper extends CustomEnchantment {
 
     public HasteMinerWrapper(final String name, final int lvl, EEnchant enchant) {
         super(name, lvl, enchant);
     }
 
+    @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
         return Enchantables.isTool(item, false) || enchant.canEnchantItemCustom(item);
     }
 
+    @Override
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
         if (enchant.getCustomConflicts().contains(enchantment)) {
             return true;
