@@ -3,6 +3,7 @@ package me.m0dii.extraenchants;
 import me.m0dii.extraenchants.commands.DisenchantCommand;
 import me.m0dii.extraenchants.commands.EnchantCommand;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
+import me.m0dii.extraenchants.utils.Placeholders;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.data.ConfigManager;
 import net.milkbowl.vault.economy.Economy;
@@ -42,12 +43,19 @@ public class ExtraEnchants extends JavaPlugin {
         return this.configManager;
     }
 
+    private Placeholders placeholders;
+
     public void onEnable() {
         instance = this;
 
         this.configManager = new ConfigManager(this);
 
         this.pm = this.getServer().getPluginManager();
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            this.placeholders = new Placeholders();
+            this.placeholders.register();
+        }
 
         getLogger().info("EnhancedEnchantments has been enabled.");
 

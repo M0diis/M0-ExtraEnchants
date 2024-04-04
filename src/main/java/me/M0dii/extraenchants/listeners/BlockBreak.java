@@ -4,6 +4,7 @@ import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.*;
 import me.m0dii.extraenchants.listeners.custom.OnLavaWalk;
+import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
@@ -239,4 +240,22 @@ public class BlockBreak implements Listener {
         Enchanter.applyEnchantWithoutLore(item, enchant, level);
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockBreakReplanter(final BlockBreakEvent e) {
+        if (shouldSkip(e, EEnchant.REPLANTER)) {
+            return;
+        }
+
+        Player p = e.getPlayer();
+
+        ItemStack hand = p.getInventory().getItemInMainHand();
+
+        if (!Enchantables.isHoe(hand)) {
+            return;
+        }
+
+        int level = InventoryUtils.getEnchantLevel(hand, EEnchant.REPLANTER);
+
+        Bukkit.getPluginManager().callEvent(new ReplanterBreakEvent(p, e, level));
+    }
 }

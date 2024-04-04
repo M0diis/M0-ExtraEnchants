@@ -2,7 +2,9 @@ package me.m0dii.extraenchants.listeners;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.InventoryUtils;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,8 +13,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.List;
+import java.util.Map;
 
 public class AnvilCombine implements Listener {
+    private static final NamespacedKey enchantKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant");
+    private static final NamespacedKey enchantLevelKey = new NamespacedKey(ExtraEnchants.getInstance(), "extraenchants_enchant_level");
+
     private final ExtraEnchants plugin;
 
     public AnvilCombine(ExtraEnchants plugin) {
@@ -50,7 +56,7 @@ public class AnvilCombine implements Listener {
 
     @EventHandler
     public void onItemPrepare(final PrepareAnvilEvent event) {
-        ItemStack srcItem = event.getInventory().getItem(0);
+        ItemStack srcItem = event.getInventory().getFirstItem();
         ItemStack result = event.getResult();
 
         if (srcItem == null || result == null) {
@@ -61,5 +67,18 @@ public class AnvilCombine implements Listener {
                 || InventoryUtils.hasEnchant(result, EEnchant.ANTI_THORNS.getEnchantment())) {
             event.setResult(null);
         }
+
+        Map<Enchantment, Integer> enchants = srcItem.getEnchantments();
+
+        if (enchants.isEmpty()) {
+            return;
+        }
+
+        enchants.keySet().forEach(enchant -> {
+            EEnchant parse = EEnchant.parse(enchant.getName());
+            if (parse != null) {
+                Enchanter.applyEnchantWithoutLore(result, parse, enchants.get(enchant));
+            }
+        });
     }
 }

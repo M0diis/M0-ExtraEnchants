@@ -3,6 +3,7 @@ package me.m0dii.extraenchants.listeners.custom;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.CombineEvent;
+import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -112,29 +113,9 @@ public class CustomCombine implements Listener {
     private boolean combine(CombineEvent event, ItemStack curr, Enchantment enchant, int level) {
         ItemStack tool = new ItemStack(curr.getType());
 
-        List<String> lore = new ArrayList<>();
+        tool.setItemMeta(curr.getItemMeta());
 
-        lore.add(EEnchant.fromEnchant(enchant).getDisplayInLore(level, true));
-
-        ItemMeta meta = curr.getItemMeta();
-
-        if (meta.getLore() != null) {
-            for (String l : meta.getLore()) {
-                lore.add(Utils.format(l));
-            }
-        }
-
-        meta.setLore(lore);
-        tool.setItemMeta(meta);
-
-        tool.addUnsafeEnchantment(enchant, level);
-
-        if (curr.getAmount() > 1) {
-            curr.setAmount(curr.getAmount() - 1);
-            event.getInventoryClickEvent().setCursor(tool);
-
-            return true;
-        }
+        Enchanter.applyEnchant(tool, EEnchant.fromEnchant(enchant), level, false);
 
         event.getInventoryClickEvent().setCurrentItem(tool);
 

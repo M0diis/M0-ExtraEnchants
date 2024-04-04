@@ -205,4 +205,16 @@ public enum EEnchant {
                 })
                 .collect(Collectors.toList());
     }
+
+    public String getLore() {
+        List<String> lore = instance.getCfg().getStringList(String.format("enchants.%s.lore", getConfigName()))
+                .stream()
+                .map(l -> l.replace("%level%", "<lygis>")
+                        .replace("%duration%", getDuration() + "")
+                        .replace("%trigger-chance%", getTriggerChance() + "%"))
+                .map(Utils::format)
+                .collect(Collectors.toList());
+
+        return String.join("\n", lore);
+    }
 }

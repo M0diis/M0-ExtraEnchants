@@ -32,7 +32,7 @@ public class InventoryUtils {
     }
 
     public static int getEnchantLevel(ItemStack item, EEnchant enchant) {
-        if (item == null) {
+        if (item == null || item.getType().isAir()) {
             return 0;
         }
 

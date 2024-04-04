@@ -26,6 +26,7 @@ public class OnPlow implements Listener {
             Material.BEETROOT_SEEDS,
             Material.MELON_SEEDS
     );
+
     private final ExtraEnchants plugin;
 
     public OnPlow(ExtraEnchants plugin) {
