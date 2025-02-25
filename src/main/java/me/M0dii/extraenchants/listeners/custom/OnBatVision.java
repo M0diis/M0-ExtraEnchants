@@ -36,7 +36,7 @@ public class OnBatVision implements Listener {
             return;
         }
 
-        InventoryUtils.applyDurabilityChanced(p.getInventory().getHelmet(), 50);
+        InventoryUtils.applyDurabilityChanced(p, p.getInventory().getHelmet(), 50);
 
         p.addPotionEffect(PotionEffectType.NIGHT_VISION.createEffect(3600, 0));
     }

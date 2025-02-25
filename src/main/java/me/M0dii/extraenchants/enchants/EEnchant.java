@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public enum EEnchant {
     TELEPATHY,
     PLOW,
+    EXCAVATOR,
     SMELT,
     BEHEADING,
     BONDED,
@@ -41,7 +42,10 @@ public enum EEnchant {
     GILLS,
     WEBBING,
     DEATH_SIPHON,
-    STAT_TRACK;
+    TIMBER,
+    STAT_TRACK,
+    ESSENCE_DRAIN,
+    DEBUFFING;
 
     private final ExtraEnchants instance = ExtraEnchants.getInstance();
 

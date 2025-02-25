@@ -88,7 +88,7 @@ public class OnReplanter implements Listener {
 
         Player player = e.getPlayer();
 
-        if (!Utils.allowed(player, blockPlant.getLocation())) {
+        if (!Utils.allowedAt(player, blockPlant.getLocation())) {
             return;
         }
 
@@ -101,7 +101,7 @@ public class OnReplanter implements Listener {
             plant.setAge(0);
             blockPlant.setBlockData(plant);
 
-            InventoryUtils.applyDurability(hand);
+            InventoryUtils.applyDurability(e.getPlayer(), hand);
         }
     }
 
@@ -209,7 +209,7 @@ public class OnReplanter implements Listener {
 
         Player player = e.getPlayer();
 
-        if (!Utils.allowed(player, block.getLocation())) {
+        if (!Utils.allowedAt(player, block.getLocation())) {
             return;
         }
 
@@ -220,7 +220,7 @@ public class OnReplanter implements Listener {
 
             pendingToReplant.add(new ReplantLocation(block, plant));
 
-            InventoryUtils.applyDurability(hand);
+            InventoryUtils.applyDurability(e.getPlayer(), hand);
         }
     }
 }

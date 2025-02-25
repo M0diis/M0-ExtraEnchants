@@ -53,7 +53,7 @@ public class InventoryUtils {
         return getEnchantLevel(item, enchant);
     }
 
-    public static void applyDurabilityChanced(ItemStack item, int chance) {
+    public static void applyDurabilityChanced(Player player, ItemStack item, int chance) {
         if (item == null || item.getType().isAir()) {
             return;
         }
@@ -62,10 +62,10 @@ public class InventoryUtils {
             return;
         }
 
-        applyDurability(item);
+        applyDurability(player, item);
     }
 
-    public static void applyDurability(ItemStack item) {
+    public static void applyDurability(Player player, ItemStack item) {
         if (!(item.getItemMeta() instanceof Damageable damageable)) {
             return;
         }
@@ -84,10 +84,17 @@ public class InventoryUtils {
             damageable.setDamage(damageable.getDamage() + 1);
         }
 
-        item.setItemMeta(damageable);
-
         if (damageable.getDamage() >= item.getType().getMaxDurability()) {
+            if (player.getInventory().getItemInMainHand().equals(item)) {
+                player.getInventory().setItemInMainHand(null);
+            } else {
+                player.getInventory().removeItem(item);
+            }
+
             item.setType(Material.AIR);
+            item.setAmount(0);
         }
+
+        item.setItemMeta(damageable);
     }
 }

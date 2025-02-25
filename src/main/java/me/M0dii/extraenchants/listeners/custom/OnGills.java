@@ -36,7 +36,7 @@ public class OnGills implements Listener {
             return;
         }
 
-        InventoryUtils.applyDurabilityChanced(p.getInventory().getHelmet(), 50);
+        InventoryUtils.applyDurabilityChanced(p, p.getInventory().getHelmet(), 50);
 
         p.addPotionEffect(PotionEffectType.WATER_BREATHING.createEffect(300, 0));
     }

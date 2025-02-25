@@ -78,7 +78,7 @@ public class OnVeinMine implements Listener {
         return Stream.of(AREA).map(block::getRelative)
                 .filter(blockAdded -> blockAdded.getType() == block.getType())
                 .filter(b -> b.getType().name().contains("ORE"))
-                .filter(b -> Utils.allowed(player, b.getLocation()))
+                .filter(b -> Utils.allowedAt(player, b.getLocation()))
                 .collect(Collectors.toSet());
     }
 }

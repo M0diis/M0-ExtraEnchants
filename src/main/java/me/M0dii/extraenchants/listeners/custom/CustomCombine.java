@@ -42,6 +42,10 @@ public class CustomCombine implements Listener {
 
         Player p = e.getPlayer();
 
+        if (hasConflict(enchant, meta, enchants, p)) {
+            return;
+        }
+
         if (!enchant.canEnchantItem(curr)) {
             p.sendMessage(Utils.format(plugin.getCfg().getString("messages.cannot-enchant-item")));
 
@@ -51,10 +55,6 @@ public class CustomCombine implements Listener {
         removeLowerLevel(curr, enchant, meta, enchants, enchantLevel);
 
         if ((curr.hasItemMeta()) && (meta.hasEnchant(enchant))) {
-            return;
-        }
-
-        if (hasConflict(enchant, meta, enchants, p)) {
             return;
         }
 

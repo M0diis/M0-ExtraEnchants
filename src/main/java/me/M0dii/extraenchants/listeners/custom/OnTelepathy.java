@@ -15,9 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Random;
+import java.util.*;
 
 public class OnTelepathy implements Listener {
     private static final Random r = new Random();
@@ -55,7 +53,7 @@ public class OnTelepathy implements Listener {
                 b.getWorld().dropItemNaturally(
                         b.getLocation(), i);
 
-            InventoryUtils.applyDurability(hand);
+            InventoryUtils.applyDurability(e.getPlayer(), hand);
 
             return;
         }
@@ -91,15 +89,11 @@ public class OnTelepathy implements Listener {
             }
         }
 
-        InventoryUtils.applyDurability(hand);
+        InventoryUtils.applyDurability(e.getPlayer(), hand);
     }
 
     public boolean doesFit(Inventory inv, Collection<ItemStack> drops) {
-        for (ItemStack i : inv.getStorageContents())
-            if (i == null)
-                return true;
-
-        return hasSpaceForItem(drops, inv);
+        return Arrays.stream(inv.getStorageContents()).anyMatch(Objects::isNull) || hasSpaceForItem(drops, inv);
     }
 
     private void addToStack(Player p, Collection<ItemStack> drops) {

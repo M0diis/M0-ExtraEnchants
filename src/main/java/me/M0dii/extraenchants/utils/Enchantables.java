@@ -91,106 +91,106 @@ public class Enchantables {
 
     public static boolean canEnchantItemCustom(ItemStack item, ItemType type) {
         switch (type) {
-            case ALL:
+            case ALL -> {
                 return true;
-            case ARMOR:
+            }
+            case ARMOR -> {
                 if (Enchantables.isArmor(item)) {
                     return true;
                 }
-                break;
-            case SWORD:
+            }
+            case SWORD -> {
                 if (Enchantables.isSword(item)) {
                     return true;
                 }
-                break;
-            case AXE:
+            }
+            case AXE -> {
                 if (Enchantables.isAxe(item)) {
                     return true;
                 }
-                break;
-            case PICKAXE:
+            }
+            case PICKAXE -> {
                 if (Enchantables.isPickaxe(item)) {
                     return true;
                 }
-                break;
-            case SHOVEL:
+            }
+            case SHOVEL -> {
                 if (Enchantables.isShovel(item)) {
                     return true;
                 }
-                break;
-            case HOE:
+            }
+            case HOE -> {
                 if (Enchantables.isHoe(item)) {
                     return true;
                 }
-                break;
-            case BOW:
+            }
+            case BOW -> {
                 if (Enchantables.isBow(item)) {
                     return true;
                 }
-                break;
-            case FISHING_ROD:
+            }
+            case FISHING_ROD -> {
                 if (Enchantables.isFishingRod(item)) {
                     return true;
                 }
-                break;
-            case TRIDENT:
+            }
+            case TRIDENT -> {
                 if (Enchantables.isTrident(item)) {
                     return true;
                 }
-                break;
-            case CROSSBOW:
+            }
+            case CROSSBOW -> {
                 if (Enchantables.isCrossbow(item)) {
                     return true;
                 }
-                break;
-            case SHEARS:
+            }
+            case SHEARS -> {
                 if (Enchantables.isShears(item)) {
                     return true;
                 }
-                break;
-            case SHIELD:
+            }
+            case SHIELD -> {
                 if (Enchantables.isShield(item)) {
                     return true;
                 }
-                break;
-            case ELYTRA:
+            }
+            case ELYTRA -> {
                 if (Enchantables.isElytra(item)) {
                     return true;
                 }
-                break;
-            case TOOL:
+            }
+            case TOOL -> {
                 if (Enchantables.isTool(item)) {
                     return true;
                 }
-                break;
-            case WEAPON:
+            }
+            case WEAPON -> {
                 if (Enchantables.isWeapon(item)) {
                     return true;
                 }
-                break;
-            case HELMET:
+            }
+            case HELMET -> {
                 if (Enchantables.isHelmet(item)) {
                     return true;
                 }
-                break;
-            case CHESTPLATE:
+            }
+            case CHESTPLATE -> {
                 if (Enchantables.isChestplate(item)) {
                     return true;
                 }
-                break;
-            case LEGGINGS:
+            }
+            case LEGGINGS -> {
                 if (Enchantables.isLeggings(item)) {
                     return true;
                 }
-                break;
-            case BOOTS:
+            }
+            case BOOTS -> {
                 if (Enchantables.isBoots(item)) {
                     return true;
                 }
-                break;
-
-            default:
-                break;
+            }
+            default -> {
+            }
         }
 
         return false;

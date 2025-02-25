@@ -35,7 +35,7 @@ public class OnAntiThorns implements Listener {
 
         if (helmet != null) {
             if (helmet.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
-                InventoryUtils.applyDurability(helmet);
+                InventoryUtils.applyDurability(e.getPlayer(), helmet);
 
                 deflectPercentage += 25;
             }
@@ -43,7 +43,7 @@ public class OnAntiThorns implements Listener {
 
         if (chestplate != null) {
             if (chestplate.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
-                InventoryUtils.applyDurability(chestplate);
+                InventoryUtils.applyDurability(e.getPlayer(), chestplate);
 
                 deflectPercentage += 25;
             }
@@ -51,7 +51,7 @@ public class OnAntiThorns implements Listener {
 
         if (leggings != null) {
             if (leggings.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
-                InventoryUtils.applyDurability(leggings);
+                InventoryUtils.applyDurability(e.getPlayer(), leggings);
 
                 deflectPercentage += 25;
             }
@@ -59,7 +59,7 @@ public class OnAntiThorns implements Listener {
 
         if (boots != null) {
             if (boots.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
-                InventoryUtils.applyDurability(boots);
+                InventoryUtils.applyDurability(e.getPlayer(), boots);
 
                 deflectPercentage += 25;
             }

@@ -44,7 +44,9 @@ public class Utils {
             return true;
         }
 
-        return random.nextInt(100) <= enchant.getTriggerChance();
+        int roll = random.nextInt(100);
+
+        return enchant.getTriggerChance() > roll;
     }
 
     public static String stripColor(Component component) {
@@ -59,7 +61,7 @@ public class Utils {
         return Component.text(ChatColor.translateAlternateColorCodes('&', text));
     }
 
-    public static boolean allowed(Player p, Location loc) {
+    public static boolean allowedAt(Player p, Location loc) {
         ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(loc);
 
         if(res == null || p.hasPermission("residence.admin")) {

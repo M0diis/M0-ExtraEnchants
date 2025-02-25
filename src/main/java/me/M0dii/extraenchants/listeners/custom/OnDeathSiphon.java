@@ -44,7 +44,7 @@ public class OnDeathSiphon implements Listener {
         ItemStack boots = e.getPlayer().getInventory().getBoots();
 
         if (InventoryUtils.hasEnchant(helmet, EEnchant.DEATH_SIPHON)) {
-            InventoryUtils.applyDurability(helmet);
+            InventoryUtils.applyDurability(e.getPlayer(), helmet);
 
             if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
@@ -52,7 +52,7 @@ public class OnDeathSiphon implements Listener {
         }
 
         if (InventoryUtils.hasEnchant(chestplate, EEnchant.DEATH_SIPHON)) {
-            InventoryUtils.applyDurability(chestplate);
+            InventoryUtils.applyDurability(e.getPlayer(), chestplate);
 
             if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
@@ -60,7 +60,7 @@ public class OnDeathSiphon implements Listener {
         }
 
         if (InventoryUtils.hasEnchant(leggings, EEnchant.DEATH_SIPHON)) {
-            InventoryUtils.applyDurability(leggings);
+            InventoryUtils.applyDurability(e.getPlayer(), leggings);
 
             if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
@@ -68,7 +68,7 @@ public class OnDeathSiphon implements Listener {
         }
 
         if (InventoryUtils.hasEnchant(boots, EEnchant.DEATH_SIPHON)) {
-            InventoryUtils.applyDurability(boots);
+            InventoryUtils.applyDurability(e.getPlayer(), boots);
 
             if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
                 e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));

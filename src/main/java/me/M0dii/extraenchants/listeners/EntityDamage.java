@@ -70,7 +70,11 @@ public class EntityDamage implements Listener {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new BarbarianEvent((Player) e.getDamager(), e));
+        if(!(e.getDamager() instanceof Player p)) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new BarbarianEvent(p, e));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -79,7 +83,24 @@ public class EntityDamage implements Listener {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new WebbingEvent((Player) e.getDamager(), e));
+        if(!(e.getDamager() instanceof Player p)) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new WebbingEvent(p, e));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityDamageDebuffing(final EntityDamageByEntityEvent e) {
+        if (shouldSkip(e, EEnchant.DEBUFFING)) {
+            return;
+        }
+
+        if(!(e.getDamager() instanceof Player p)) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new DebuffingEvent(p, e));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -88,11 +109,13 @@ public class EntityDamage implements Listener {
             return;
         }
 
-        Player damager = (Player) e.getDamager();
+        if(!(e.getDamager() instanceof Player p)) {
+            return;
+        }
 
-        int level = InventoryUtils.getEnchantLevelHand(damager, EEnchant.WITHERING);
+        int level = InventoryUtils.getEnchantLevelHand(p, EEnchant.WITHERING);
 
-        Bukkit.getPluginManager().callEvent(new WitheringEvent(damager, e, level));
+        Bukkit.getPluginManager().callEvent(new WitheringEvent(p, e, level));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

@@ -30,11 +30,11 @@ public class PlayerDeathRespawn implements Listener {
             return;
         }
 
-        List<ItemStack> kept = keptItems.get(p.getUniqueId());
+        List<ItemStack> kept = keptItems.getOrDefault(p.getUniqueId(), new ArrayList<>());
 
         List<ItemStack> updated = new ArrayList<>();
 
-        if (kept != null && kept.size() > 0) {
+        if (kept != null && !kept.isEmpty()) {
             for (ItemStack item : kept) {
                 ItemStack copy = item.clone();
 
@@ -46,7 +46,7 @@ public class PlayerDeathRespawn implements Listener {
 
                 List<String> lore = m.getLore();
 
-                if (lore != null && lore.size() > 0)
+                if (lore != null && !lore.isEmpty())
                     for (int i = 0; i < lore.size(); i++) {
                         String s = lore.get(i);
 
