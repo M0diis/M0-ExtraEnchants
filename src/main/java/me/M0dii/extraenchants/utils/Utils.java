@@ -1,5 +1,7 @@
 package me.m0dii.extraenchants.utils;
 
+import com.bekvon.bukkit.residence.Residence;
+import com.bekvon.bukkit.residence.protection.ClaimedResidence;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import net.kyori.adventure.text.Component;
@@ -57,8 +59,15 @@ public class Utils {
         return Component.text(ChatColor.translateAlternateColorCodes('&', text));
     }
 
-    public static boolean allowed(Player p, Location loc) {
-        return true;
+    public static boolean allowedAt(Player p, Location loc) {
+        ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(loc);
+
+        if(res == null || p.hasPermission("residence.admin")) {
+            return true;
+        }
+
+        return res.getPermissions().playerHas(p, "build", true)
+                || res.getPermissions().getOwnerUUID().equals(p.getUniqueId());
     }
 
     public static String arabicToRoman(int level) {

@@ -61,7 +61,7 @@ public class OnTunnel implements Listener {
             return;
         }
 
-        if (!Utils.allowed(p, b.getLocation())) {
+        if (!Utils.allowedAt(p, b.getLocation())) {
             Messenger.debug("Player not allowed, skipping tunnel.");
             return;
         }

@@ -53,7 +53,7 @@ public class OnTurtleShell implements Listener {
 
         if (InventoryUtils.hasEnchant(helmet, EEnchant.TURTLE_SHELL)) {
             if (Utils.shouldTrigger(EEnchant.TURTLE_SHELL)) {
-                InventoryUtils.applyDurability(helmet);
+                InventoryUtils.applyDurability(receiver, helmet);
 
                 percentage += 0.025;
             }
@@ -61,7 +61,7 @@ public class OnTurtleShell implements Listener {
 
         if (InventoryUtils.hasEnchant(chestplate, EEnchant.TURTLE_SHELL)) {
             if (Utils.shouldTrigger(EEnchant.TURTLE_SHELL)) {
-                InventoryUtils.applyDurability(chestplate);
+                InventoryUtils.applyDurability(receiver, chestplate);
 
                 percentage += 0.025;
             }
@@ -69,7 +69,7 @@ public class OnTurtleShell implements Listener {
 
         if (InventoryUtils.hasEnchant(leggings, EEnchant.TURTLE_SHELL)) {
             if (Utils.shouldTrigger(EEnchant.TURTLE_SHELL)) {
-                InventoryUtils.applyDurability(leggings);
+                InventoryUtils.applyDurability(receiver, leggings);
 
                 percentage += 0.025;
             }
@@ -77,7 +77,7 @@ public class OnTurtleShell implements Listener {
 
         if (InventoryUtils.hasEnchant(boots, EEnchant.TURTLE_SHELL)) {
             if (Utils.shouldTrigger(EEnchant.TURTLE_SHELL)) {
-                InventoryUtils.applyDurability(boots);
+                InventoryUtils.applyDurability(receiver, boots);
 
                 percentage += 0.025;
             }

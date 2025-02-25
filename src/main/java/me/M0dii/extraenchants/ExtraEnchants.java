@@ -1,14 +1,13 @@
 package me.m0dii.extraenchants;
 
+import lombok.Getter;
 import me.m0dii.extraenchants.commands.DisenchantCommand;
 import me.m0dii.extraenchants.commands.EnchantCommand;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
+import me.m0dii.extraenchants.utils.Placeholders;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.data.ConfigManager;
 import net.milkbowl.vault.economy.Economy;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.CustomChart;
-import org.bstats.charts.MultiLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -21,26 +20,21 @@ import org.reflections.Reflections;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class ExtraEnchants extends JavaPlugin {
+    @Getter
     private static ExtraEnchants instance;
     private PluginManager pm;
+    @Getter
     private ConfigManager configManager;
+    @Getter
     private Economy economy = null;
-
-    public static ExtraEnchants getInstance() {
-        return instance;
-    }
 
     public FileConfiguration getCfg() {
         return this.configManager.getConfig();
     }
 
-    public ConfigManager getConfigManager() {
-        return this.configManager;
-    }
+    private Placeholders placeholders;
 
     public void onEnable() {
         instance = this;
@@ -49,7 +43,12 @@ public class ExtraEnchants extends JavaPlugin {
 
         this.pm = this.getServer().getPluginManager();
 
-        getLogger().info("EnhancedEnchantments has been enabled.");
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            this.placeholders = new Placeholders();
+            this.placeholders.register();
+        }
+
+        getLogger().info("M0-ExtraEnchants has been enabled.");
 
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
@@ -57,7 +56,6 @@ public class ExtraEnchants extends JavaPlugin {
         registerEvents();
         registerCommands();
 
-        setupMetrics();
         checkForUpdates();
 
         Utils.copy(getResource("config.yml"), new File(getDataFolder(), "config_default.yml"));
@@ -104,28 +102,8 @@ public class ExtraEnchants extends JavaPlugin {
         });
     }
 
-    private void setupMetrics() {
-        Metrics metrics = new Metrics(this, 12049);
-
-        CustomChart c = new MultiLineChart("players_and_servers", () ->
-        {
-            Map<String, Integer> valueMap = new HashMap<>();
-
-            valueMap.put("servers", 1);
-            valueMap.put("players", Bukkit.getOnlinePlayers().size());
-
-            return valueMap;
-        });
-
-        metrics.addCustomChart(c);
-    }
-
-    public Economy getEconomy() {
-        return economy;
-    }
-
     public void onDisable() {
-        this.getLogger().info("EnhancedEnchantments has been disabled.");
+        this.getLogger().info("M0-ExtraEnchants has been disabled.");
     }
 
     private void registerEvents() {

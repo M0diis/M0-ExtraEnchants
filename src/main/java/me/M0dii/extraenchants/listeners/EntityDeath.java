@@ -4,6 +4,7 @@ import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.BeheadingEvent;
 import me.m0dii.extraenchants.events.DeathSiphonEvent;
+import me.m0dii.extraenchants.events.EssenceDrainEvent;
 import me.m0dii.extraenchants.utils.Messenger;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -60,5 +61,22 @@ public class EntityDeath implements Listener {
         }
 
         Bukkit.getPluginManager().callEvent(new DeathSiphonEvent(killer, e));
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEntityDeathEssenceDrain(final EntityDeathEvent e) {
+        Messenger.debug("EntityDeathEvent called");
+
+        if (EEnchant.ESSENCE_DRAIN.isDisabled()) {
+            return;
+        }
+
+        Player killer = e.getEntity().getKiller();
+
+        if (killer == null) {
+            return;
+        }
+
+        Bukkit.getPluginManager().callEvent(new EssenceDrainEvent(killer, e));
     }
 }

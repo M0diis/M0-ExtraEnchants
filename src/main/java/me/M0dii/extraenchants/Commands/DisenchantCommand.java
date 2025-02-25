@@ -1,7 +1,9 @@
 package me.m0dii.extraenchants.commands;
 
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
+import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -12,6 +14,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -52,7 +55,7 @@ public class DisenchantCommand implements CommandExecutor {
         }
 
         CustomEnchants.getAllEnchants().forEach((enchant) -> {
-            if (hand.getItemMeta().hasEnchant(enchant)) {
+            if (InventoryUtils.hasEnchant(hand, enchant)) {
                 removeEnchant(sender, hand, enchant, hand, enchant.getName());
             }
         });
@@ -85,5 +88,35 @@ public class DisenchantCommand implements CommandExecutor {
         }
 
         sender.sendMessage(Utils.format(removed.replace("%enchant_name%", enchName)));
+    }
+
+    private void removeEnchant(@Nonnull CommandSender sender, ItemStack hand, CustomEnchantment ench, ItemStack itemInMainHand, String enchName) {
+        ItemMeta meta = itemInMainHand.getItemMeta();
+
+        List<String> lore;
+
+        if (meta.getLore() != null) {
+            lore = meta.getLore().stream()
+                    .filter(l -> !l.contains(enchName))
+                    .collect(Collectors.toList());
+
+            meta.setLore(lore);
+        }
+
+        hand.setItemMeta(meta);
+
+        String removed = cfg.getString("messages.enchant-removed");
+
+        if (removed == null) {
+            return;
+        }
+
+        sender.sendMessage(Utils.format(removed.replace("%enchant_name%", enchName)));
+
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+
+        pdc.remove(ench.getKey());
+
+        itemInMainHand.setItemMeta(meta);
     }
 }

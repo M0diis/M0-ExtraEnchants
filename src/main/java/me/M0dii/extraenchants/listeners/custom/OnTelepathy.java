@@ -55,7 +55,7 @@ public class OnTelepathy implements Listener {
                 b.getWorld().dropItemNaturally(
                         b.getLocation(), i);
 
-            InventoryUtils.applyDurability(hand);
+            InventoryUtils.applyDurability(player, hand);
 
             return;
         }
@@ -91,7 +91,7 @@ public class OnTelepathy implements Listener {
             }
         }
 
-        InventoryUtils.applyDurability(hand);
+        InventoryUtils.applyDurability(player, hand);
     }
 
     public boolean doesFit(Inventory inv, Collection<ItemStack> drops) {

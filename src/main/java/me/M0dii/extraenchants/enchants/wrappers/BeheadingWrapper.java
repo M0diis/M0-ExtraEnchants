@@ -34,7 +34,7 @@ public class BeheadingWrapper extends CustomEnchantment {
             return false;
         }
 
-        return enchantment.equals(Enchantment.LOOT_BONUS_MOBS);
+        return enchantment.equals(Enchantment.LOOTING);
     }
 
     @Override

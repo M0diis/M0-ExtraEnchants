@@ -1,10 +1,10 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    id 'com.gradleup.shadow' version '8.3.5'
 }
 
 group 'me.m0dii'
-version '3.7.0'
+version 'j21-mc1.21.3-1.0.0'
 
 archivesBaseName = 'M0-ExtraEnchants'
 
@@ -37,25 +37,34 @@ repositories {
     }
 
     maven {
-        url = 'https://hub.jeff-media.com/nexus/repository/jeff-media-public/'
+        url = 'https://repo.jeff-media.com/public/'
+    }
+
+    maven {
+        url = 'https://repo.extendedclip.com/releases/'
     }
 }
 
 dependencies {
     implementation "org.bstats:bstats-bukkit:2.2.1"
-    compileOnly 'io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT'
+    compileOnly 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
+
+    compileOnly 'me.clip:placeholderapi:2.11.5'
 
     implementation 'org.reflections:reflections:0.10.2'
 
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
     compileOnly name: 'Residence5.0.1.5'
 
-    implementation 'com.jeff_media:MorePersistentDataTypes:2.4.0'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    implementation group: 'com.jeff_media', name: 'MorePersistentDataTypes', version: '2.4.0'
 }
 
 compileJava.options.encoding = 'UTF-8'
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }
 

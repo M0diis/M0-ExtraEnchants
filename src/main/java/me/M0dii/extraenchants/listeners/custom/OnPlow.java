@@ -45,7 +45,7 @@ public class OnPlow implements Listener {
 
         ItemStack hand = p.getInventory().getItemInMainHand();
 
-        InventoryUtils.applyDurability(hand);
+        InventoryUtils.applyDurability(p, hand);
 
         if (block1 == null) {
             return;
@@ -189,7 +189,7 @@ public class OnPlow implements Listener {
                           Block block5, Block plant5,
                           int amount, int slot,
                           ItemStack fee, Material seed) {
-        if (Utils.allowed(p, plant1.getLocation())) {
+        if (Utils.allowedAt(p, plant1.getLocation())) {
             block1.setType(Material.FARMLAND);
             plant1.setType(seed);
 
@@ -210,7 +210,7 @@ public class OnPlow implements Listener {
             return;
         }
 
-        if (Utils.allowed(p, plant.getLocation())) {
+        if (Utils.allowedAt(p, plant.getLocation())) {
             if (plant.getType().equals(Material.AIR) && amount >= 1 &&
                     (block.getType().equals(Material.DIRT) ||
                             block.getType().equals(Material.GRASS_BLOCK))) {

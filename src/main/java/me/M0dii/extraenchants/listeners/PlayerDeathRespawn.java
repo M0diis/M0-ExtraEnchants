@@ -2,6 +2,7 @@ package me.m0dii.extraenchants.listeners;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.utils.InventoryUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -87,7 +88,7 @@ public class PlayerDeathRespawn implements Listener {
             if (item.hasItemMeta() && item.getItemMeta() != null) {
                 ItemMeta meta = item.getItemMeta();
 
-                if (meta.hasEnchant(EEnchant.BONDED.getEnchantment())) {
+                if (InventoryUtils.hasEnchant(item, EEnchant.BONDED.getEnchantment())) {
                     drops.remove(item);
                     meta.removeEnchant(EEnchant.BONDED.getEnchantment());
                     item.setItemMeta(meta);

@@ -46,7 +46,7 @@ public class OnReinforced implements Listener {
 
         if (InventoryUtils.hasEnchant(helmet, EEnchant.REINFORCED)) {
             if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
-                InventoryUtils.applyDurability(helmet);
+                InventoryUtils.applyDurability(receiver, helmet);
 
                 maxCount++;
             }
@@ -54,7 +54,7 @@ public class OnReinforced implements Listener {
 
         if (InventoryUtils.hasEnchant(chestplate, EEnchant.REINFORCED)) {
             if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
-                InventoryUtils.applyDurability(chestplate);
+                InventoryUtils.applyDurability(receiver, chestplate);
 
                 maxCount++;
             }
@@ -62,7 +62,7 @@ public class OnReinforced implements Listener {
 
         if (InventoryUtils.hasEnchant(leggings, EEnchant.REINFORCED)) {
             if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
-                InventoryUtils.applyDurability(leggings);
+                InventoryUtils.applyDurability(receiver, leggings);
 
                 maxCount++;
             }
@@ -70,7 +70,7 @@ public class OnReinforced implements Listener {
 
         if (InventoryUtils.hasEnchant(boots, EEnchant.REINFORCED)) {
             if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
-                InventoryUtils.applyDurability(boots);
+                InventoryUtils.applyDurability(receiver, boots);
 
                 maxCount++;
             }

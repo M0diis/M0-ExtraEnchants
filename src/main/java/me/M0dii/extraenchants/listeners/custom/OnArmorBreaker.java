@@ -44,22 +44,22 @@ public class OnArmorBreaker implements Listener {
         switch (random) {
             case 0:
                 if (helmet != null) {
-                    InventoryUtils.applyDurability(helmet);
+                    InventoryUtils.applyDurability(damager, helmet);
                 }
                 break;
             case 1:
                 if (chestplate != null) {
-                    InventoryUtils.applyDurability(chestplate);
+                    InventoryUtils.applyDurability(damager, chestplate);
                 }
                 break;
             case 2:
                 if (leggings != null) {
-                    InventoryUtils.applyDurability(leggings);
+                    InventoryUtils.applyDurability(damager, leggings);
                 }
                 break;
             case 3:
                 if (boots != null) {
-                    InventoryUtils.applyDurability(boots);
+                    InventoryUtils.applyDurability(damager, boots);
                 }
                 break;
         }

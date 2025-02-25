@@ -8,14 +8,14 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class ColdSteelEvent extends Event implements Cancellable {
+public class DebuffingEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     @Getter
     private final Player player;
     private final EntityDamageByEntityEvent event;
     private boolean isCancelled;
 
-    public ColdSteelEvent(Player p, EntityDamageByEntityEvent e) {
+    public DebuffingEvent(Player p, EntityDamageByEntityEvent e) {
         this.player = p;
         this.event = e;
     }

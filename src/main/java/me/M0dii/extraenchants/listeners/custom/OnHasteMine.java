@@ -30,7 +30,7 @@ public class OnHasteMine implements Listener {
 
         Optional<PotionEffect> current = p.getActivePotionEffects()
                 .stream()
-                .filter(effect -> effect.getType().equals(PotionEffectType.FAST_DIGGING))
+                .filter(effect -> effect.getType().equals(PotionEffectType.HASTE))
                 .findFirst();
 
         if (current.isPresent()) {
@@ -39,7 +39,7 @@ public class OnHasteMine implements Listener {
 
         int level = Math.max(1, e.getEnchantLevel());
 
-        p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, (level * 100), level - 1));
+        p.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, (level * 100), level - 1));
 
         p.getWorld().playSound(p.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_HIT, 0.1F, 0.1F);
     }

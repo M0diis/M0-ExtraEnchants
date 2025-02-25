@@ -38,40 +38,42 @@ public class OnDeathSiphon implements Listener {
             return;
         }
 
-        ItemStack helmet = e.getPlayer().getInventory().getHelmet();
-        ItemStack chestplate = e.getPlayer().getInventory().getChestplate();
-        ItemStack leggings = e.getPlayer().getInventory().getLeggings();
-        ItemStack boots = e.getPlayer().getInventory().getBoots();
+        Player player = e.getPlayer();
+
+        ItemStack helmet = player.getInventory().getHelmet();
+        ItemStack chestplate = player.getInventory().getChestplate();
+        ItemStack leggings = player.getInventory().getLeggings();
+        ItemStack boots = player.getInventory().getBoots();
 
         if (InventoryUtils.hasEnchant(helmet, EEnchant.DEATH_SIPHON)) {
-            InventoryUtils.applyDurability(helmet);
+            InventoryUtils.applyDurability(player, helmet);
 
             if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
-                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
             }
         }
 
         if (InventoryUtils.hasEnchant(chestplate, EEnchant.DEATH_SIPHON)) {
-            InventoryUtils.applyDurability(chestplate);
+            InventoryUtils.applyDurability(player, chestplate);
 
             if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
-                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
             }
         }
 
         if (InventoryUtils.hasEnchant(leggings, EEnchant.DEATH_SIPHON)) {
-            InventoryUtils.applyDurability(leggings);
+            InventoryUtils.applyDurability(player, leggings);
 
             if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
-                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
             }
         }
 
         if (InventoryUtils.hasEnchant(boots, EEnchant.DEATH_SIPHON)) {
-            InventoryUtils.applyDurability(boots);
+            InventoryUtils.applyDurability(player, boots);
 
             if (random.nextInt(100) < EEnchant.DEATH_SIPHON.getTriggerChance()) {
-                e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
+                player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 60, 4));
             }
         }
     }

@@ -43,13 +43,13 @@ public class OnSmelt implements Listener {
         Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
         boolean hasFortune = tool.getItemMeta().getEnchants()
-                .containsKey(Enchantment.LOOT_BONUS_BLOCKS);
+                .containsKey(Enchantment.FORTUNE);
 
         int fortuneLevel = 1;
 
         if (hasFortune) {
             fortuneLevel = tool.getItemMeta().getEnchants()
-                    .get(Enchantment.LOOT_BONUS_BLOCKS);
+                    .get(Enchantment.FORTUNE);
         }
 
         while (recipes.hasNext() && !dontSmelt(b.getType().name())) {

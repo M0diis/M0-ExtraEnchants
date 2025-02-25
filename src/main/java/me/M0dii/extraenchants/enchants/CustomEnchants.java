@@ -11,8 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CustomEnchants {
-
     public static void register() {
+        if(true) {
+            return;
+        }
+
         new Reflections("me.m0dii.extraenchants.enchants.wrappers")
                 .getSubTypesOf(Enchantment.class)
                 .forEach(clazz -> {
@@ -42,6 +45,7 @@ public class CustomEnchants {
                     }
                 });
     }
+
 
     public static List<Enchantment> getAllEnchants() {
         return Arrays.stream(EEnchant.values())

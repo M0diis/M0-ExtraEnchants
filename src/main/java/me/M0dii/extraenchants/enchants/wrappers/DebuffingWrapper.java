@@ -12,24 +12,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
-@EnchantWrapper(name = "Anti Thorns", maxLevel = 1)
-public class AntiThornsWrapper extends CustomEnchantment {
-
-    public AntiThornsWrapper(final String name, final int lvl, EEnchant enchant) {
+@EnchantWrapper(name = "Debuffing", maxLevel = 1)
+public class DebuffingWrapper extends CustomEnchantment {
+    public DebuffingWrapper(final String name, final int lvl, EEnchant enchant) {
         super(name, lvl, enchant);
     }
 
-    @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isArmor(item) || enchant.canEnchantItemCustom(item);
+        return Enchantables.isSword(item) || enchant.canEnchantItemCustom(item);
     }
 
-    @Override
-    public int getAnvilCost() {
-        return 0;
-    }
-
-    @Override
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
         if (enchant.getCustomConflicts().contains(enchantment)) {
             return true;
@@ -39,21 +31,15 @@ public class AntiThornsWrapper extends CustomEnchantment {
             return false;
         }
 
-        return enchantment.equals(Enchantment.THORNS);
+        return EEnchant.LIFESTEAL.equals(enchantment)
+                || EEnchant.ASSASSIN.equals(enchantment);
     }
 
-    @Override
     public @NotNull EnchantmentTarget getItemTarget() {
-        return EnchantmentTarget.ARMOR;
+        return EnchantmentTarget.WEAPON;
     }
 
-    @Override
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
-        return Set.of(
-                EquipmentSlot.HEAD,
-                EquipmentSlot.CHEST,
-                EquipmentSlot.LEGS,
-                EquipmentSlot.FEET
-        );
+        return Set.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND);
     }
 }

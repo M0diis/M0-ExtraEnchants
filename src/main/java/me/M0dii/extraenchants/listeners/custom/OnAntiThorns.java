@@ -5,6 +5,7 @@ import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.events.AntiThornsEvent;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -26,6 +27,8 @@ public class OnAntiThorns implements Listener {
             return;
         }
 
+        Player p = e.getPlayer();
+
         ItemStack helmet = e.getPlayer().getInventory().getHelmet();
         ItemStack chestplate = e.getPlayer().getInventory().getChestplate();
         ItemStack leggings = e.getPlayer().getInventory().getLeggings();
@@ -35,7 +38,7 @@ public class OnAntiThorns implements Listener {
 
         if (helmet != null) {
             if (helmet.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
-                InventoryUtils.applyDurability(helmet);
+                InventoryUtils.applyDurability(p, helmet);
 
                 deflectPercentage += 25;
             }
@@ -43,7 +46,7 @@ public class OnAntiThorns implements Listener {
 
         if (chestplate != null) {
             if (chestplate.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
-                InventoryUtils.applyDurability(chestplate);
+                InventoryUtils.applyDurability(p, chestplate);
 
                 deflectPercentage += 25;
             }
@@ -51,7 +54,7 @@ public class OnAntiThorns implements Listener {
 
         if (leggings != null) {
             if (leggings.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
-                InventoryUtils.applyDurability(leggings);
+                InventoryUtils.applyDurability(p, leggings);
 
                 deflectPercentage += 25;
             }
@@ -59,7 +62,7 @@ public class OnAntiThorns implements Listener {
 
         if (boots != null) {
             if (boots.containsEnchantment(EEnchant.ANTI_THORNS.getEnchantment())) {
-                InventoryUtils.applyDurability(boots);
+                InventoryUtils.applyDurability(p, boots);
 
                 deflectPercentage += 25;
             }

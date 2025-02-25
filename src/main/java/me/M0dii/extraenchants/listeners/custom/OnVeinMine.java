@@ -51,7 +51,7 @@ public class OnVeinMine implements Listener {
 
         int limit = 15;
 
-        if (prepare.size() == 0) {
+        if (prepare.isEmpty()) {
             return;
         }
 
@@ -78,7 +78,7 @@ public class OnVeinMine implements Listener {
         return Stream.of(AREA).map(block::getRelative)
                 .filter(blockAdded -> blockAdded.getType() == block.getType())
                 .filter(b -> b.getType().name().contains("ORE"))
-                .filter(b -> Utils.allowed(player, b.getLocation()))
+                .filter(b -> Utils.allowedAt(player, b.getLocation()))
                 .collect(Collectors.toSet());
     }
 }

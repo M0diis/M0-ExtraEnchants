@@ -29,16 +29,18 @@ public class OnColdSteel implements Listener {
             return;
         }
 
+        Player player = e.getPlayer();
+
         boolean apply = false;
 
-        ItemStack helmet = e.getPlayer().getInventory().getHelmet();
-        ItemStack chestplate = e.getPlayer().getInventory().getChestplate();
-        ItemStack leggings = e.getPlayer().getInventory().getLeggings();
-        ItemStack boots = e.getPlayer().getInventory().getBoots();
+        ItemStack helmet = player.getInventory().getHelmet();
+        ItemStack chestplate = player.getInventory().getChestplate();
+        ItemStack leggings = player.getInventory().getLeggings();
+        ItemStack boots = player.getInventory().getBoots();
 
         if (InventoryUtils.hasEnchant(helmet, EEnchant.COLD_STEEL)) {
             if (Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
-                InventoryUtils.applyDurability(helmet);
+                InventoryUtils.applyDurability(player, helmet);
 
                 apply = true;
             }
@@ -46,7 +48,7 @@ public class OnColdSteel implements Listener {
 
         if (InventoryUtils.hasEnchant(chestplate, EEnchant.COLD_STEEL)) {
             if (Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
-                InventoryUtils.applyDurability(chestplate);
+                InventoryUtils.applyDurability(player, chestplate);
 
                 apply = true;
             }
@@ -54,7 +56,7 @@ public class OnColdSteel implements Listener {
 
         if (InventoryUtils.hasEnchant(leggings, EEnchant.COLD_STEEL)) {
             if (Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
-                InventoryUtils.applyDurability(leggings);
+                InventoryUtils.applyDurability(player, leggings);
 
                 apply = true;
             }
@@ -62,7 +64,7 @@ public class OnColdSteel implements Listener {
 
         if (InventoryUtils.hasEnchant(boots, EEnchant.COLD_STEEL)) {
             if (Utils.shouldTrigger(EEnchant.COLD_STEEL)) {
-                InventoryUtils.applyDurability(boots);
+                InventoryUtils.applyDurability(player, boots);
 
                 apply = true;
             }
@@ -76,7 +78,7 @@ public class OnColdSteel implements Listener {
             return;
         }
 
-        receiver.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 60, 0));
-        receiver.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 60, 0));
+        receiver.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 60, 0));
+        receiver.addPotionEffect(new PotionEffect(PotionEffectType.MINING_FATIGUE, 60, 0));
     }
 }

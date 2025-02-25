@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public enum EEnchant {
     TELEPATHY,
     PLOW,
+    EXCAVATOR,
     SMELT,
     BEHEADING,
     BONDED,
@@ -41,7 +42,10 @@ public enum EEnchant {
     GILLS,
     WEBBING,
     DEATH_SIPHON,
-    STAT_TRACK;
+    TIMBER,
+    STAT_TRACK,
+    ESSENCE_DRAIN,
+    DEBUFFING;
 
     private final ExtraEnchants instance = ExtraEnchants.getInstance();
 
@@ -204,5 +208,17 @@ public enum EEnchant {
                     return parsed.getEnchantment();
                 })
                 .collect(Collectors.toList());
+    }
+
+    public String getLore() {
+        List<String> lore = instance.getCfg().getStringList(String.format("enchants.%s.lore", getConfigName()))
+                .stream()
+                .map(l -> l.replace("%level%", "<lygis>")
+                        .replace("%duration%", getDuration() + "")
+                        .replace("%trigger-chance%", getTriggerChance() + "%"))
+                .map(Utils::format)
+                .collect(Collectors.toList());
+
+        return String.join("\n", lore);
     }
 }

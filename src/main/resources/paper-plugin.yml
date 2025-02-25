@@ -1,0 +1,16 @@
+main: me.m0dii.extraenchants.ExtraEnchants
+bootstrapper: me.m0dii.extraenchants.ExtraEnchantsBootstrapper
+name: M0-ExtraEnchants
+author: M0dii
+version: 3.6.2
+api-version: 1.21.3
+softdepend: [Vault]
+commands:
+  extraenchant:
+    permission: extraenchants.command.enchant
+    description: Enchant command.
+    aliases: [ee, extraenchants, eench]
+  unenchant:
+    permission: extraenchants.command.unenchant
+    description: Unenchant command.
+    aliases: [unench, unen, ue]

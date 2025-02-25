@@ -3,10 +3,12 @@ package me.m0dii.extraenchants.listeners.custom;
 import com.google.common.collect.Sets;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.events.ReplanterBreakEvent;
 import me.m0dii.extraenchants.events.ReplanterEvent;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
@@ -17,6 +19,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class OnReplanter implements Listener {
@@ -34,6 +38,24 @@ public class OnReplanter implements Listener {
 
     public OnReplanter(ExtraEnchants plugin) {
         this.plugin = plugin;
+
+        init();
+    }
+
+    private void init() {
+        Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
+            List<ReplantLocation> toReplant = pendingToReplant.stream()
+                    .filter(replant -> System.currentTimeMillis() - replant.getTime() >= 3000)
+                    .toList();
+
+            for (ReplantLocation replant : toReplant) {
+                replant.getBlock().setType(replant.getPlant().getMaterial());
+                replant.getPlant().setAge(0);
+                replant.getBlock().setBlockData(replant.getPlant());
+            }
+
+            pendingToReplant.removeAll(toReplant);
+        }, 20L, 20L);
     }
 
     @EventHandler
@@ -60,9 +82,13 @@ public class OnReplanter implements Listener {
             return;
         }
 
+        if (plant.getAge() != plant.getMaximumAge()) {
+            return;
+        }
+
         Player player = e.getPlayer();
 
-        if (!Utils.allowed(player, blockPlant.getLocation())) {
+        if (!Utils.allowedAt(player, blockPlant.getLocation())) {
             return;
         }
 
@@ -75,7 +101,7 @@ public class OnReplanter implements Listener {
             plant.setAge(0);
             blockPlant.setBlockData(plant);
 
-            InventoryUtils.applyDurability(hand);
+            InventoryUtils.applyDurability(e.getPlayer(), hand);
         }
     }
 
@@ -123,5 +149,78 @@ public class OnReplanter implements Listener {
         seed.setAmount(seed.getAmount() - 1);
 
         return true;
+    }
+
+    class ReplantLocation {
+        private final Block block;
+        private final Ageable plant;
+        private final long time = System.currentTimeMillis();
+
+        public ReplantLocation(Block block, Ageable plant) {
+            this.block = block;
+            this.plant = plant;
+        }
+
+        public Block getBlock() {
+            return this.block;
+        }
+
+        public Ageable getPlant() {
+            return this.plant;
+        }
+
+        public long getTime() {
+            return this.time;
+        }
+    }
+
+    private final List<ReplantLocation> pendingToReplant = new ArrayList<>();
+
+    @EventHandler(ignoreCancelled = true)
+    public void onBlockBreak(final ReplanterBreakEvent e) {
+        if (!Utils.shouldTrigger(EEnchant.REPLANTER)) {
+            return;
+        }
+
+        if (e.getBreakEvent().isCancelled()) {
+            return;
+        }
+
+        if (e.getEnchantLevel() <= 0) {
+            return;
+        }
+
+        Block block = e.getBreakEvent().getBlock();
+
+        if (!CROPS.contains(this.fineBlockToSeeds(block.getType()))) {
+            return;
+        }
+
+        BlockData data = block.getBlockData();
+
+        if (!(data instanceof Ageable plant)) {
+            return;
+        }
+
+        if (plant.getAge() != plant.getMaximumAge()) {
+            e.getBreakEvent().setCancelled(true);
+            return;
+        }
+
+        Player player = e.getPlayer();
+
+        if (!Utils.allowedAt(player, block.getLocation())) {
+            return;
+        }
+
+        ItemStack hand = player.getInventory().getItemInMainHand();
+
+        if (takeSeeds(player, plant.getMaterial())) {
+            block.breakNaturally(hand);
+
+            pendingToReplant.add(new ReplantLocation(block, plant));
+
+            InventoryUtils.applyDurability(e.getPlayer(), hand);
+        }
     }
 }

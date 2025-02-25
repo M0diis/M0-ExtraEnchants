@@ -76,9 +76,8 @@ public class TillInteract implements Listener {
         }
 
         ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
-        Player p = e.getPlayer();
 
-        if (hand == null) {
+        if (hand.getType().isAir()) {
             return;
         }
 
@@ -93,6 +92,8 @@ public class TillInteract implements Listener {
         if (!Enchantables.isHoe(hand)) {
             return;
         }
+
+        Player p = e.getPlayer();
 
         if ((p.getGameMode() == GameMode.CREATIVE)
                 || (p.getGameMode() == GameMode.SPECTATOR)) {

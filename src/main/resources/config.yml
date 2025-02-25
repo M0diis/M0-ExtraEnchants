@@ -498,6 +498,104 @@ enchants:
     extra:
       duration: 3
       player-only: true
+  replanter:
+    enabled: true
+    trigger-chance: -1
+    table-chance: -1
+    enchanted-item-lore-name: '&7Replanter %level%'
+    book-display-name: "&d&lReplanter %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Automatically replants seeds."
+      - ""
+      - "&6Enchantable items: &aHoes"
+    default-conflicts: true
+    conflicts: []
+    enchantable-items: []
+  timber:
+    enabled: true
+    trigger-chance: -1
+    table-chance: -1
+    enchanted-item-lore-name: '&7Timber %level%'
+    book-display-name: "&d&lTimber %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Automatically chops down adjacent logs."
+      - ""
+      - "&6Enchantable items: &aHoes"
+    default-conflicts: true
+    conflicts: []
+    enchantable-items: []
+  excavator:
+    enabled: true
+    trigger-chance: -1
+    table-chance: -1
+    enchanted-item-lore-name: '&7Excavator %level%'
+    book-display-name: "&d&lExcavator %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Mines 3x3 area in front of you."
+      - ""
+      - "&6Enchantable items: &aPickaxes, Shovels"
+    default-conflicts: true
+    conflicts: []
+    enchantable-items: []
+  debuffing:
+    enabled: true
+    trigger-chance: 10
+    table-chance: -1
+    enchanted-item-lore-name: '&7Debuffing %level%'
+    book-display-name: "&d&lDebuffing %level%"
+    cursed: false
+    treasure: false
+    rarity: VERY_RARE
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a %trigger-chance% chance to remove"
+      - "&7all potion effects from the opponent when"
+      - "&7opponent has less than 4 hearts."
+      - ""
+      - "&6Enchantable items: &aWeapons"
+    default-conflicts: true
+    conflicts: []
+    enchantable-items: []
+  essence-drain:
+    enabled: true
+    trigger-chance: 10
+    table-chance: -1
+    enchanted-item-lore-name: '&7Essence Drain %level%'
+    book-display-name: "&d&lEssence Drain %level%"
+    cursed: false
+    treasure: true
+    rarity: VERY_RARE
+    lore:
+      - "&7Drag book and drop on item."
+      - "&7Right click for more info."
+      - ""
+      - "&7Has a %trigger-chance% chance to double"
+      - "&7experience gained from killing mobs."
+      - ""
+      - "&6Enchantable items: &aWeapons"
+    default-conflicts: true
+    conflicts: []
+    enchantable-items: []
 
 messages:
   no-permission: "&c&lYou do not have permission to do this!"

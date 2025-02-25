@@ -132,11 +132,6 @@ public class SignEnchantInteract implements Listener {
 
         Player player = e.getPlayer();
 
-        if (!player.hasPermission("extraenchants.signs.use")) {
-            player.sendMessage(Utils.format(plugin.getCfg().getString("messages.no-permission")));
-            return;
-        }
-
         Block block = e.getClickedBlock();
 
         if (block == null) {
@@ -148,6 +143,11 @@ public class SignEnchantInteract implements Listener {
         }
 
         if (!(sign.getBlockData() instanceof WallSign ws)) {
+            return;
+        }
+
+        if (!player.hasPermission("extraenchants.signs.use")) {
+            player.sendMessage(Utils.format(plugin.getCfg().getString("messages.no-permission")));
             return;
         }
 

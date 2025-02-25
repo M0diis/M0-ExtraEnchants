@@ -2,6 +2,7 @@ package me.m0dii.extraenchants.utils;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -22,7 +23,7 @@ public class InventoryUtils {
 
     private static final Random random = new Random();
 
-    public static boolean hasEnchant(ItemStack item, Enchantment enchant) {
+    public static boolean hasEnchant(ItemStack item, CustomEnchantment enchant) {
         ItemMeta itemMeta = item.getItemMeta();
 
         if(itemMeta == null) {
@@ -34,6 +35,24 @@ public class InventoryUtils {
         Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
 
         return itemMeta.getEnchants().containsKey(enchant) || current.containsKey(enchant.translationKey());
+    }
+
+    public static boolean hasEnchant(ItemStack item, Enchantment enchant) {
+        if (item == null) {
+            return false;
+        }
+
+        ItemMeta itemMeta = item.getItemMeta();
+
+        if(itemMeta == null) {
+            return false;
+        }
+
+        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+
+        Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+
+        return itemMeta.getEnchants().containsKey(enchant) || item.getEnchantments().containsKey(enchant) || current.containsKey(enchant.getKey().getKey());
     }
 
     public static boolean hasEnchant(ItemStack item, EEnchant enchant) {
@@ -74,7 +93,7 @@ public class InventoryUtils {
             return current.get(enchant.getEnchantment().translationKey());
         }
 
-        return item.getEnchantmentLevel(enchant.getEnchantment());
+        return itemMeta.getEnchants().getOrDefault(enchant.getEnchantment(), 0);
     }
 
     public static int getEnchantLevelHand(Player p, EEnchant enchant) {
@@ -91,7 +110,7 @@ public class InventoryUtils {
         return getEnchantLevel(item, enchant);
     }
 
-    public static void applyDurabilityChanced(ItemStack item, int chance) {
+    public static void applyDurabilityChanced(Player player, ItemStack item, int chance) {
         if (item == null || item.getType().isAir()) {
             return;
         }
@@ -100,18 +119,18 @@ public class InventoryUtils {
             return;
         }
 
-        applyDurability(item);
+        applyDurability(player, item);
     }
 
-    public static void applyDurability(ItemStack item) {
+    public static void applyDurability(Player player, ItemStack item) {
         if (!(item.getItemMeta() instanceof Damageable damageable)) {
             return;
         }
 
         int unbreakingLevel = 0;
 
-        if (InventoryUtils.hasEnchant(item, Enchantment.DURABILITY)) {
-            unbreakingLevel = item.getItemMeta().getEnchants().get(Enchantment.DURABILITY);
+        if (InventoryUtils.hasEnchant(item, Enchantment.UNBREAKING)) {
+            unbreakingLevel = item.getItemMeta().getEnchants().get(Enchantment.UNBREAKING);
         }
 
         int chance = (100) / (1 + unbreakingLevel);
@@ -122,11 +141,18 @@ public class InventoryUtils {
             damageable.setDamage(damageable.getDamage() + 1);
         }
 
-        item.setItemMeta(damageable);
-
         if (damageable.getDamage() >= item.getType().getMaxDurability()) {
+            if (player.getInventory().getItemInMainHand().equals(item)) {
+                player.getInventory().setItemInMainHand(null);
+            } else {
+                player.getInventory().removeItem(item);
+            }
+
             item.setType(Material.AIR);
+            item.setAmount(0);
         }
+
+        item.setItemMeta(damageable);
     }
 
     public static Map<String, Integer> getEnchantmentMapFromPDC(@Nonnull ItemStack item) {
