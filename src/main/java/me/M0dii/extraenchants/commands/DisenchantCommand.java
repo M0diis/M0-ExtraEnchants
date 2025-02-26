@@ -1,4 +1,4 @@
-package me.m0dii.extraenchants.commands;
+1package me.m0dii.extraenchants.commands;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
