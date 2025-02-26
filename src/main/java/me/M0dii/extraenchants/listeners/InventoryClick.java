@@ -98,10 +98,11 @@ public class InventoryClick implements Listener {
                 .ifPresent(enchantment -> {
                     PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
-                    Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
+                    Map<String, Integer> current = pdc.getOrDefault(enchantKey,
+                            DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
 
                     Bukkit.getPluginManager().callEvent(
-                            new CombineEvent(p, e, enchantment.getEnchantment(), current.get(enchantment.getEnchantment().translationKey())));
+                            new CombineEvent(p, e, enchantment, current.get(enchantment.getEnchantment().key().asString())));
                 });
     }
 

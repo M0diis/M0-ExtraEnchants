@@ -2,8 +2,8 @@ main: me.m0dii.extraenchants.ExtraEnchants
 name: M0-ExtraEnchants
 author: M0dii
 version: 3.6.2
-api-version: 1.16
-softdepend: [Vault]
+api-version: 1.21.3
+softdepend: [Residence, Vault, PlaceholderAPI]
 commands:
   extraenchant:
     permission: extraenchants.command.enchant

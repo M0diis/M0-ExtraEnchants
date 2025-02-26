@@ -1,8 +1,8 @@
 package me.m0dii.extraenchants.utils;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
-import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.ExtraEnchants;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -65,7 +65,7 @@ public class Enchanter {
 
         Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
 
-        Map<String, Integer> map = Map.of(enchant.getEnchantment().translationKey(), level);
+        Map<String, Integer> map = Map.of(enchant.getEnchantment().key().asString(), level);
 
         current.putAll(map);
 
@@ -79,7 +79,7 @@ public class Enchanter {
     public static void applyEnchant(ItemStack item, EEnchant enchant, int level, boolean onlyLore) {
         List<String> lore = new ArrayList<>();
 
-        lore.add(enchant.getDisplayInLore(level, true));
+//        lore.add(enchant.getDisplayInLore(level, true));
 
         ItemMeta meta = item.getItemMeta();
 
@@ -99,7 +99,7 @@ public class Enchanter {
 
         Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
 
-        Map<String, Integer> map = Map.of(enchant.getEnchantment().translationKey(), level);
+        Map<String, Integer> map = Map.of(enchant.getEnchantment().key().asString(), level);
 
         current.putAll(map);
 
@@ -117,7 +117,7 @@ public class Enchanter {
 
         Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
 
-        Map<String, Integer> map = Map.of(enchant.getEnchantment().translationKey(), level);
+        Map<String, Integer> map = Map.of(enchant.getEnchantment().key().asString(), level);
 
         current.putAll(map);
 

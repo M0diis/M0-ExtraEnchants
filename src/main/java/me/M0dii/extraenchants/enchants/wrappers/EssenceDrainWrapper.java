@@ -18,10 +18,12 @@ public class EssenceDrainWrapper extends CustomEnchantment {
         super(name, lvl, enchant);
     }
 
+    @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
         return Enchantables.isWeapon(item) || enchant.canEnchantItemCustom(item);
     }
 
+    @Override
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
         if (enchant.getCustomConflicts().contains(enchantment)) {
             return true;
@@ -34,10 +36,12 @@ public class EssenceDrainWrapper extends CustomEnchantment {
         return enchantment.equals(EEnchant.DEATH_SIPHON.getEnchantment());
     }
 
+    @Override
     public @NotNull EnchantmentTarget getItemTarget() {
         return EnchantmentTarget.ARMOR;
     }
 
+    @Override
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
         return Set.of(EquipmentSlot.HAND);
     }

@@ -19,10 +19,12 @@ public class ExcavatorWrapper extends CustomEnchantment {
         super(name, lvl, enchant);
     }
 
+    @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
         return Enchantables.isPickaxe(item) || Enchantables.isShovel(item) || enchant.canEnchantItemCustom(item);
     }
 
+    @Override
     public boolean conflictsWith(final @NotNull Enchantment enchantment) {
         if (enchant.getCustomConflicts().contains(enchantment)) {
             return true;
@@ -37,10 +39,12 @@ public class ExcavatorWrapper extends CustomEnchantment {
                 || EEnchant.TELEPATHY.equals(enchantment);
     }
 
+    @Override
     public @NotNull EnchantmentTarget getItemTarget() {
         return EnchantmentTarget.TOOL;
     }
 
+    @Override
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
         return Set.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND);
     }

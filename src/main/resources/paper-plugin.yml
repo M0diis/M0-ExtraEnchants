@@ -4,7 +4,6 @@ name: M0-ExtraEnchants
 author: M0dii
 version: 3.6.2
 api-version: 1.21.3
-softdepend: [Vault]
 commands:
   extraenchant:
     permission: extraenchants.command.enchant
@@ -14,3 +13,18 @@ commands:
     permission: extraenchants.command.unenchant
     description: Unenchant command.
     aliases: [unench, unen, ue]
+
+dependencies:
+  server:
+    Residence:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    PlaceholderAPI:
+      load: BEFORE
+      required: true
+      join-classpath: true
+    Vault:
+      load: BEFORE
+      required: true
+      join-classpath: true

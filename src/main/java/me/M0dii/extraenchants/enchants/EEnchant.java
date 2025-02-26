@@ -1,6 +1,8 @@
 package me.m0dii.extraenchants.enchants;
 
 import io.papermc.paper.enchantments.EnchantmentRarity;
+import lombok.Getter;
+import lombok.Setter;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.utils.Enchantables;
 import me.m0dii.extraenchants.utils.Utils;
@@ -50,6 +52,9 @@ public enum EEnchant {
     private final ExtraEnchants instance = ExtraEnchants.getInstance();
 
     private Enchantment enchant;
+    @Setter
+    @Getter
+    private CustomEnchantment customEnchantment;
 
     public static EEnchant parse(String value) {
         return Arrays.stream(EEnchant.values())
@@ -157,7 +162,7 @@ public enum EEnchant {
     }
 
     public boolean canEnchantItem(ItemStack item) {
-        return this.enchant.canEnchantItem(item);
+        return this.customEnchantment.canEnchantItem(item);
     }
 
     public boolean canEnchantItemCustom(ItemStack item) {

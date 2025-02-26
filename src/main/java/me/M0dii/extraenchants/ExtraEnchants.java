@@ -9,11 +9,9 @@ import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.data.ConfigManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.command.PluginCommand;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
 
@@ -56,51 +54,30 @@ public class ExtraEnchants extends JavaPlugin {
         registerEvents();
         registerCommands();
 
-        checkForUpdates();
-
         Utils.copy(getResource("config.yml"), new File(getDataFolder(), "config_default.yml"));
 
-        if (!setupEconomy()) {
-            getLogger().severe("Vault not found, disabling economy features.");
-        }
+//        if (!setupEconomy()) {
+//            getLogger().severe("Vault not found, disabling economy features.");
+//        }
 
         CustomEnchants.register();
     }
 
-    private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-
-        if (rsp == null) {
-            return false;
-        }
-
-        economy = rsp.getProvider();
-
-        return economy != null;
-    }
-
-    private void checkForUpdates() {
-        if (!configManager.getConfig().getBoolean("notify-update")) {
-            return;
-        }
-
-        new UpdateChecker(this, 88737).getVersion(ver ->
-        {
-            String curr = this.getDescription().getVersion();
-
-            if (!curr.equalsIgnoreCase(
-                    ver.replace("v", ""))) {
-                getLogger().info("You are running an outdated version of M0-ExtraEnchants.");
-                getLogger().info("Latest version: " + ver + ", you are using: " + curr);
-                getLogger().info("You can download the latest version on Spigot:");
-                getLogger().info("https://www.spigotmc.org/resources/88737/");
-            }
-        });
-    }
+//    private boolean setupEconomy() {
+//        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+//            return false;
+//        }
+//
+//        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+//
+//        if (rsp == null) {
+//            return false;
+//        }
+//
+//        economy = rsp.getProvider();
+//
+//        return economy != null;
+//    }
 
     public void onDisable() {
         this.getLogger().info("M0-ExtraEnchants has been disabled.");
@@ -126,16 +103,9 @@ public class ExtraEnchants extends JavaPlugin {
     }
 
     private void registerCommands() {
-        PluginCommand ee = getCommand("extraenchant");
-
-        if (ee != null) {
-            ee.setExecutor(new EnchantCommand(this));
-        }
-
-        PluginCommand ue = getCommand("unenchant");
-
-        if (ue != null) {
-            ue.setExecutor(new DisenchantCommand(this));
-        }
+        getServer().getCommandMap().register("unenchant", new DisenchantCommand(this));
+        getServer().getCommandMap().register("ue", new DisenchantCommand(this));
+        getServer().getCommandMap().register("extraenchant", new EnchantCommand(this));
+        getServer().getCommandMap().register("ee", new EnchantCommand(this));
     }
 }

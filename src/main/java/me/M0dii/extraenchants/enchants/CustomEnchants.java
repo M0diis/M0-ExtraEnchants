@@ -1,7 +1,12 @@
 package me.m0dii.extraenchants.enchants;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
+import io.papermc.paper.registry.TypedKey;
 import me.m0dii.extraenchants.utils.EnchantWrapper;
+import net.kyori.adventure.key.Key;
 import org.bukkit.Bukkit;
+import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
 import org.reflections.Reflections;
 
@@ -12,13 +17,10 @@ import java.util.List;
 
 public class CustomEnchants {
     public static void register() {
-        if(true) {
-            return;
-        }
-
         new Reflections("me.m0dii.extraenchants.enchants.wrappers")
-                .getSubTypesOf(Enchantment.class)
+                .getSubTypesOf(CustomEnchantment.class)
                 .forEach(clazz -> {
+
                     try {
                         if (!clazz.isAnnotationPresent(EnchantWrapper.class)) {
                             return;
@@ -32,13 +34,24 @@ public class CustomEnchants {
                             return;
                         }
 
-                        Constructor<? extends Enchantment> constructor = clazz.getConstructor(String.class, int.class, EEnchant.class);
+                        Constructor<? extends CustomEnchantment> constructor = clazz.getConstructor(String.class, int.class, EEnchant.class);
 
-                        Enchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLevel(), eEnchant);
+                        CustomEnchantment enchantment = constructor.newInstance(wrapper.name(), wrapper.maxLevel(), eEnchant);
+
+                        Registry<Enchantment> enchantmentRegistry = RegistryAccess
+                                .registryAccess()
+                                .getRegistry(RegistryKey.ENCHANTMENT);
+
+                        String name = wrapper.name();
+
+                        Enchantment enchantmentB = enchantmentRegistry.getOrThrow(TypedKey.create(
+                                RegistryKey.ENCHANTMENT, Key.key("custom:" + name.toLowerCase().replace(" ", "_")))
+                        );
+
+                        eEnchant.setEnchantment(enchantmentB);
+                        eEnchant.setCustomEnchantment(enchantment);
 
                         Bukkit.getLogger().info("Registering enchant wrapper: " + enchantment.getClass().getSimpleName());
-
-                        eEnchant.setEnchantment(enchantment);
                     } catch (NoSuchMethodException | IllegalAccessException | InstantiationException |
                              InvocationTargetException ex) {
                         ex.printStackTrace();

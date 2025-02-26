@@ -35,7 +35,7 @@ public class CustomCombine implements Listener {
             return;
         }
 
-        Enchantment enchant = e.getEnchant();
+        Enchantment enchant = e.getEnchantment();
 
         ItemMeta meta = curr.getItemMeta();
 
@@ -45,7 +45,7 @@ public class CustomCombine implements Listener {
 
         Player p = e.getPlayer();
 
-        if (!enchant.canEnchantItem(curr)) {
+        if (!e.getEnchant().canEnchantItem(curr)) {
             p.sendMessage(Utils.format(plugin.getCfg().getString("messages.cannot-enchant-item")));
 
             return;
@@ -122,19 +122,11 @@ public class CustomCombine implements Listener {
 
         ItemMeta meta = curr.getItemMeta();
 
-        if (meta.getLore() != null) {
-            for (String l : meta.getLore()) {
-                lore.add(Utils.format(l));
-            }
-        }
-
-        meta.setLore(lore);
-
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
         Map<String, Integer> current = InventoryUtils.getEnchantmentMapFromPDC(curr);
 
-        current.put(enchant.translationKey(), level);
+        current.put(enchant.key().asString(), level);
 
         pdc.set(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), current);
 

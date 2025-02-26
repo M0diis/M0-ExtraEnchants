@@ -1,5 +1,7 @@
 package me.m0dii.extraenchants.events;
 
+import lombok.Getter;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -10,18 +12,24 @@ import org.jetbrains.annotations.NotNull;
 
 public class CombineEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
+    @Getter
     private final @NotNull Player player;
     private final @NotNull InventoryClickEvent event;
-    private final @NotNull Enchantment enchant;
+    @Getter
+    private final @NotNull EEnchant enchant;
+    @Getter
+    private final @NotNull Enchantment enchantment;
     private final String enchantName;
+    @Getter
     private final int enchantLevel;
     private boolean isCancelled;
 
-    public CombineEvent(@NotNull Player p, @NotNull InventoryClickEvent e, Enchantment enchant, int level) {
+    public CombineEvent(@NotNull Player p, @NotNull InventoryClickEvent e, @NotNull EEnchant enchant, int level) {
         this.player = p;
         this.event = e;
+        this.enchantment = enchant.getEnchantment();
         this.enchant = enchant;
-        this.enchantName = enchant.translationKey();
+        this.enchantName = this.enchantment.key().asString();
         this.enchantLevel = level;
     }
 
@@ -41,23 +49,11 @@ public class CombineEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public Player getPlayer() {
-        return this.player;
-    }
-
     public InventoryClickEvent getInventoryClickEvent() {
         return this.event;
     }
 
     public String getEnchantString() {
         return this.enchantName;
-    }
-
-    public Enchantment getEnchant() {
-        return this.enchant;
-    }
-
-    public int getEnchantLevel() {
-        return this.enchantLevel;
     }
 }

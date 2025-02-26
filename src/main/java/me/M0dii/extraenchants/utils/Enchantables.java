@@ -6,8 +6,6 @@ import java.util.Arrays;
 
 public class Enchantables {
     public static boolean isPickaxe(ItemStack item) {
-        Messenger.debug(item.toString());
-
         return item.getType().name().toUpperCase().contains("PICKAXE");
     }
 
