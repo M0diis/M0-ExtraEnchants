@@ -143,7 +143,7 @@ public class InventoryClick implements Listener {
                 return;
             }
 
-            EnchantInfoGUI gui = new EnchantInfoGUI(enchant.getEnchantment());
+            EnchantInfoGUI gui = new EnchantInfoGUI(enchant);
 
             gui.open(p);
         }
@@ -317,7 +317,7 @@ public class InventoryClick implements Listener {
                 return;
             }
 
-            EnchantInfoGUI gui = new EnchantInfoGUI(enchant);
+            EnchantInfoGUI gui = new EnchantInfoGUI(EEnchant.parse(name));
 
             gui.open(p);
         }

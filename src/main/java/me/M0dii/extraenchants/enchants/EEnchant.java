@@ -4,16 +4,19 @@ import io.papermc.paper.enchantments.EnchantmentRarity;
 import lombok.Getter;
 import lombok.Setter;
 import me.m0dii.extraenchants.ExtraEnchants;
-import me.m0dii.extraenchants.utils.Enchantables;
+import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public enum EEnchant {
@@ -51,38 +54,44 @@ public enum EEnchant {
 
     private final ExtraEnchants instance = ExtraEnchants.getInstance();
 
-    private Enchantment enchant;
+    @Setter
+    @Getter
+    private Enchantment enchantment;
     @Setter
     @Getter
     private CustomEnchantment customEnchantment;
 
+
     public static EEnchant parse(String value) {
+
         return Arrays.stream(EEnchant.values())
-                .filter(v -> v.getDisplayName().equalsIgnoreCase(value.trim())
-                        || v.getDisplayName().replace(" ", "").equalsIgnoreCase(value.trim())
-                        || v.getDisplayName().replace(" ", "_").equalsIgnoreCase(value.trim())
-                        || v.getConfigName().equalsIgnoreCase(value.trim())
-                )
+                .filter(getFilterPredicate(value))
                 .findFirst()
                 .orElse(null);
     }
 
+
     public static Enchantment toEnchant(String value) {
         return Arrays.stream(EEnchant.values())
-                .filter(v -> {
-                    String val = value.trim();
-
-                    return v.getDisplayName().equalsIgnoreCase(val)
-                            || v.getDisplayName().replace(" ", "").equalsIgnoreCase(val)
-                            || v.getConfigName().equalsIgnoreCase(val)
-                            || v.getConfigName().equalsIgnoreCase(val.replace(" ", ""));
-                })
+                .filter(getFilterPredicate(value))
                 .map(EEnchant::getEnchantment)
                 .findFirst()
                 .orElse(null);
     }
 
-    public static EEnchant fromEnchant(Enchantment enchant) {
+    private static Predicate<EEnchant> getFilterPredicate(String value) {
+        return v -> {
+            String val = value.trim();
+
+            return v.getDisplayName().equalsIgnoreCase(val)
+                    || v.getDisplayName().replace(" ", "").equalsIgnoreCase(val)
+                    || v.getConfigName().equalsIgnoreCase(val)
+                    || v.getConfigName().replace("_", "").equalsIgnoreCase(val)
+                    || v.getConfigName().equalsIgnoreCase(val.replace(" ", ""));
+        };
+    }
+
+    public static EEnchant fromEnchant(@NotNull Enchantment enchant) {
         return Arrays.stream(EEnchant.values())
                 .filter(v -> v.getEnchantment().equals(enchant))
                 .findFirst()
@@ -104,14 +113,6 @@ public enum EEnchant {
 
     public String getConfigName() {
         return name().toLowerCase().replace("_", "");
-    }
-
-    public Enchantment getEnchantment() {
-        return this.enchant;
-    }
-
-    public void setEnchantment(Enchantment enchant) {
-        this.enchant = enchant;
     }
 
     public int getTriggerChance() {
@@ -153,43 +154,43 @@ public enum EEnchant {
         return formatted ? ChatColor.translateAlternateColorCodes('&', name) : name;
     }
 
-    public boolean conflictsWith(Enchantment enchant) {
-        return this.enchant.conflictsWith(enchant);
+    public boolean conflictsWith(@NotNull Enchantment enchant) {
+        return this.enchantment.conflictsWith(enchant);
     }
 
     public boolean defaultConflictsEnabled() {
         return instance.getCfg().getBoolean("enchants." + getConfigName() + ".default-conflicts");
     }
 
-    public boolean canEnchantItem(ItemStack item) {
+    public boolean canEnchantItem(@Nullable ItemStack item) {
         return this.customEnchantment.canEnchantItem(item);
     }
 
-    public boolean canEnchantItemCustom(ItemStack item) {
+    public boolean canEnchantItemCustom(@Nullable ItemStack item) {
         if (getEnchantableTypes().isEmpty() || item == null || item.getType().isAir()) {
             return false;
         }
 
         return getEnchantableTypes().stream()
-                .anyMatch(type -> Enchantables.canEnchantItemCustom(item, type));
+                .anyMatch(type -> EnchantableItemTypeUtil.canEnchantItemCustom(item, type));
     }
 
-    public boolean equals(Enchantment other) {
-        return this.enchant.equals(other);
+    public boolean equals(@Nullable Enchantment other) {
+        return this.enchantment.equals(other);
     }
 
-    public void enchant(ItemStack item) {
+    public void enchant(@NotNull ItemStack item) {
         enchant(item, 1);
     }
 
-    public void enchant(ItemStack item, int level) {
-        item.addUnsafeEnchantment(enchant, level);
+    public void enchant(@NotNull ItemStack item, int level) {
+        item.addUnsafeEnchantment(enchantment, level);
     }
 
-    public List<Enchantables.ItemType> getEnchantableTypes() {
+    public List<EnchantableItemTypeUtil.ItemType> getEnchantableTypes() {
         return instance.getCfg().getStringList("enchants." + getConfigName() + ".enchantable-items")
                 .stream()
-                .map(Enchantables.ItemType::parse)
+                .map(EnchantableItemTypeUtil.ItemType::parse)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
@@ -212,7 +213,7 @@ public enum EEnchant {
 
                     return parsed.getEnchantment();
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public String getLore() {
@@ -222,7 +223,7 @@ public enum EEnchant {
                         .replace("%duration%", getDuration() + "")
                         .replace("%trigger-chance%", getTriggerChance() + "%"))
                 .map(Utils::format)
-                .collect(Collectors.toList());
+                .toList();
 
         return String.join("\n", lore);
     }

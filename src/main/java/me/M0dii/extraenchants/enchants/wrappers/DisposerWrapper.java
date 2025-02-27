@@ -2,10 +2,13 @@ package me.m0dii.extraenchants.enchants.wrappers;
 
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.utils.EnchantWrapper;
-import me.m0dii.extraenchants.utils.Enchantables;
+import me.m0dii.extraenchants.events.DisposerEvent;
+import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +24,7 @@ public class DisposerWrapper extends CustomEnchantment {
 
     @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isTool(item, true) || enchant.canEnchantItemCustom(item);
+        return EnchantableItemTypeUtil.isTool(item, true) || enchant.canEnchantItemCustom(item);
     }
 
     @Override
@@ -47,5 +50,14 @@ public class DisposerWrapper extends CustomEnchantment {
     @Override
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
         return Set.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND);
+    }
+
+    @EventHandler
+    public void onDisposer(final DisposerEvent e) {
+        if (!Utils.shouldTrigger(EEnchant.DISPOSER)) {
+            return;
+        }
+
+        e.getBlockBreakEvent().setDropItems(false);
     }
 }

@@ -2,10 +2,13 @@ package me.m0dii.extraenchants.enchants.wrappers;
 
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.utils.EnchantWrapper;
-import me.m0dii.extraenchants.utils.Enchantables;
+import me.m0dii.extraenchants.events.BarbarianEvent;
+import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +24,7 @@ public class BarbarianWrapper extends CustomEnchantment {
 
     @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isAxe(item) || enchant.canEnchantItemCustom(item);
+        return EnchantableItemTypeUtil.isAxe(item) || enchant.canEnchantItemCustom(item);
     }
 
     @Override
@@ -47,5 +50,16 @@ public class BarbarianWrapper extends CustomEnchantment {
     @Override
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
         return Set.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND);
+    }
+
+    @EventHandler
+    public void onBarbarian(final BarbarianEvent e) {
+        if (!Utils.shouldTrigger(EEnchant.BARBARIAN)) {
+            return;
+        }
+
+        double damage = e.getEntityDamageEvent().getDamage();
+
+        e.getEntityDamageEvent().setDamage(damage * 1.25);
     }
 }

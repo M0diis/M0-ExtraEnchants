@@ -11,6 +11,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.EntityType;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Set;
 
 @SuppressWarnings("all")
-public abstract class CustomEnchantment extends Enchantment {
+public abstract class CustomEnchantment extends Enchantment implements Listener {
     protected final NamespacedKey key;
 
     protected final String name;

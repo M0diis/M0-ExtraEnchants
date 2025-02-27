@@ -2,9 +2,9 @@ package me.m0dii.extraenchants.listeners;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.enchants.wrappers.LavaWalkerWrapper;
 import me.m0dii.extraenchants.events.*;
-import me.m0dii.extraenchants.listeners.custom.OnLavaWalk;
-import me.m0dii.extraenchants.utils.Enchantables;
+import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
@@ -195,7 +195,7 @@ public class BlockBreak implements Listener {
 
         Block block = e.getBlock();
 
-        if (OnLavaWalk.lavaWalkerBlocks.contains(block)) {
+        if (LavaWalkerWrapper.lavaWalkerBlocks.contains(block)) {
             e.setDropItems(false);
 
             return true;
@@ -284,7 +284,7 @@ public class BlockBreak implements Listener {
 
         ItemStack hand = p.getInventory().getItemInMainHand();
 
-        if (!Enchantables.isHoe(hand)) {
+        if (!EnchantableItemTypeUtil.isHoe(hand)) {
             return;
         }
 
@@ -303,7 +303,7 @@ public class BlockBreak implements Listener {
 
         ItemStack hand = p.getInventory().getItemInMainHand();
 
-        if (!Enchantables.isAxe(hand)) {
+        if (!EnchantableItemTypeUtil.isAxe(hand)) {
             return;
         }
 

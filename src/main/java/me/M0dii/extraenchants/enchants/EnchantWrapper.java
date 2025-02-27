@@ -1,4 +1,4 @@
-package me.m0dii.extraenchants.utils;
+package me.m0dii.extraenchants.enchants;
 
 import org.intellij.lang.annotations.Subst;
 

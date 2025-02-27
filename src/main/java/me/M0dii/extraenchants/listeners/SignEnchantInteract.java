@@ -2,7 +2,7 @@ package me.m0dii.extraenchants.listeners;
 
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.utils.Enchantables;
+import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
@@ -66,7 +66,7 @@ public class SignEnchantInteract implements Listener {
 
         String itemTypeString = Utils.stripColor(e.line(1));
 
-        Enchantables.ItemType itemType = Enchantables.ItemType.parse(itemTypeString);
+        EnchantableItemTypeUtil.ItemType itemType = EnchantableItemTypeUtil.ItemType.parse(itemTypeString);
 
         if (itemType == null) {
             player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.invalid-item-type")));
@@ -159,7 +159,7 @@ public class SignEnchantInteract implements Listener {
 
         String itemTypeString = Utils.stripColor(sign.line(1));
 
-        Enchantables.ItemType itemType = Enchantables.ItemType.parse(itemTypeString);
+        EnchantableItemTypeUtil.ItemType itemType = EnchantableItemTypeUtil.ItemType.parse(itemTypeString);
 
 
         if (itemType == null) {
@@ -232,7 +232,7 @@ public class SignEnchantInteract implements Listener {
             return;
         }
 
-        if (!Enchantables.canEnchantItemCustom(hand, itemType)) {
+        if (!EnchantableItemTypeUtil.canEnchantItemCustom(hand, itemType)) {
             player.sendMessage(Utils.format(plugin.getCfg().getString("enchant-signs.messages.cannot-enchant-item")));
             return;
         }
@@ -245,13 +245,13 @@ public class SignEnchantInteract implements Listener {
 
             if (isXP) {
                 player.giveExp(-costInt);
-                Enchanter.applyEnchant(hand, enchantment, levelInt);
+                Enchanter.addUnsafe(hand, enchantment, levelInt);
             } else if (isLevel) {
                 player.setLevel(player.getLevel() - costInt);
-                Enchanter.applyEnchant(hand, enchantment, levelInt);
+                Enchanter.addUnsafe(hand, enchantment, levelInt);
             } else {
                 if (econ.withdrawPlayer(player, costInt).transactionSuccess()) {
-                    Enchanter.applyEnchant(hand, enchantment, levelInt);
+                    Enchanter.addUnsafe(hand, enchantment, levelInt);
                 }
             }
 

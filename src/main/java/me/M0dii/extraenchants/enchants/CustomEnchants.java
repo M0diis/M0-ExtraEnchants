@@ -3,11 +3,11 @@ package me.m0dii.extraenchants.enchants;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
-import me.m0dii.extraenchants.utils.EnchantWrapper;
+import me.m0dii.extraenchants.ExtraEnchants;
 import net.kyori.adventure.key.Key;
-import org.bukkit.Bukkit;
 import org.bukkit.Registry;
 import org.bukkit.enchantments.Enchantment;
+import org.intellij.lang.annotations.Subst;
 import org.reflections.Reflections;
 
 import java.lang.reflect.Constructor;
@@ -16,17 +16,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CustomEnchants {
-    public static void register() {
+    public static void register(ExtraEnchants plugin) {
         new Reflections("me.m0dii.extraenchants.enchants.wrappers")
                 .getSubTypesOf(CustomEnchantment.class)
                 .forEach(clazz -> {
-
                     try {
                         if (!clazz.isAnnotationPresent(EnchantWrapper.class)) {
                             return;
                         }
 
-                        EnchantWrapper wrapper = clazz.getAnnotation(EnchantWrapper.class);
+                        @Subst("") EnchantWrapper wrapper = clazz.getAnnotation(EnchantWrapper.class);
 
                         EEnchant eEnchant = EEnchant.parse(wrapper.name());
 
@@ -51,7 +50,9 @@ public class CustomEnchants {
                         eEnchant.setEnchantment(enchantmentB);
                         eEnchant.setCustomEnchantment(enchantment);
 
-                        Bukkit.getLogger().info("Registering enchant wrapper: " + enchantment.getClass().getSimpleName());
+                        plugin.getLogger().info("Registered enchant wrapper: " + enchantment.getClass().getSimpleName());
+                        plugin.getServer().getPluginManager().registerEvents(enchantment, plugin);
+                        plugin.getLogger().info("Registered listener for enchant: " + enchantment.getName());
                     } catch (NoSuchMethodException | IllegalAccessException | InstantiationException |
                              InvocationTargetException ex) {
                         ex.printStackTrace();

@@ -1,8 +1,9 @@
 package me.m0dii.extraenchants.utils;
 
+import me.m0dii.extraenchants.enchants.EEnchant;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -13,9 +14,9 @@ import org.jetbrains.annotations.NotNull;
 public class EnchantInfoGUI implements InventoryHolder {
     private final Inventory inventory;
 
-    private final Enchantment enchant;
+    private final EEnchant enchant;
 
-    public EnchantInfoGUI(Enchantment enchant) {
+    public EnchantInfoGUI(EEnchant enchant) {
         this.inventory = Bukkit.createInventory(this, 9 * 6, Utils.format("&8&lEnchant Information"));
         this.enchant = enchant;
 
@@ -68,7 +69,7 @@ public class EnchantInfoGUI implements InventoryHolder {
         ItemStack backButton = new ItemStack(Material.PAPER);
         ItemMeta meta = backButton.getItemMeta();
 
-        meta.setDisplayName(Utils.format("&c&lBack"));
+        meta.displayName(Utils.colorize("&c&lBack"));
 
         backButton.setItemMeta(meta);
 
@@ -79,7 +80,7 @@ public class EnchantInfoGUI implements InventoryHolder {
                 ItemStack glass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
                 ItemMeta glassMeta = glass.getItemMeta();
 
-                glassMeta.setDisplayName(" ");
+                glassMeta.displayName(Component.text(" "));
 
                 glass.setItemMeta(glassMeta);
 
@@ -88,17 +89,17 @@ public class EnchantInfoGUI implements InventoryHolder {
         }
     }
 
-    private ItemStack canEnchant(ItemStack item) {
+    private ItemStack canEnchant(@NotNull ItemStack item) {
         ItemStack itemStack = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 
         ItemMeta meta = itemStack.getItemMeta();
 
-        meta.setDisplayName(Utils.format("&a&lCan Enchant"));
+        meta.displayName(Utils.colorize("&a&lCan Enchant"));
 
         if (!enchant.canEnchantItem(item)) {
             itemStack.setType(Material.RED_STAINED_GLASS_PANE);
 
-            meta.setDisplayName(Utils.format("&c&lCan't Enchant"));
+            meta.displayName(Utils.colorize("&c&lCan't Enchant"));
         }
 
         itemStack.setItemMeta(meta);

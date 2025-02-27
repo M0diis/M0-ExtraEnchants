@@ -2,10 +2,14 @@ package me.m0dii.extraenchants.enchants.wrappers;
 
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.utils.EnchantWrapper;
-import me.m0dii.extraenchants.utils.Enchantables;
+import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.events.ReinforcedEvent;
+import me.m0dii.extraenchants.utils.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +25,7 @@ public class ReinforcedWrapper extends CustomEnchantment {
 
     @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isArmor(item) || enchant.canEnchantItemCustom(item);
+        return EnchantableItemTypeUtil.isArmor(item) || enchant.canEnchantItemCustom(item);
     }
 
     @Override
@@ -52,5 +56,72 @@ public class ReinforcedWrapper extends CustomEnchantment {
                 EquipmentSlot.LEGS,
                 EquipmentSlot.FEET
         );
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onColdSteel(final ReinforcedEvent e) {
+        Messenger.debug("ReinforcedEvent called.");
+
+        if (!Utils.shouldTrigger(EEnchant.REINFORCED)) {
+            return;
+        }
+
+        if (!(e.getEntityDamageEvent().getEntity() instanceof Player receiver)) {
+            return;
+        }
+
+        if (!(e.getEntityDamageEvent().getDamager() instanceof Player)) {
+            return;
+        }
+
+        double percentage = 0.015;
+
+        int maxCount = 1;
+
+        ItemStack helmet = receiver.getInventory().getHelmet();
+        ItemStack chestplate = receiver.getInventory().getChestplate();
+        ItemStack leggings = receiver.getInventory().getLeggings();
+        ItemStack boots = receiver.getInventory().getBoots();
+
+        if (InventoryUtils.hasEnchant(helmet, EEnchant.REINFORCED)) {
+            if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
+                InventoryUtils.applyDurability(receiver, helmet);
+
+                maxCount++;
+            }
+        }
+
+        if (InventoryUtils.hasEnchant(chestplate, EEnchant.REINFORCED)) {
+            if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
+                InventoryUtils.applyDurability(receiver, chestplate);
+
+                maxCount++;
+            }
+        }
+
+        if (InventoryUtils.hasEnchant(leggings, EEnchant.REINFORCED)) {
+            if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
+                InventoryUtils.applyDurability(receiver, leggings);
+
+                maxCount++;
+            }
+        }
+
+        if (InventoryUtils.hasEnchant(boots, EEnchant.REINFORCED)) {
+            if (Utils.shouldTrigger(EEnchant.REINFORCED)) {
+                InventoryUtils.applyDurability(receiver, boots);
+
+                maxCount++;
+            }
+        }
+
+        if (maxCount == 1) {
+            return;
+        }
+
+        double damage = e.getEntityDamageEvent().getDamage();
+
+        e.getEntityDamageEvent().setDamage(damage * (1 - (percentage * maxCount)));
     }
 }

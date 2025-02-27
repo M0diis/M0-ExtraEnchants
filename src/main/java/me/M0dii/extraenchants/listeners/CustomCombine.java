@@ -1,4 +1,4 @@
-package me.m0dii.extraenchants.listeners.custom;
+package me.m0dii.extraenchants.listeners;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
 import me.m0dii.extraenchants.ExtraEnchants;

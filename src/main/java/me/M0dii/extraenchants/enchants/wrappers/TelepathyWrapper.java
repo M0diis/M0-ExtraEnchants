@@ -2,14 +2,25 @@ package me.m0dii.extraenchants.enchants.wrappers;
 
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.utils.EnchantWrapper;
-import me.m0dii.extraenchants.utils.Enchantables;
+import me.m0dii.extraenchants.events.TelepathyEvent;
+import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
+import me.m0dii.extraenchants.utils.InventoryUtils;
+import me.m0dii.extraenchants.utils.Utils;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Set;
 
 @EnchantWrapper(name = "Telepathy", maxLevel = 1)
@@ -21,7 +32,7 @@ public class TelepathyWrapper extends CustomEnchantment {
 
     @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return Enchantables.isTool(item, false) || enchant.canEnchantItemCustom(item);
+        return EnchantableItemTypeUtil.isTool(item, false) || enchant.canEnchantItemCustom(item);
     }
 
     @Override
@@ -45,5 +56,114 @@ public class TelepathyWrapper extends CustomEnchantment {
     @Override
     public @NotNull Set<EquipmentSlot> getActiveSlots() {
         return Set.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND);
+    }
+
+
+    @EventHandler
+    public void onTelepathy(final TelepathyEvent e) {
+        if (!Utils.shouldTrigger(EEnchant.TELEPATHY)) {
+            return;
+        }
+
+        Player player = e.getPlayer();
+        Block b = e.getBlock();
+        PlayerInventory inv = player.getInventory();
+        ItemStack hand = inv.getItemInMainHand();
+
+        Collection<ItemStack> drops = e.getDrops();
+
+        boolean hasSilk = hand.getItemMeta()
+                .getEnchants().containsKey(Enchantment.SILK_TOUCH);
+
+        boolean fits = doesFit(inv, drops);
+
+        if (b.getType().equals(Material.SPAWNER)
+                || b.getType().name().toUpperCase().contains("SPAWNER"))
+            return;
+
+        if (!fits) {
+            for (ItemStack i : drops)
+                b.getWorld().dropItemNaturally(
+                        b.getLocation(), i);
+
+            InventoryUtils.applyDurability(player, hand);
+
+            return;
+        }
+
+        if (hasSilk) {
+            ItemStack itm = new ItemStack(b.getType());
+
+            String name = itm.getType().name();
+
+            if (name.contains("WALL_") || name.contains("BANNER")) {
+                if (name.contains("BANNER")) {
+                    for (ItemStack i : drops) {
+                        inv.addItem(i);
+                    }
+                } else {
+                    Material m = Material.getMaterial(name.replace("WALL_", ""));
+
+                    if (m != null)
+                        inv.addItem(new ItemStack(m));
+                }
+            } else {
+                inv.addItem(itm);
+            }
+        } else if (inv.firstEmpty() == -1) {
+            ItemStack item = drops.iterator().next();
+
+            if (inv.contains(item)) {
+                addToStack(player, drops);
+            }
+        } else {
+            for (ItemStack i : drops) {
+                inv.addItem(i);
+            }
+        }
+
+        InventoryUtils.applyDurability(player, hand);
+    }
+
+    public boolean doesFit(Inventory inv, Collection<ItemStack> drops) {
+        for (ItemStack i : inv.getStorageContents())
+            if (i == null)
+                return true;
+
+        return hasSpaceForItem(drops, inv);
+    }
+
+    private void addToStack(Player p, Collection<ItemStack> drops) {
+        ItemStack item = drops.iterator().next();
+        ItemStack[] arrayOfItemStack;
+
+        int j = (arrayOfItemStack = p.getInventory().getContents()).length;
+
+        for (int i = 0; i < j; i++) {
+            ItemStack it = arrayOfItemStack[i];
+
+            if ((it.equals(item)) && (it.getAmount() < 64)) {
+                for (ItemStack itm : drops) {
+                    p.getInventory().addItem(itm);
+                }
+
+                break;
+            }
+        }
+    }
+
+    private boolean hasSpaceForItem(Collection<ItemStack> drops, Inventory inv) {
+        Iterator<ItemStack> iter = drops.iterator();
+
+        if (iter != null && iter.hasNext()) {
+            ItemStack item = iter.next();
+
+            for (ItemStack it : inv.getStorageContents()) {
+                if (it != null && it.equals(item) && (it.getAmount() < 64))
+                    return true;
+            }
+        }
+
+        return false;
     }
 }

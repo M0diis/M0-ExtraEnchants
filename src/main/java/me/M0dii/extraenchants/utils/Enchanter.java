@@ -1,8 +1,9 @@
 package me.m0dii.extraenchants.utils;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
-import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -10,6 +11,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +24,7 @@ public class Enchanter {
     private static final ExtraEnchants plugin = ExtraEnchants.getInstance();
     private static final FileConfiguration cfg = plugin.getCfg();
 
-    public static ItemStack getBook(String type, int level) {
+    public static ItemStack getBook(@NotNull String type, int level) {
         ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
 
         EEnchant enchant = EEnchant.parse(type);
@@ -45,21 +47,19 @@ public class Enchanter {
             return item;
         }
 
-        meta.setDisplayName(Utils.format(
-                displayName.replace("%level%", Utils.arabicToRoman(level)))
-        );
+        meta.displayName(Utils.colorize(displayName.replace("%level%", Utils.arabicToRoman(level))));
 
-        List<String> lore = new ArrayList<>();
+        List<Component> lore = new ArrayList<>();
 
         for (String l : cfg.getStringList(String.format("enchants.%s.lore", name))) {
             String line = l.replace("%level%", Utils.arabicToRoman(level))
                     .replace("%duration%", enchant.getDuration() + "")
                     .replace("%trigger-chance%", enchant.getTriggerChance() + "%");
 
-            lore.add(Utils.format(line));
+            lore.add(Utils.colorize(line));
         }
 
-        meta.setLore(lore);
+        meta.lore(lore);
 
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
@@ -76,20 +76,8 @@ public class Enchanter {
         return item;
     }
 
-    public static void applyEnchant(ItemStack item, EEnchant enchant, int level, boolean onlyLore) {
-        List<String> lore = new ArrayList<>();
-
-//        lore.add(enchant.getDisplayInLore(level, true));
-
+    public static void applyEnchant(@NotNull ItemStack item, @NotNull EEnchant enchant, int level, boolean onlyLore) {
         ItemMeta meta = item.getItemMeta();
-
-        if (meta.getLore() != null) {
-            for (String l : meta.getLore()) {
-                lore.add(Utils.format(l));
-            }
-        }
-
-        meta.setLore(lore);
 
         if (!onlyLore) {
             meta.addEnchant(enchant.getEnchantment(), level, true);
@@ -108,7 +96,7 @@ public class Enchanter {
         item.setItemMeta(meta);
     }
 
-    public static void applyEnchantWithoutLore(ItemStack item, EEnchant enchant, int level) {
+    public static void applyEnchantWithoutLore(@NotNull ItemStack item, @NotNull EEnchant enchant, int level) {
         ItemMeta meta = item.getItemMeta();
 
         meta.addEnchant(enchant.getEnchantment(), level, true);
@@ -126,7 +114,7 @@ public class Enchanter {
         item.setItemMeta(meta);
     }
 
-    public static void applyEnchant(ItemStack item, Enchantment enchant, int level) {
+    public static void addUnsafe(@NotNull ItemStack item, @NotNull Enchantment enchant, int level) {
         item.addUnsafeEnchantment(enchant, level);
     }
 }

@@ -7,7 +7,7 @@ import io.papermc.paper.registry.event.RegistryEvents;
 import io.papermc.paper.registry.keys.EnchantmentKeys;
 import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
-import me.m0dii.extraenchants.utils.EnchantWrapper;
+import me.m0dii.extraenchants.enchants.EnchantWrapper;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.EquipmentSlotGroup;
@@ -15,6 +15,7 @@ import org.reflections.Reflections;
 
 import java.util.Set;
 
+@SuppressWarnings("ALL")
 public class ExtraEnchantsBootstrapper implements PluginBootstrap {
 
     @Override

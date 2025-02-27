@@ -1,199 +1,202 @@
 package me.m0dii.extraenchants.utils;
 
+import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class Enchantables {
-    public static boolean isPickaxe(ItemStack item) {
+public class EnchantableItemTypeUtil {
+    public static boolean isPickaxe(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("PICKAXE");
     }
 
-    public static boolean isAxe(ItemStack item) {
+    public static boolean isAxe(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("AXE")
                 && !item.getType().name().toUpperCase().contains("PICKAXE");
     }
 
-    public static boolean isShovel(ItemStack item) {
+    public static boolean isShovel(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("SHOVEL");
     }
 
-    public static boolean isHoe(ItemStack item) {
+    public static boolean isHoe(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("HOE");
     }
 
-    public static boolean isSword(ItemStack item) {
+    public static boolean isSword(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("SWORD");
     }
 
-    public static boolean isHelmet(ItemStack item) {
+    public static boolean isHelmet(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("HELMET");
     }
 
-    public static boolean isChestplate(ItemStack item) {
+    public static boolean isChestplate(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("CHESTPLATE");
     }
 
-    public static boolean isLeggings(ItemStack item) {
+    public static boolean isLeggings(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("LEGGINGS");
     }
 
-    public static boolean isBoots(ItemStack item) {
+    public static boolean isBoots(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("BOOTS");
     }
 
-    public static boolean isBow(ItemStack item) {
+    public static boolean isBow(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("BOW");
     }
 
-    public static boolean isArmor(ItemStack item) {
+    public static boolean isArmor(@NotNull ItemStack item) {
         return isHelmet(item) || isChestplate(item) || isLeggings(item) || isBoots(item);
     }
 
-    public static boolean isTool(ItemStack item) {
+    public static boolean isTool(@NotNull ItemStack item) {
         return isTool(item, false);
     }
 
-    public static boolean isTool(ItemStack item, boolean includeHoe) {
+    public static boolean isTool(@NotNull ItemStack item, boolean includeHoe) {
         return isPickaxe(item) || isAxe(item) || isShovel(item)
                 || isShears(item) || (includeHoe && isHoe(item));
     }
 
-    public static boolean isWeapon(ItemStack item) {
+    public static boolean isWeapon(@NotNull ItemStack item) {
         return isSword(item) || isBow(item);
     }
 
-    public static boolean isFishingRod(ItemStack item) {
+    public static boolean isFishingRod(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("FISHING_ROD");
     }
 
-    public static boolean isTrident(ItemStack item) {
+    public static boolean isTrident(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("TRIDENT");
     }
 
-    public static boolean isCrossbow(ItemStack item) {
+    public static boolean isCrossbow(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("CROSSBOW");
     }
 
-    public static boolean isShears(ItemStack item) {
+    public static boolean isShears(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("SHEARS");
     }
 
-    public static boolean isShield(ItemStack item) {
+    public static boolean isShield(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("SHIELD");
     }
 
-    public static boolean isElytra(ItemStack item) {
+    public static boolean isElytra(@NotNull ItemStack item) {
         return item.getType().name().toUpperCase().contains("ELYTRA");
     }
 
     public static boolean canEnchantItemCustom(ItemStack item, ItemType type) {
         switch (type) {
-            case ALL:
+            case ALL -> {
                 return true;
-            case ARMOR:
-                if (Enchantables.isArmor(item)) {
+            }
+            case ARMOR -> {
+                if (EnchantableItemTypeUtil.isArmor(item)) {
                     return true;
                 }
-                break;
-            case SWORD:
-                if (Enchantables.isSword(item)) {
+            }
+            case SWORD -> {
+                if (EnchantableItemTypeUtil.isSword(item)) {
                     return true;
                 }
-                break;
-            case AXE:
-                if (Enchantables.isAxe(item)) {
+            }
+            case AXE -> {
+                if (EnchantableItemTypeUtil.isAxe(item)) {
                     return true;
                 }
-                break;
-            case PICKAXE:
-                if (Enchantables.isPickaxe(item)) {
+            }
+            case PICKAXE -> {
+                if (EnchantableItemTypeUtil.isPickaxe(item)) {
                     return true;
                 }
-                break;
-            case SHOVEL:
-                if (Enchantables.isShovel(item)) {
+            }
+            case SHOVEL -> {
+                if (EnchantableItemTypeUtil.isShovel(item)) {
                     return true;
                 }
-                break;
-            case HOE:
-                if (Enchantables.isHoe(item)) {
+            }
+            case HOE -> {
+                if (EnchantableItemTypeUtil.isHoe(item)) {
                     return true;
                 }
-                break;
-            case BOW:
-                if (Enchantables.isBow(item)) {
+            }
+            case BOW -> {
+                if (EnchantableItemTypeUtil.isBow(item)) {
                     return true;
                 }
-                break;
-            case FISHING_ROD:
-                if (Enchantables.isFishingRod(item)) {
+            }
+            case FISHING_ROD -> {
+                if (EnchantableItemTypeUtil.isFishingRod(item)) {
                     return true;
                 }
-                break;
-            case TRIDENT:
-                if (Enchantables.isTrident(item)) {
+            }
+            case TRIDENT -> {
+                if (EnchantableItemTypeUtil.isTrident(item)) {
                     return true;
                 }
-                break;
-            case CROSSBOW:
-                if (Enchantables.isCrossbow(item)) {
+            }
+            case CROSSBOW -> {
+                if (EnchantableItemTypeUtil.isCrossbow(item)) {
                     return true;
                 }
-                break;
-            case SHEARS:
-                if (Enchantables.isShears(item)) {
+            }
+            case SHEARS -> {
+                if (EnchantableItemTypeUtil.isShears(item)) {
                     return true;
                 }
-                break;
-            case SHIELD:
-                if (Enchantables.isShield(item)) {
+            }
+            case SHIELD -> {
+                if (EnchantableItemTypeUtil.isShield(item)) {
                     return true;
                 }
-                break;
-            case ELYTRA:
-                if (Enchantables.isElytra(item)) {
+            }
+            case ELYTRA -> {
+                if (EnchantableItemTypeUtil.isElytra(item)) {
                     return true;
                 }
-                break;
-            case TOOL:
-                if (Enchantables.isTool(item)) {
+            }
+            case TOOL -> {
+                if (EnchantableItemTypeUtil.isTool(item)) {
                     return true;
                 }
-                break;
-            case WEAPON:
-                if (Enchantables.isWeapon(item)) {
+            }
+            case WEAPON -> {
+                if (EnchantableItemTypeUtil.isWeapon(item)) {
                     return true;
                 }
-                break;
-            case HELMET:
-                if (Enchantables.isHelmet(item)) {
+            }
+            case HELMET -> {
+                if (EnchantableItemTypeUtil.isHelmet(item)) {
                     return true;
                 }
-                break;
-            case CHESTPLATE:
-                if (Enchantables.isChestplate(item)) {
+            }
+            case CHESTPLATE -> {
+                if (EnchantableItemTypeUtil.isChestplate(item)) {
                     return true;
                 }
-                break;
-            case LEGGINGS:
-                if (Enchantables.isLeggings(item)) {
+            }
+            case LEGGINGS -> {
+                if (EnchantableItemTypeUtil.isLeggings(item)) {
                     return true;
                 }
-                break;
-            case BOOTS:
-                if (Enchantables.isBoots(item)) {
+            }
+            case BOOTS -> {
+                if (EnchantableItemTypeUtil.isBoots(item)) {
                     return true;
                 }
-                break;
-
-            default:
-                break;
+            }
+            default -> {
+            }
         }
 
         return false;
     }
 
+    @Getter
     public enum ItemType {
         PICKAXE("PICKAXE", "PICKAXES"),
         AXE("AXE", "AXES"),
@@ -225,17 +228,10 @@ public class Enchantables {
         public static ItemType parse(String name) {
             return Arrays.stream(ItemType.values())
                     .filter(type -> Arrays.stream(type.getNames())
-                            .anyMatch(n ->
-                                    n.equalsIgnoreCase(name)
-                                            || n.toUpperCase().contains(name.toUpperCase())
-                            ))
-                    .findFirst().orElse(null);
+                            .anyMatch(n -> n.equalsIgnoreCase(name)
+                                    || n.toUpperCase().contains(name.toUpperCase())))
+                    .findFirst()
+                    .orElse(null);
         }
-
-        public String[] getNames() {
-            return this.names;
-        }
-
-
     }
 }

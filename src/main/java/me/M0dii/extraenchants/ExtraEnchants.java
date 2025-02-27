@@ -1,8 +1,9 @@
 package me.m0dii.extraenchants;
 
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import lombok.Getter;
-import me.m0dii.extraenchants.commands.DisenchantCommand;
-import me.m0dii.extraenchants.commands.EnchantCommand;
+import me.m0dii.extraenchants.commands.ExtraEnchantCommand;
+import me.m0dii.extraenchants.commands.UnenchantCommand;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.utils.Placeholders;
 import me.m0dii.extraenchants.utils.Utils;
@@ -60,7 +61,7 @@ public class ExtraEnchants extends JavaPlugin {
 //            getLogger().severe("Vault not found, disabling economy features.");
 //        }
 
-        CustomEnchants.register();
+        CustomEnchants.register(this);
     }
 
 //    private boolean setupEconomy() {
@@ -103,9 +104,12 @@ public class ExtraEnchants extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getServer().getCommandMap().register("unenchant", new DisenchantCommand(this));
-        getServer().getCommandMap().register("ue", new DisenchantCommand(this));
-        getServer().getCommandMap().register("extraenchant", new EnchantCommand(this));
-        getServer().getCommandMap().register("ee", new EnchantCommand(this));
+        getServer().getCommandMap().register("unenchant", new UnenchantCommand(this));
+        getServer().getCommandMap().register("ue", new UnenchantCommand(this));
+
+        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
+                commands -> {
+                    commands.registrar().register(ExtraEnchantCommand.createCommand());
+                });
     }
 }

@@ -3,7 +3,6 @@ package me.m0dii.extraenchants.listeners;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.Enchanter;
-import me.m0dii.extraenchants.utils.Messenger;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -25,8 +24,6 @@ public class EnchantItem implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEnchantPopulateEnchantingTable(final EnchantItemEvent e) {
-        Messenger.debug("EnchantItemEvent called.");
-
         ItemStack target = e.getItem();
 
         if (e.getExpLevelCost() < 30) {
