@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.events;
 
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -9,13 +10,15 @@ import org.jetbrains.annotations.NotNull;
 
 public class GillsEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
+    @Getter
     private final Player player;
-    private final PlayerMoveEvent event;
+    @Getter
+    private final PlayerMoveEvent playerMoveEvent;
     private boolean isCancelled;
 
     public GillsEvent(Player p, PlayerMoveEvent e) {
         this.player = p;
-        this.event = e;
+        this.playerMoveEvent = e;
     }
 
     public static HandlerList getHandlerList() {
@@ -34,11 +37,4 @@ public class GillsEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    public PlayerMoveEvent getPlayerMoveEvent() {
-        return this.event;
-    }
 }

@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.events;
 
+import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -9,14 +10,17 @@ import org.jetbrains.annotations.NotNull;
 
 public class ArmorBreakerEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
+    @Getter
     private final Player player;
-    private final EntityDamageEvent event;
+    @Getter
+    private final EntityDamageEvent entityDamageEvent;
+    @Getter
     private final int enchantLevel;
     private boolean isCancelled;
 
     public ArmorBreakerEvent(Player p, EntityDamageEvent e, int enchantLevel) {
         this.player = p;
-        this.event = e;
+        this.entityDamageEvent = e;
         this.enchantLevel = enchantLevel;
     }
 
@@ -36,15 +40,4 @@ public class ArmorBreakerEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    public EntityDamageEvent getEntityDamageEvent() {
-        return this.event;
-    }
-
-    public int getEnchantLevel() {
-        return this.enchantLevel;
-    }
 }

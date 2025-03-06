@@ -66,13 +66,13 @@ public class LifestealWrapper extends CustomEnchantment {
 
         Player damager = e.getPlayer();
 
-        Entity target = e.getEntityDamageEvent().getEntity();
+        Entity target = e.getEntityDamageByEntityEvent().getEntity();
 
         if (EEnchant.WEBBING.isPlayerOnly() && !(target instanceof Player)) {
             return;
         }
 
-        double damage = e.getEntityDamageEvent().getDamage();
+        double damage = e.getEntityDamageByEntityEvent().getDamage();
 
         double heal = damage * 0.1;
 

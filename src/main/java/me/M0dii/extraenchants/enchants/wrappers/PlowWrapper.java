@@ -78,7 +78,7 @@ public class PlowWrapper extends CustomEnchantment {
         }
 
         final Player p = event.getPlayer();
-        final Block block1 = event.getInteractEvent().getClickedBlock();
+        final Block block1 = event.getPlayerInteractEvent().getClickedBlock();
 
         Material type = null;
 

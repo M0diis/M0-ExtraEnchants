@@ -107,7 +107,7 @@ public class ColdSteelWrapper extends CustomEnchantment {
             return;
         }
 
-        if (!(e.getEntityDamageEvent().getEntity() instanceof Player receiver)) {
+        if (!(e.getEntityDamageByEntityEvent().getEntity() instanceof Player receiver)) {
             return;
         }
 

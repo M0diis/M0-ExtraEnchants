@@ -93,7 +93,7 @@ public class BlockBreak implements Listener {
 
         e.setDropItems(false);
 
-        Bukkit.getPluginManager().callEvent(new StatTrackEvent(p, e, drops));
+        Bukkit.getPluginManager().callEvent(new StatTrackEvent(p, e));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

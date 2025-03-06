@@ -63,7 +63,7 @@ public class WitheringWrapper extends CustomEnchantment {
             return;
         }
 
-        Entity target = e.getEntityDamageEvent().getEntity();
+        Entity target = e.getEntityDamageByEntityEvent().getEntity();
 
         if (EEnchant.WEBBING.isPlayerOnly() && !(target instanceof Player)) {
             return;

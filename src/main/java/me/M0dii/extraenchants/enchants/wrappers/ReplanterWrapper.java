@@ -99,7 +99,7 @@ public class ReplanterWrapper extends CustomEnchantment {
             return;
         }
 
-        Block blockPlant = e.getInteractEvent().getClickedBlock();
+        Block blockPlant = e.getPlayerInteractEvent().getClickedBlock();
 
         if (blockPlant == null) {
             return;
@@ -257,7 +257,7 @@ public class ReplanterWrapper extends CustomEnchantment {
             return;
         }
 
-        if (e.getBreakEvent().isCancelled()) {
+        if (e.getBlockBreakEvent().isCancelled()) {
             return;
         }
 
@@ -265,7 +265,7 @@ public class ReplanterWrapper extends CustomEnchantment {
             return;
         }
 
-        Block block = e.getBreakEvent().getBlock();
+        Block block = e.getBlockBreakEvent().getBlock();
 
         if (!CROPS.contains(this.fineBlockToSeeds(block.getType()))) {
             return;
@@ -278,7 +278,7 @@ public class ReplanterWrapper extends CustomEnchantment {
         }
 
         if (plant.getAge() != plant.getMaximumAge()) {
-            e.getBreakEvent().setCancelled(true);
+            e.getBlockBreakEvent().setCancelled(true);
             return;
         }
 

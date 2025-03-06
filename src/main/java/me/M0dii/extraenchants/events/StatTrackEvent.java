@@ -1,37 +1,31 @@
 package me.m0dii.extraenchants.events;
 
+import lombok.Getter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
 
 public class StatTrackEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
+    @Getter
     private final Player player;
     private final BlockBreakEvent event;
+    @Getter
     private final Block block;
-    private final Collection<ItemStack> drops;
     private boolean isCancelled;
 
-    public StatTrackEvent(Player p, BlockBreakEvent e, Collection<ItemStack> drops) {
+    public StatTrackEvent(Player p, BlockBreakEvent e) {
         this.player = p;
         this.event = e;
         this.block = e.getBlock();
-        this.drops = drops;
     }
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
-    }
-
-    public Block getBlock() {
-        return this.block;
     }
 
     public boolean isCancelled() {
@@ -42,16 +36,8 @@ public class StatTrackEvent extends Event implements Cancellable {
         this.isCancelled = isCancelled;
     }
 
-    public Collection<ItemStack> getDrops() {
-        return this.drops;
-    }
-
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;
-    }
-
-    public Player getPlayer() {
-        return this.player;
     }
 
     public BlockBreakEvent getBlockBreakEvent() {

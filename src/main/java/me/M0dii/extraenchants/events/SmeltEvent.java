@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.events;
 
+import lombok.Getter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -13,9 +14,12 @@ import java.util.Collection;
 
 public class SmeltEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
+    @Getter
     private final Player player;
     private final BlockBreakEvent event;
+    @Getter
     private final Block block;
+    @Getter
     private final Collection<ItemStack> drops;
     private boolean isCancelled;
 
@@ -30,10 +34,6 @@ public class SmeltEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public Block getBlock() {
-        return this.block;
-    }
-
     public boolean isCancelled() {
         return this.isCancelled;
     }
@@ -42,16 +42,8 @@ public class SmeltEvent extends Event implements Cancellable {
         this.isCancelled = isCancelled;
     }
 
-    public Collection<ItemStack> getDrops() {
-        return this.drops;
-    }
-
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;
-    }
-
-    public Player getPlayer() {
-        return this.player;
     }
 
     public BlockBreakEvent getBlockBreakEvent() {

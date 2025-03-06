@@ -67,11 +67,11 @@ public class ReinforcedWrapper extends CustomEnchantment {
             return;
         }
 
-        if (!(e.getEntityDamageEvent().getEntity() instanceof Player receiver)) {
+        if (!(e.getEntityDamageByEntityEvent().getEntity() instanceof Player receiver)) {
             return;
         }
 
-        if (!(e.getEntityDamageEvent().getDamager() instanceof Player)) {
+        if (!(e.getEntityDamageByEntityEvent().getDamager() instanceof Player)) {
             return;
         }
 
@@ -120,8 +120,8 @@ public class ReinforcedWrapper extends CustomEnchantment {
             return;
         }
 
-        double damage = e.getEntityDamageEvent().getDamage();
+        double damage = e.getEntityDamageByEntityEvent().getDamage();
 
-        e.getEntityDamageEvent().setDamage(damage * (1 - (percentage * maxCount)));
+        e.getEntityDamageByEntityEvent().setDamage(damage * (1 - (percentage * maxCount)));
     }
 }

@@ -60,7 +60,7 @@ public class BerserkWrapper extends CustomEnchantment {
             return;
         }
 
-        Entity target = e.getEntityDamageEvent().getEntity();
+        Entity target = e.getEntityDamageByEntityEvent().getEntity();
 
         if (EEnchant.BERSERK.isPlayerOnly() && !(target instanceof Player)) {
             return;
@@ -94,6 +94,6 @@ public class BerserkWrapper extends CustomEnchantment {
         double damageCap = 1.30;
         double damageFinal = Math.min(damageCap, 1D + damageAmount * pointAmount);
 
-        e.getEntityDamageEvent().setDamage(e.getEntityDamageEvent().getDamage() * damageFinal);
+        e.getEntityDamageByEntityEvent().setDamage(e.getEntityDamageByEntityEvent().getDamage() * damageFinal);
     }
 }

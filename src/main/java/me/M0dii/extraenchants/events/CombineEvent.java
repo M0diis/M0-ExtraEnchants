@@ -14,22 +14,21 @@ public class CombineEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     @Getter
     private final @NotNull Player player;
-    private final @NotNull InventoryClickEvent event;
+    @Getter
+    private final @NotNull InventoryClickEvent inventoryClickEvent;
     @Getter
     private final @NotNull EEnchant enchant;
     @Getter
     private final @NotNull Enchantment enchantment;
-    private final String enchantName;
     @Getter
     private final int enchantLevel;
     private boolean isCancelled;
 
     public CombineEvent(@NotNull Player p, @NotNull InventoryClickEvent e, @NotNull EEnchant enchant, int level) {
         this.player = p;
-        this.event = e;
+        this.inventoryClickEvent = e;
         this.enchantment = enchant.getEnchantment();
         this.enchant = enchant;
-        this.enchantName = this.enchantment.key().asString();
         this.enchantLevel = level;
     }
 
@@ -49,11 +48,4 @@ public class CombineEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public InventoryClickEvent getInventoryClickEvent() {
-        return this.event;
-    }
-
-    public String getEnchantString() {
-        return this.enchantName;
-    }
 }

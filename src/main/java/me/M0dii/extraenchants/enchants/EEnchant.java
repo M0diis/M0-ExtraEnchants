@@ -61,9 +61,7 @@ public enum EEnchant {
     @Getter
     private CustomEnchantment customEnchantment;
 
-
     public static EEnchant parse(String value) {
-
         return Arrays.stream(EEnchant.values())
                 .filter(getFilterPredicate(value))
                 .findFirst()
@@ -80,14 +78,15 @@ public enum EEnchant {
     }
 
     private static Predicate<EEnchant> getFilterPredicate(String value) {
-        return v -> {
-            String val = value.trim();
+        return enchant -> {
+            String fromString = value.trim();
 
-            return v.getDisplayName().equalsIgnoreCase(val)
-                    || v.getDisplayName().replace(" ", "").equalsIgnoreCase(val)
-                    || v.getConfigName().equalsIgnoreCase(val)
-                    || v.getConfigName().replace("_", "").equalsIgnoreCase(val)
-                    || v.getConfigName().equalsIgnoreCase(val.replace(" ", ""));
+            return enchant.getDisplayName().equalsIgnoreCase(fromString)
+                    || enchant.name().equalsIgnoreCase(fromString)
+                    || enchant.getDisplayName().replace(" ", "").equalsIgnoreCase(fromString)
+                    || enchant.getConfigName().equalsIgnoreCase(fromString)
+                    || enchant.getConfigName().replace("_", "").equalsIgnoreCase(fromString)
+                    || enchant.getConfigName().equalsIgnoreCase(fromString.replace(" ", ""));
         };
     }
 
@@ -163,6 +162,10 @@ public enum EEnchant {
     }
 
     public boolean canEnchantItem(@Nullable ItemStack item) {
+        if(item == null || item.getType().isAir()) {
+            return false;
+        }
+
         return this.customEnchantment.canEnchantItem(item);
     }
 

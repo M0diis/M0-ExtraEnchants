@@ -13,7 +13,8 @@ public class ExcavatorEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     @Getter
     private final Player player;
-    private final BlockBreakEvent event;
+    @Getter
+    private final BlockBreakEvent blockBreakEvent;
     @Getter
     private final Block block;
     @Getter
@@ -22,7 +23,7 @@ public class ExcavatorEvent extends Event implements Cancellable {
 
     public ExcavatorEvent(Player p, BlockBreakEvent e, int enchantLevel) {
         this.player = p;
-        this.event = e;
+        this.blockBreakEvent = e;
         this.block = e.getBlock();
         this.enchantLevel = enchantLevel;
     }
@@ -41,10 +42,6 @@ public class ExcavatorEvent extends Event implements Cancellable {
 
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;
-    }
-
-    public BlockBreakEvent getBlockBreakEvent() {
-        return this.event;
     }
 
 }

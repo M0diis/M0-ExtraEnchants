@@ -19,6 +19,7 @@ import org.reflections.Reflections;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 public class ExtraEnchants extends JavaPlugin {
     @Getter
@@ -109,7 +110,7 @@ public class ExtraEnchants extends JavaPlugin {
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
                 commands -> {
-                    commands.registrar().register(ExtraEnchantCommand.createCommand());
+                    commands.registrar().register(ExtraEnchantCommand.createCommand(), List.of("extraenchant", "ee"));
                 });
     }
 }

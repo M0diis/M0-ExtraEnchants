@@ -62,7 +62,7 @@ public class DebuffingWrapper extends CustomEnchantment {
             return;
         }
 
-        Entity target = e.getEntityDamageEvent().getEntity();
+        Entity target = e.getEntityDamageByEntityEvent().getEntity();
 
         if (!(target instanceof Player targetPlayer)) {
             return;

@@ -12,14 +12,15 @@ public class ReplanterBreakEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     @Getter
     private final Player player;
-    private final BlockBreakEvent event;
+    @Getter
+    private final BlockBreakEvent blockBreakEvent;
     @Getter
     private final int enchantLevel;
     private boolean isCancelled;
 
     public ReplanterBreakEvent(Player p, BlockBreakEvent e, int enchantLevel) {
         this.player = p;
-        this.event = e;
+        this.blockBreakEvent = e;
         this.enchantLevel = enchantLevel;
     }
 
@@ -37,10 +38,6 @@ public class ReplanterBreakEvent extends Event implements Cancellable {
 
     public @NotNull HandlerList getHandlers() {
         return HANDLERS;
-    }
-
-    public BlockBreakEvent getBreakEvent() {
-        return this.event;
     }
 
 }

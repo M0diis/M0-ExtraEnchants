@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.events;
 
+import lombok.Getter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -10,25 +11,25 @@ import org.jetbrains.annotations.NotNull;
 
 public class HasteMinerEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
+    @Getter
     private final Player player;
-    private final BlockBreakEvent event;
+    @Getter
+    private final BlockBreakEvent blockBreakEvent;
+    @Getter
     private final Block block;
+    @Getter
     private final int enchantLevel;
     private boolean isCancelled;
 
     public HasteMinerEvent(Player p, BlockBreakEvent e, int enchantLevel) {
         this.player = p;
-        this.event = e;
+        this.blockBreakEvent = e;
         this.block = e.getBlock();
         this.enchantLevel = enchantLevel;
     }
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
-    }
-
-    public Block getBlock() {
-        return this.block;
     }
 
     public boolean isCancelled() {
@@ -43,15 +44,4 @@ public class HasteMinerEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    public BlockBreakEvent getBlockBreakEvent() {
-        return this.event;
-    }
-
-    public int getEnchantLevel() {
-        return this.enchantLevel;
-    }
 }
