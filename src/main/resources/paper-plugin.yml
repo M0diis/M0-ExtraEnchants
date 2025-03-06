@@ -18,7 +18,7 @@ dependencies:
   server:
     Residence:
       load: BEFORE
-      required: true
+      required: false
       join-classpath: true
     PlaceholderAPI:
       load: BEFORE
@@ -26,5 +26,5 @@ dependencies:
       join-classpath: true
     Vault:
       load: BEFORE
-      required: true
+      required: false
       join-classpath: true
