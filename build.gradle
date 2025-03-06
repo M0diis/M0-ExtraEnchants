@@ -9,8 +9,10 @@ version 'j21-mc1.21.3-4.0.1'
 archivesBaseName = 'M0-ExtraEnchants'
 
 shadowJar {
-    relocate 'org.bstats', 'me.m0dii.ExtraEnchants'
-    relocate 'com.jeff_media.morepersistentdatatypes', 'me.m0dii.morepersistentdatatypes'
+    ['org.bstats', 'com.jeff_media'].each {
+        relocate it, "me.m0dii.libs.$it"
+    }
+
     minimize()
 
     archiveFileName = "M0-ExtraEnchants-${version}.jar"
@@ -24,42 +26,29 @@ repositories {
         dirs 'libs'
     }
 
-    maven {
-        url = uri("https://repo.papermc.io/repository/maven-public/")
-    }
-
-    maven {
-        url 'https://jitpack.io'
-    }
-
-    maven {
-        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-    }
-
-    maven {
-        url = 'https://repo.jeff-media.com/public/'
-    }
-
-    maven {
-        url = 'https://repo.extendedclip.com/releases/'
+    ['https://jitpack.io',
+     'https://repo.papermc.io/repository/maven-public/',
+     'https://hub.spigotmc.org/nexus/content/repositories/snapshots/',
+     'https://repo.jeff-media.com/public/',
+     'https://repo.extendedclip.com/releases/'
+    ].each { repo ->
+        maven { url = uri(repo) }
     }
 }
 
 dependencies {
-    implementation "org.bstats:bstats-bukkit:2.2.1"
     compileOnly 'io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT'
 
     compileOnly 'me.clip:placeholderapi:2.11.6'
-
-    implementation 'org.reflections:reflections:0.10.2'
-
     compileOnly 'com.github.MilkBowl:VaultAPI:1.7'
     compileOnly name: 'Residence5.0.1.5'
 
+    implementation "org.bstats:bstats-bukkit:2.2.1"
+    implementation 'org.reflections:reflections:0.10.2'
+    implementation group: 'com.jeff_media', name: 'MorePersistentDataTypes', version: '2.4.0'
+
     compileOnly 'org.projectlombok:lombok:1.18.30'
     annotationProcessor 'org.projectlombok:lombok:1.18.30'
-
-    implementation group: 'com.jeff_media', name: 'MorePersistentDataTypes', version: '2.4.0'
 }
 
 compileJava.options.encoding = 'UTF-8'

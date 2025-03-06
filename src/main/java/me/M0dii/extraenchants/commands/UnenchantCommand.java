@@ -7,6 +7,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.ChatColor;
@@ -95,6 +96,8 @@ public class UnenchantCommand {
             return;
         }
 
-        sender.sendMessage(Utils.format(removed.replace("%enchant_name%", enchantName)));
+        EEnchant eenchant = EEnchant.fromEnchant(enchantment);
+
+        sender.sendMessage(Utils.format(removed.replace("%enchant_name%", eenchant.getDisplayName())));
     }
 }
