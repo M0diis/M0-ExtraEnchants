@@ -1,42 +1,47 @@
 package me.m0dii.extraenchants.commands;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.tree.LiteralCommandNode;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
+import io.papermc.paper.command.brigadier.Commands;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UnenchantCommand extends Command {
-    private final FileConfiguration cfg;
+public class UnenchantCommand {
+    private static final FileConfiguration cfg = ExtraEnchants.getInstance().getCfg();
 
-    public UnenchantCommand(ExtraEnchants plugin) {
-        super("unenchant");
-        this.cfg = plugin.getCfg();
+    public static LiteralCommandNode<CommandSourceStack> createCommand() {
+        return Commands.literal("unenchant")
+                .executes(UnenchantCommand::runUnenchantLogic)
+                .build();
     }
 
-    @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull String s, @NotNull String[] strings) {
+    private static int runUnenchantLogic(CommandContext<CommandSourceStack> ctx) {
+        CommandSender sender = ctx.getSource().getSender();
+
         if (!(sender instanceof Player player)) {
             sender.sendMessage(ChatColor.RED + "Console cannot perform this command");
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
 
         if (!player.hasPermission("extraenchants.command.unenchant")) {
             sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
 
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
 
         ItemStack hand = player.getInventory().getItemInMainHand();
@@ -44,13 +49,13 @@ public class UnenchantCommand extends Command {
         if (hand.getType().isAir()) {
             sender.sendMessage(ChatColor.RED + "Must be holding an item to do this.");
 
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
 
         if (hand.getItemMeta() == null) {
             sender.sendMessage(ChatColor.RED + "Must be holding an enchanted item to do this.");
 
-            return true;
+            return Command.SINGLE_SUCCESS;
         }
 
         CustomEnchants.getAllEnchants().forEach((enchant) -> {
@@ -59,20 +64,24 @@ public class UnenchantCommand extends Command {
             }
         });
 
-        return true;
+        return Command.SINGLE_SUCCESS;
     }
 
-    private void removeEnchant(@Nonnull CommandSender sender, ItemStack hand, Enchantment ench, ItemStack itemInMainHand, String enchName) {
+    private static void removeEnchant(@Nonnull CommandSender sender,
+                                      ItemStack hand,
+                                      Enchantment enchantment,
+                                      ItemStack itemInMainHand,
+                                      String enchantName) {
         ItemMeta meta = itemInMainHand.getItemMeta();
 
-        hand.removeEnchantment(ench);
-        meta.removeEnchant(ench);
+        hand.removeEnchantment(enchantment);
+        meta.removeEnchant(enchantment);
 
         List<String> lore;
 
         if (meta.getLore() != null) {
             lore = meta.getLore().stream()
-                    .filter(l -> !l.contains(enchName))
+                    .filter(l -> !l.contains(enchantName))
                     .collect(Collectors.toList());
 
             meta.setLore(lore);
@@ -86,6 +95,6 @@ public class UnenchantCommand extends Command {
             return;
         }
 
-        sender.sendMessage(Utils.format(removed.replace("%enchant_name%", enchName)));
+        sender.sendMessage(Utils.format(removed.replace("%enchant_name%", enchantName)));
     }
 }

@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'me.m0dii'
-version 'j21-mc1.21.3-4.0.0'
+version 'j21-mc1.21.3-4.0.1'
 
 archivesBaseName = 'M0-ExtraEnchants'
 

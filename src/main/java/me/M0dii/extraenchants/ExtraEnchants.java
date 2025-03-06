@@ -65,7 +65,7 @@ public class ExtraEnchants extends JavaPlugin {
             getLogger().severe("Vault not found, disabling economy features.");
         }
 
-        if (getServer().getPluginManager().getPlugin("Residdence") != null) {
+        if (getServer().getPluginManager().getPlugin("Residence") != null) {
             RESIDENCE_ENABLED = true;
         }
 
@@ -112,12 +112,10 @@ public class ExtraEnchants extends JavaPlugin {
     }
 
     private void registerCommands() {
-        getServer().getCommandMap().register("unenchant", new UnenchantCommand(this));
-        getServer().getCommandMap().register("ue", new UnenchantCommand(this));
-
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS,
                 commands -> {
                     commands.registrar().register(ExtraEnchantCommand.createCommand(), List.of("extraenchant", "ee"));
+                    commands.registrar().register(UnenchantCommand.createCommand(), List.of("unenchant", "disenchant", "ue"));
                 });
     }
 }
