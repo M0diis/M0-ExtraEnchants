@@ -59,7 +59,13 @@ public class Utils {
         return Component.text(ChatColor.translateAlternateColorCodes('&', text));
     }
 
+
+
     public static boolean allowedAt(Player p, Location loc) {
+        if (!ExtraEnchants.RESIDENCE_ENABLED) {
+            return true;
+        }
+
         ClaimedResidence res = Residence.getInstance().getResidenceManager().getByLoc(loc);
 
         if(res == null || p.hasPermission("residence.admin")) {

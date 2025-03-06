@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
 
@@ -36,6 +37,8 @@ public class ExtraEnchants extends JavaPlugin {
 
     private Placeholders placeholders;
 
+    public static boolean RESIDENCE_ENABLED = false;
+
     public void onEnable() {
         instance = this;
 
@@ -58,28 +61,32 @@ public class ExtraEnchants extends JavaPlugin {
 
         Utils.copy(getResource("config.yml"), new File(getDataFolder(), "config_default.yml"));
 
-//        if (!setupEconomy()) {
-//            getLogger().severe("Vault not found, disabling economy features.");
-//        }
+        if (!setupEconomy()) {
+            getLogger().severe("Vault not found, disabling economy features.");
+        }
+
+        if (getServer().getPluginManager().getPlugin("Residdence") != null) {
+            RESIDENCE_ENABLED = true;
+        }
 
         CustomEnchants.register(this);
     }
 
-//    private boolean setupEconomy() {
-//        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-//            return false;
-//        }
-//
-//        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-//
-//        if (rsp == null) {
-//            return false;
-//        }
-//
-//        economy = rsp.getProvider();
-//
-//        return economy != null;
-//    }
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+
+        if (rsp == null) {
+            return false;
+        }
+
+        economy = rsp.getProvider();
+
+        return true;
+    }
 
     public void onDisable() {
         this.getLogger().info("M0-ExtraEnchants has been disabled.");
