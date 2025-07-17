@@ -1,6 +1,7 @@
 package me.m0dii.extraenchants.events;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 @Getter
+@Setter
 public class TelepathyEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
@@ -42,13 +44,8 @@ public class TelepathyEvent extends Event implements Cancellable {
         this.drops = drops;
     }
 
-
     public static HandlerList getHandlerList() {
         return HANDLERS;
-    }
-
-    public void setCancelled(boolean isCancelled) {
-        this.isCancelled = isCancelled;
     }
 
     public @NotNull HandlerList getHandlers() {

@@ -1,20 +1,21 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
-import lombok.Getter;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.TimberEvent;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.events.TelepathyEvent;
+import me.m0dii.extraenchants.events.TimberEvent;
 import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
@@ -67,17 +68,7 @@ public class TimberWrapper extends CustomEnchantment {
         return name.toLowerCase();
     }
 
-    @Getter
-    static class BlockLocation {
-        private final Block block;
-        private final ItemStack tool;
-        private final long time;
-
-        public BlockLocation(Block block, ItemStack tool, long time) {
-            this.block = block;
-            this.tool = tool;
-            this.time = time;
-        }
+    record BlockLocation(Block block, ItemStack tool, Player player, long time) {
     }
 
     private final List<BlockLocation> pendingToBreak = new ArrayList<>();
@@ -87,13 +78,23 @@ public class TimberWrapper extends CustomEnchantment {
     private void init() {
         breakTask = Bukkit.getServer().getScheduler().runTaskTimer(ExtraEnchants.getInstance(), () -> {
             List<BlockLocation> toBreak = pendingToBreak.stream()
-                    .filter(block -> System.currentTimeMillis() - block.getTime() >= 100)
-                    .sorted(Comparator.comparingLong(BlockLocation::getTime))
+                    .filter(block -> System.currentTimeMillis() - block.time() >= 100)
+                    .sorted(Comparator.comparingLong(BlockLocation::time))
                     .toList();
 
-            for (BlockLocation block : toBreak) {
-                block.getBlock().breakNaturally(block.getTool());
-            }
+            toBreak.forEach(block -> {
+                if (InventoryUtils.hasEnchant(block.tool(), EEnchant.TELEPATHY)) {
+                    BlockBreakEvent blockBreakEvent = new BlockBreakEvent(block.block(), block.player());
+                    blockBreakEvent.setDropItems(false);
+                    List<ItemStack> drops = List.of(new ItemStack(block.block().getType(), 1));
+                    block.block().setType(Material.AIR);
+                    block.block().getWorld().playSound(block.block().getLocation(), Sound.BLOCK_WOOD_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
+                    block.block().getWorld().spawnParticle(Particle.BLOCK, block.block().getLocation(), 10, block.block().getBlockData());
+                    Bukkit.getPluginManager().callEvent(new TelepathyEvent(block.player(), blockBreakEvent, drops));
+                } else {
+                    block.block().breakNaturally(block.tool());
+                }
+            });
 
             pendingToBreak.removeAll(toBreak);
         }, 0L, 1L);
@@ -105,7 +106,8 @@ public class TimberWrapper extends CustomEnchantment {
             return;
         }
 
-        if (!Utils.allowedAt(e.getPlayer(), e.getBlock().getLocation())) {
+        Player player = e.getPlayer();
+        if (!Utils.allowedAt(player, e.getBlock().getLocation())) {
             return;
         }
 
@@ -122,21 +124,19 @@ public class TimberWrapper extends CustomEnchantment {
 
         e.getBlockBreakEvent().setCancelled(true);
 
-        ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
-
-        block.breakNaturally(hand);
+        ItemStack hand = player.getInventory().getItemInMainHand();
 
         long time = System.currentTimeMillis();
 
         for (Block log : treeBlocks) {
-            pendingToBreak.add(new BlockLocation(log, hand, time));
+            pendingToBreak.add(new BlockLocation(log, hand, player, time));
 
-            time += Math.random() * 2 * 100;
+            time += (long) (Math.random() * 2 * 100);
 
-            InventoryUtils.applyDurabilityChanced(e.getPlayer(), hand, 50);
+            InventoryUtils.applyDurabilityChanced(player, hand, 50);
         }
 
-        pendingToBreak.sort(Comparator.comparingLong(BlockLocation::getTime));
+        pendingToBreak.sort(Comparator.comparingLong(BlockLocation::time));
     }
 
     private static boolean isLog(Block block) {
