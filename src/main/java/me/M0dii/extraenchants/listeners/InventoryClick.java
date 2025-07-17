@@ -117,7 +117,7 @@ public class InventoryClick implements Listener {
         if (clickedInv.getHolder() instanceof EnchantListGUI list) {
             e.setCancelled(true);
 
-            Player p = (Player) e.getWhoClicked();
+            Player playerClicked = (Player) e.getWhoClicked();
 
             ItemStack item = e.getCurrentItem();
 
@@ -145,7 +145,12 @@ public class InventoryClick implements Listener {
 
             EnchantInfoGUI gui = new EnchantInfoGUI(enchant);
 
-            gui.open(p);
+            if(e.isShiftClick() && playerClicked.isOp()) {
+                playerClicked.getInventory().addItem(Enchanter.getBook(enchant, 1));
+                return;
+            }
+
+            gui.open(playerClicked);
         }
     }
 

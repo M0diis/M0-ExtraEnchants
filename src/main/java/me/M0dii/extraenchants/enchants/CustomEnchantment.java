@@ -25,12 +25,12 @@ public abstract class CustomEnchantment extends Enchantment implements Listener 
     protected final NamespacedKey key;
 
     protected final String name;
-    protected final int maxLvl;
+    protected final int maxLevel;
     protected final EEnchant enchant;
 
-    public CustomEnchantment(final String name, final int lvl, EEnchant enchant) {
+    public CustomEnchantment(final String name, final int maxLevel, EEnchant enchant) {
         this.name = name;
-        this.maxLvl = lvl;
+        this.maxLevel = maxLevel;
         this.enchant = enchant;
 
         this.key = new NamespacedKey(ExtraEnchants.getInstance(), name.toLowerCase().replace(" ", "_"));
@@ -88,7 +88,7 @@ public abstract class CustomEnchantment extends Enchantment implements Listener 
 
     @Override
     public int getMaxLevel() {
-        return this.maxLvl;
+        return this.maxLevel;
     }
 
     @Override

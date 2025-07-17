@@ -90,110 +90,28 @@ public class EnchantableItemTypeUtil {
     }
 
     public static boolean canEnchantItemCustom(ItemStack item, ItemType type) {
-        switch (type) {
-            case ALL -> {
-                return true;
-            }
-            case ARMOR -> {
-                if (EnchantableItemTypeUtil.isArmor(item)) {
-                    return true;
-                }
-            }
-            case SWORD -> {
-                if (EnchantableItemTypeUtil.isSword(item)) {
-                    return true;
-                }
-            }
-            case AXE -> {
-                if (EnchantableItemTypeUtil.isAxe(item)) {
-                    return true;
-                }
-            }
-            case PICKAXE -> {
-                if (EnchantableItemTypeUtil.isPickaxe(item)) {
-                    return true;
-                }
-            }
-            case SHOVEL -> {
-                if (EnchantableItemTypeUtil.isShovel(item)) {
-                    return true;
-                }
-            }
-            case HOE -> {
-                if (EnchantableItemTypeUtil.isHoe(item)) {
-                    return true;
-                }
-            }
-            case BOW -> {
-                if (EnchantableItemTypeUtil.isBow(item)) {
-                    return true;
-                }
-            }
-            case FISHING_ROD -> {
-                if (EnchantableItemTypeUtil.isFishingRod(item)) {
-                    return true;
-                }
-            }
-            case TRIDENT -> {
-                if (EnchantableItemTypeUtil.isTrident(item)) {
-                    return true;
-                }
-            }
-            case CROSSBOW -> {
-                if (EnchantableItemTypeUtil.isCrossbow(item)) {
-                    return true;
-                }
-            }
-            case SHEARS -> {
-                if (EnchantableItemTypeUtil.isShears(item)) {
-                    return true;
-                }
-            }
-            case SHIELD -> {
-                if (EnchantableItemTypeUtil.isShield(item)) {
-                    return true;
-                }
-            }
-            case ELYTRA -> {
-                if (EnchantableItemTypeUtil.isElytra(item)) {
-                    return true;
-                }
-            }
-            case TOOL -> {
-                if (EnchantableItemTypeUtil.isTool(item)) {
-                    return true;
-                }
-            }
-            case WEAPON -> {
-                if (EnchantableItemTypeUtil.isWeapon(item)) {
-                    return true;
-                }
-            }
-            case HELMET -> {
-                if (EnchantableItemTypeUtil.isHelmet(item)) {
-                    return true;
-                }
-            }
-            case CHESTPLATE -> {
-                if (EnchantableItemTypeUtil.isChestplate(item)) {
-                    return true;
-                }
-            }
-            case LEGGINGS -> {
-                if (EnchantableItemTypeUtil.isLeggings(item)) {
-                    return true;
-                }
-            }
-            case BOOTS -> {
-                if (EnchantableItemTypeUtil.isBoots(item)) {
-                    return true;
-                }
-            }
-            default -> {
-            }
-        }
-
-        return false;
+        return switch (type) {
+            case ALL -> true;
+            case ARMOR -> isArmor(item);
+            case SWORD -> isSword(item);
+            case AXE -> isAxe(item);
+            case PICKAXE -> isPickaxe(item);
+            case SHOVEL -> isShovel(item);
+            case HOE -> isHoe(item);
+            case BOW -> isBow(item);
+            case FISHING_ROD -> isFishingRod(item);
+            case TRIDENT -> isTrident(item);
+            case CROSSBOW -> isCrossbow(item);
+            case SHEARS -> isShears(item);
+            case SHIELD -> isShield(item);
+            case ELYTRA -> isElytra(item);
+            case TOOL -> isTool(item);
+            case WEAPON -> isWeapon(item);
+            case HELMET -> isHelmet(item);
+            case CHESTPLATE -> isChestplate(item);
+            case LEGGINGS -> isLeggings(item);
+            case BOOTS -> isBoots(item);
+        };
     }
 
     @Getter

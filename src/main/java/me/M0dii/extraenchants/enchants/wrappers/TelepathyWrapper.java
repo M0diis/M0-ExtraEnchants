@@ -2,8 +2,8 @@ package me.m0dii.extraenchants.enchants.wrappers;
 
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.TelepathyEvent;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.events.TelepathyEvent;
 import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
@@ -32,7 +32,7 @@ public class TelepathyWrapper extends CustomEnchantment {
 
     @Override
     public boolean canEnchantItem(final @NotNull ItemStack item) {
-        return EnchantableItemTypeUtil.isTool(item, false) || enchant.canEnchantItemCustom(item);
+        return EnchantableItemTypeUtil.isTool(item, true) || enchant.canEnchantItemCustom(item);
     }
 
     @Override
@@ -92,7 +92,13 @@ public class TelepathyWrapper extends CustomEnchantment {
         }
 
         if (hasSilk) {
-            ItemStack itm = new ItemStack(b.getType());
+            ItemStack itm;
+
+            if (b.getType().equals(Material.REDSTONE_WIRE)) {
+                itm = new ItemStack(Material.REDSTONE);
+            } else {
+                itm = new ItemStack(b.getType());
+            }
 
             String name = itm.getType().name();
 

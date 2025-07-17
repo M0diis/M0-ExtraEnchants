@@ -7,7 +7,11 @@ import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
 import me.m0dii.extraenchants.events.ReplanterBreakEvent;
 import me.m0dii.extraenchants.events.ReplanterEvent;
-import me.m0dii.extraenchants.utils.*;
+import me.m0dii.extraenchants.events.TelepathyEvent;
+import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
+import me.m0dii.extraenchants.utils.InventoryUtils;
+import me.m0dii.extraenchants.utils.Messenger;
+import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -91,7 +95,7 @@ public class ReplanterWrapper extends CustomEnchantment {
         }, 20L, 20L);
     }
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onReplanter(final ReplanterEvent e) {
         Messenger.debug("ReplanterEvent called.");
 
@@ -128,7 +132,11 @@ public class ReplanterWrapper extends CustomEnchantment {
         ItemStack hand = player.getInventory().getItemInMainHand();
 
         if (takeSeeds(player, plant.getMaterial())) {
-            blockPlant.breakNaturally(hand);
+            if (InventoryUtils.hasEnchant(hand, EEnchant.TELEPATHY)) {
+                Bukkit.getPluginManager().callEvent(new TelepathyEvent(e.getPlayer(), e.getPlayerInteractEvent(), blockPlant.getDrops(hand)));
+            } else {
+                blockPlant.breakNaturally(hand);
+            }
 
             blockPlant.setType(plant.getMaterial());
             plant.setAge(0);
@@ -291,7 +299,12 @@ public class ReplanterWrapper extends CustomEnchantment {
         ItemStack hand = player.getInventory().getItemInMainHand();
 
         if (takeSeeds(player, plant.getMaterial())) {
-            block.breakNaturally(hand);
+            if (InventoryUtils.hasEnchant(hand, EEnchant.TELEPATHY)) {
+                Bukkit.getPluginManager().callEvent(new TelepathyEvent(e.getPlayer(), e.getBlockBreakEvent(), block.getDrops(hand)));
+                block.setType(Material.AIR);
+            } else {
+                block.breakNaturally(hand);
+            }
 
             pendingToReplant.add(new ReplantLocation(block, plant));
 

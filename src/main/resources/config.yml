@@ -642,7 +642,9 @@ enchant-signs:
   enabled: true
   # You can add own color codes when placing it. This should be plain.
   # You can also add color format to other lines too.
-  first-line-format: "> ENCHANT <"
+  enchant-first-line-format: "> ENCHANT <"
+  disenchant-first-line-format: "> DISENCHANT <"
+  retrieve-first-line-format: "> RETRIEVE <"
   messages:
     sign-created: "&aSuccessfully created enchant sign."
     invalid-enchant: "&cInvalid enchantment."
@@ -655,6 +657,9 @@ enchant-signs:
     already-enchanted: "&cThis item is already enchanted."
     not-enough-xp: "&cYou do not have enough XP to purchase this enchant."
     not-enough-levels: "&cYou do not have enough levels to purchase this enchant."
-
+    item-not-enchanted: "&cThis item is not enchanted."
+    enchant-removed: "&4%enchant_name% enchant has been removed"
+    enchant-retrieved: "&aSuccessfully retrieved enchantment."
+    
 debug: false
 notify-update: true

@@ -85,6 +85,8 @@ public class ExtraEnchants extends JavaPlugin {
 
         economy = rsp.getProvider();
 
+        getLogger().info("Vault found, economy features enabled.");
+
         return true;
     }
 
