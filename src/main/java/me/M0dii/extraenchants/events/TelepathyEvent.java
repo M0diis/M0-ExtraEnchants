@@ -14,19 +14,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+@Getter
 public class TelepathyEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
-    @Getter
     private final Player player;
-    @Getter
     @Nullable
     private final BlockBreakEvent blockBreakEvent;
-    @Getter
     @Nullable
     private final PlayerInteractEvent playerInteractEvent;
-    @Getter
     private final Block block;
-    @Getter
     private final Collection<ItemStack> drops;
     private boolean isCancelled;
 
@@ -49,10 +45,6 @@ public class TelepathyEvent extends Event implements Cancellable {
 
     public static HandlerList getHandlerList() {
         return HANDLERS;
-    }
-
-    public boolean isCancelled() {
-        return this.isCancelled;
     }
 
     public void setCancelled(boolean isCancelled) {

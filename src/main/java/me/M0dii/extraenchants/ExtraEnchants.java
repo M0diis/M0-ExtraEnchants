@@ -39,6 +39,7 @@ public class ExtraEnchants extends JavaPlugin {
 
     public static boolean RESIDENCE_ENABLED = false;
 
+    @Override
     public void onEnable() {
         instance = this;
 
