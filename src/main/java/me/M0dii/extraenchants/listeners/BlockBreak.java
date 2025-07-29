@@ -62,7 +62,8 @@ public class BlockBreak implements Listener {
 
         List<Enchantment> conflicts = List.of(
                 EEnchant.SMELT.getEnchantment(),
-                EEnchant.EXCAVATOR.getEnchantment()
+                EEnchant.EXCAVATOR.getEnchantment(),
+                Enchantment.SILK_TOUCH
         );
 
         boolean hasConflicts = conflicts.stream().anyMatch(enchant -> InventoryUtils.hasEnchant(hand, enchant));

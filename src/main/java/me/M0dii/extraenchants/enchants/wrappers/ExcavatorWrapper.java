@@ -156,6 +156,6 @@ public class ExcavatorWrapper extends CustomEnchantment {
             }
         }
 
-        InventoryUtils.applyDurabilityChanced(p, p.getInventory().getItemInMainHand(), 70);
+        InventoryUtils.applyDurabilityChanced(p, item, 70);
     }
 }

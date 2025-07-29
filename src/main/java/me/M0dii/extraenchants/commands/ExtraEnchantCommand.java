@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
 
@@ -78,12 +79,8 @@ public class ExtraEnchantCommand {
                                 )
                         )
                 )
-                .then(Commands.literal("reload")
-                        .executes(ExtraEnchantCommand::runReloadLogic)
-                )
-                .then(Commands.literal("debugitem")
-                        .executes(ExtraEnchantCommand::runDebugItemLogic)
-                )
+                .then(Commands.literal("reload").executes(ExtraEnchantCommand::runReloadLogic))
+                .then(Commands.literal("debugitem").executes(ExtraEnchantCommand::runDebugItemLogic))
                 .build();
     }
 
@@ -217,11 +214,10 @@ public class ExtraEnchantCommand {
         sender.sendMessage(Utils.format("&eEnchantments: &f" + item.getEnchantments()));
         sender.sendMessage(Utils.format("&eItem Flags: &f" + meta.getItemFlags()));
         sender.sendMessage(Utils.format("&eItem Type: &f" + item.getType().name()));
-        //noinspection removal
         sender.sendMessage(Utils.format("&eItem Data: &f" + item.getData()));
         sender.sendMessage(Utils.format("&ePDC Keys:"));
         pdc.getKeys().forEach(key -> {
-            sender.sendMessage(Utils.format("&e- &f" + key));
+            sender.sendMessage(Utils.format("&e- &f" + key + " : " + pdc.get(key, PersistentDataType.STRING)));
         });
         sender.sendMessage(Utils.format("&7&m----------------------------------------"));
 

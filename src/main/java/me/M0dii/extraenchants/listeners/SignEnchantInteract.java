@@ -169,8 +169,12 @@ public class SignEnchantInteract implements Listener {
         }
 
         if (firstLine.equalsIgnoreCase(plugin.getCfg().getString("enchant-signs.retrieve-first-line-format"))) {
-            // Stub
+            handleRetrieveLogic(sign, player);
         }
+    }
+
+    private void handleRetrieveLogic(Sign sign, Player player) {
+        // TODO: Implement retrieve logic
     }
 
     private void handleEnchantLogic(Sign sign, Player player) {

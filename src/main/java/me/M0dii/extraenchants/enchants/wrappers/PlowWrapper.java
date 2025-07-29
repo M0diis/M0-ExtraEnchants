@@ -2,8 +2,8 @@ package me.m0dii.extraenchants.enchants.wrappers;
 
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.PlowEvent;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.events.PlowEvent;
 import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
@@ -73,168 +73,78 @@ public class PlowWrapper extends CustomEnchantment {
 
     @EventHandler
     public void onCustomTill(final PlowEvent event) {
-        if (!Utils.shouldTrigger(EEnchant.PLOW)) {
-            return;
-        }
+        if (!Utils.shouldTrigger(EEnchant.PLOW)) return;
 
         final Player p = event.getPlayer();
-        final Block block1 = event.getPlayerInteractEvent().getClickedBlock();
+        final Block clickedBlock = event.getPlayerInteractEvent().getClickedBlock();
 
-        Material type = null;
+        if (clickedBlock == null) return;
 
-        ItemStack hand = p.getInventory().getItemInMainHand();
-
-        InventoryUtils.applyDurability(p, hand);
-
-        if (block1 == null) {
+        if (!clickedBlock.getType().equals(Material.DIRT) && !clickedBlock.getType().equals(Material.GRASS_BLOCK))
             return;
+
+        Location loc = clickedBlock.getLocation();
+        int level = event.getEnchantLevel();
+
+        BlockFace face = p.getFacing();
+        int[][] offsets = switch (face) {
+            case NORTH -> new int[][]{{0, 1, 0}, {-1, 1, 0}, {-2, 1, 0}, {1, 1, 0}, {2, 1, 0}};
+            case SOUTH -> new int[][]{{0, 1, 0}, {1, 1, 0}, {2, 1, 0}, {-1, 1, 0}, {-2, 1, 0}};
+            case EAST -> new int[][]{{0, 1, 0}, {0, 1, -1}, {0, 1, -2}, {0, 1, 1}, {0, 1, 2}};
+            default -> new int[][]{{0, 1, 0}, {0, 1, 1}, {0, 1, 2}, {0, 1, -1}, {0, 1, -2}};
+        };
+
+        int count = (level == 2) ? 5 : 3;
+        Block[] plants = new Block[count];
+        Block[] blocks = new Block[count];
+        for (int i = 0; i < count; i++) {
+            plants[i] = loc.clone().add(offsets[i][0], offsets[i][1], offsets[i][2]).getBlock();
+            blocks[i] = loc.clone().add(offsets[i][0], offsets[i][1] - 1, offsets[i][2]).getBlock();
         }
-
-        if (!block1.getType().equals(Material.DIRT)
-                && !block1.getType().equals(Material.GRASS_BLOCK)) {
-            return;
-        }
-
-        Location clickedLocation = block1.getLocation();
-
-        Block plant1 = clickedLocation.add(0.0, 1.0, 0.0).getBlock();
-
-        Block plant2 = null;
-        Block plant3 = null;
-
-        Block block2 = null;
-        Block block3 = null;
-
-        Block plant4 = null;
-        Block block4 = null;
-
-        Block plant5 = null;
-        Block block5 = null;
-
-        if (p.getFacing() == BlockFace.NORTH) {
-            plant2 = clickedLocation.clone().add(-1.0, 0.0, 0.0).getBlock();
-            block2 = clickedLocation.clone().add(-1.0, -1.0, 0.0).getBlock();
-
-            plant3 = clickedLocation.clone().add(-2.0, 0.0, 0.0).getBlock();
-            block3 = clickedLocation.clone().add(-2.0, -1.0, 0.0).getBlock();
-
-            if (event.getEnchantLevel() == 2) {
-                plant4 = clickedLocation.clone().add(1.0, 0.0, 0.0).getBlock();
-                block4 = clickedLocation.clone().add(1.0, -1.0, 0.0).getBlock();
-
-                plant5 = clickedLocation.clone().add(2.0, 0.0, 0.0).getBlock();
-                block5 = clickedLocation.clone().add(2.0, -1.0, 0.0).getBlock();
-            }
-        } else if (p.getFacing() == BlockFace.SOUTH) {
-            plant2 = clickedLocation.clone().add(1.0, 0.0, 0.0).getBlock();
-            block2 = clickedLocation.clone().add(1.0, -1.0, 0.0).getBlock();
-
-            plant3 = clickedLocation.clone().add(2.0, 0.0, 0.0).getBlock();
-            block3 = clickedLocation.clone().add(2.0, -1.0, 0.0).getBlock();
-
-            if (event.getEnchantLevel() == 2) {
-                plant4 = clickedLocation.clone().add(-1.0, 0.0, 0.0).getBlock();
-                block4 = clickedLocation.clone().add(-1.0, -1.0, 0.0).getBlock();
-
-                plant5 = clickedLocation.clone().add(-2.0, 0.0, 0.0).getBlock();
-                block5 = clickedLocation.clone().add(-2.0, -1.0, 0.0).getBlock();
-            }
-        } else if (p.getFacing() == BlockFace.EAST) {
-            plant2 = clickedLocation.clone().add(0.0, 0.0, -1.0).getBlock();
-            block2 = clickedLocation.clone().add(0.0, -1.0, -1.0).getBlock();
-
-            plant3 = clickedLocation.clone().add(0.0, 0.0, -2.0).getBlock();
-            block3 = clickedLocation.clone().add(0.0, -1.0, -2.0).getBlock();
-
-            if (event.getEnchantLevel() == 2) {
-                plant4 = clickedLocation.clone().add(0.0, 0.0, 1.0).getBlock();
-                block4 = clickedLocation.clone().add(0.0, -1.0, 1.0).getBlock();
-
-                plant5 = clickedLocation.clone().add(0.0, 0.0, 2.0).getBlock();
-                block5 = clickedLocation.clone().add(0.0, -1.0, 2.0).getBlock();
-            }
-        } else {
-            plant2 = clickedLocation.clone().add(0.0, 0.0, 1.0).getBlock();
-            block2 = clickedLocation.clone().add(0.0, -1.0, 1.0).getBlock();
-
-            plant3 = clickedLocation.clone().add(0.0, 0.0, 2.0).getBlock();
-            block3 = clickedLocation.clone().add(0.0, -1.0, 2.0).getBlock();
-
-            if (event.getEnchantLevel() == 2) {
-                plant4 = clickedLocation.clone().add(0.0, 0.0, -1.0).getBlock();
-                block4 = clickedLocation.clone().add(0.0, -1.0, -1.0).getBlock();
-
-                plant5 = clickedLocation.clone().add(0.0, 0.0, -2.0).getBlock();
-                block5 = clickedLocation.clone().add(0.0, -1.0, -2.0).getBlock();
-            }
-        }
-
-        if (!plant1.getType().equals(Material.AIR)) {
-            return;
-        }
-
-        int num = 0;
-        int amount = 0;
 
         ItemStack[] contents = p.getInventory().getStorageContents();
-
         ItemStack fee = null;
         int slot = -1;
-
-        for (int j = 0; j < contents.length; ++j) {
-            final ItemStack i = contents[j];
-
+        Material type = null;
+        int amount = 0;
+        for (int j = 0; j < contents.length && j < 9; ++j) {
+            ItemStack i = contents[j];
             if (i != null && SEEDS.contains(i.getType())) {
                 type = i.getType();
                 amount = i.getAmount();
-
                 fee = i;
                 slot = j;
-
                 break;
             }
-
-            if (++num > 8)
-                return;
         }
+        if (fee == null || type == null || slot == -1) return;
 
-        if (fee == null || type == null || slot == -1) {
-            return;
-        }
+        Material plantType = switch (type) {
+            case BEETROOT_SEEDS -> Material.BEETROOTS;
+            case WHEAT_SEEDS -> Material.WHEAT;
+            case PUMPKIN_SEEDS -> Material.PUMPKIN_STEM;
+            case MELON_SEEDS -> Material.MELON_STEM;
+            case CARROT -> Material.CARROTS;
+            case POTATO -> Material.POTATOES;
+            default -> null;
+        };
 
-        switch (type) {
-            case BEETROOT_SEEDS ->
-                    setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.BEETROOTS);
-            case WHEAT_SEEDS ->
-                    setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.WHEAT);
-            case PUMPKIN_SEEDS ->
-                    setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.PUMPKIN_STEM);
-            case MELON_SEEDS ->
-                    setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.MELON_STEM);
-            case CARROT ->
-                    setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.CARROTS);
-            case POTATO ->
-                    setSeeds(p, block1, plant1, plant2, block2, block3, plant3, block4, plant4, block5, plant5, amount, slot, fee, Material.POTATOES);
-            default -> {
-            }
+        if (plantType == null) return;
+
+        for (int i = 0; i < count; i++) {
+            amount = plantSeed(p, blocks[i], plants[i], amount, slot, fee, plantType);
         }
     }
 
-
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractPlow(final PlayerInteractEvent e) {
         if (EEnchant.PLOW.isDisabled()) {
             return;
         }
-
-        if (e.isCancelled()) {
-            return;
-        }
-
         ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
         Player p = e.getPlayer();
 
-        if (hand == null) {
+        if (hand.getType().isAir()) {
             return;
         }
 
@@ -250,8 +160,7 @@ public class PlowWrapper extends CustomEnchantment {
             return;
         }
 
-        if ((p.getGameMode() == GameMode.CREATIVE)
-                || (p.getGameMode() == GameMode.SPECTATOR)) {
+        if ((p.getGameMode() == GameMode.CREATIVE) || (p.getGameMode() == GameMode.SPECTATOR)) {
             return;
         }
 
@@ -264,37 +173,10 @@ public class PlowWrapper extends CustomEnchantment {
         Bukkit.getPluginManager().callEvent(new PlowEvent(p, e, level));
     }
 
-
-
-    private void setSeeds(Player p,
-                          Block block1, Block plant1,
-                          Block plant2, Block block2,
-                          Block block3, Block plant3,
-                          Block block4, Block plant4,
-                          Block block5, Block plant5,
-                          int amount, int slot,
-                          ItemStack fee, Material seed) {
-        if (Utils.allowedAt(p, plant1.getLocation())) {
-            block1.setType(Material.FARMLAND);
-            plant1.setType(seed);
-
-            --amount;
-
-            fee.setAmount(amount);
-            p.getInventory().setItem(slot, fee);
-        }
-
-        setSeed(p, plant2, block2, amount, slot, fee, seed);
-        setSeed(p, plant3, block3, amount, slot, fee, seed);
-        setSeed(p, plant4, block4, amount, slot, fee, seed);
-        setSeed(p, plant5, block5, amount, slot, fee, seed);
-    }
-
-    private void setSeed(Player p, Block plant, Block block, int amount, int slot, ItemStack fee, Material seed) {
+    private int plantSeed(Player p, Block block, Block plant, int amount, int slot, ItemStack fee, Material seed) {
         if (plant == null || block == null) {
-            return;
+            return amount;
         }
-
         if (Utils.allowedAt(p, plant.getLocation())) {
             if (plant.getType().equals(Material.AIR) && amount >= 1 &&
                     (block.getType().equals(Material.DIRT) ||
@@ -305,9 +187,9 @@ public class PlowWrapper extends CustomEnchantment {
                 --amount;
                 fee.setAmount(amount);
                 p.getInventory().setItem(slot, fee);
-
                 p.updateInventory();
             }
         }
+        return amount;
     }
 }
