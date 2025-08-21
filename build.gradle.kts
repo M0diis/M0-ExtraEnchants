@@ -59,7 +59,8 @@ dependencies {
 
     implementation("org.bstats:bstats-bukkit:2.2.1")
     implementation("org.reflections:reflections:0.10.2")
-    implementation("com.jeff_media:MorePersistentDataTypes:2.4.0")
+//    implementation("com.jeff_media:MorePersistentDataTypes:2.4.0")
+    implementation(files("MorePersistentDataTypes-2.4.0.jar"))
 
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
