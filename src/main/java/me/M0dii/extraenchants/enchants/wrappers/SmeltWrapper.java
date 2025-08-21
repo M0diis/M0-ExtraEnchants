@@ -9,6 +9,7 @@ import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
@@ -86,7 +87,7 @@ public class SmeltWrapper extends CustomEnchantment {
                     .get(Enchantment.FORTUNE);
         }
 
-        while (recipes.hasNext() && !dontSmelt(b.getType().name())) {
+        while (recipes.hasNext() && !dontSmelt(b.getType())) {
             Recipe recipe = recipes.next();
 
             if (!(recipe instanceof FurnaceRecipe furnaceRecipe)) {
@@ -108,7 +109,7 @@ public class SmeltWrapper extends CustomEnchantment {
             break;
         }
 
-        if (results.size() == 0) {
+        if (results.isEmpty()) {
             results = new ArrayList<>(drops);
         }
 
@@ -120,7 +121,7 @@ public class SmeltWrapper extends CustomEnchantment {
         }
 
         if (InventoryUtils.hasEnchant(tool, EEnchant.TELEPATHY)) {
-            Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, e.getBlockBreakEvent(), results));
+            Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, tool, e.getBlockBreakEvent(), results));
         } else {
             for (ItemStack drop : results) {
                 if (drop == null || drop.getType().isAir()) {
@@ -136,13 +137,24 @@ public class SmeltWrapper extends CustomEnchantment {
                 .anyMatch(name::equalsIgnoreCase);
     }
 
-    private boolean dontSmelt(String name) {
-        return Stream.of("REDSTONE_ORE",
-                        "DIAMOND_ORE",
-                        "NETHER_QUARTZ_ORE",
-                        "LAPIS_ORE",
-                        "NETHER_GOLD_ORE",
-                        "EMERALD_ORE")
-                .anyMatch(name::equalsIgnoreCase);
+    private static final Set<Material> UNSMELTABLE_MATERIALS = EnumSet.of(
+            Material.REDSTONE_ORE,
+            Material.DEEPSLATE_REDSTONE_ORE,
+            Material.DIAMOND_ORE,
+            Material.DEEPSLATE_DIAMOND_ORE,
+            Material.GOLD_ORE,
+            Material.NETHER_GOLD_ORE,
+            Material.NETHER_QUARTZ_ORE,
+            Material.LAPIS_ORE,
+            Material.DEEPSLATE_LAPIS_ORE,
+            Material.EMERALD_ORE,
+            Material.DEEPSLATE_EMERALD_ORE,
+            Material.COAL_ORE,
+            Material.DEEPSLATE_COAL_ORE,
+            Material.ANCIENT_DEBRIS
+    );
+
+    public static boolean dontSmelt(@NotNull Material material) {
+        return UNSMELTABLE_MATERIALS.contains(material);
     }
 }

@@ -20,6 +20,7 @@ import java.util.Collection;
 public class TelepathyEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
+    private final ItemStack tool;
     @Nullable
     private final BlockBreakEvent blockBreakEvent;
     @Nullable
@@ -28,16 +29,18 @@ public class TelepathyEvent extends Event implements Cancellable {
     private final Collection<ItemStack> drops;
     private boolean isCancelled;
 
-    public TelepathyEvent(Player p, BlockBreakEvent e, Collection<ItemStack> drops) {
+    public TelepathyEvent(Player p, ItemStack tool, BlockBreakEvent e, Collection<ItemStack> drops) {
         this.player = p;
+        this.tool = tool;
         this.blockBreakEvent = e;
         this.playerInteractEvent = null;
         this.block = e.getBlock();
         this.drops = drops;
     }
 
-    public TelepathyEvent(Player p, PlayerInteractEvent e, Collection<ItemStack> drops) {
+    public TelepathyEvent(Player p, ItemStack tool, PlayerInteractEvent e, Collection<ItemStack> drops) {
         this.player = p;
+        this.tool = tool;
         this.blockBreakEvent = null;
         this.playerInteractEvent = e;
         this.block = e.getClickedBlock();

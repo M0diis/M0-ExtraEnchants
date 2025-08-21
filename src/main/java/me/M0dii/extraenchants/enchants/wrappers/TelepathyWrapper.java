@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 @EnchantWrapper(name = "Telepathy", maxLevel = 1)
@@ -65,14 +66,19 @@ public class TelepathyWrapper extends CustomEnchantment {
             return;
         }
 
+        ItemStack tool = e.getTool();
+
+        if(tool.getItemMeta() == null) {
+            return;
+        }
+
         Player player = e.getPlayer();
         Block b = e.getBlock();
         PlayerInventory inv = player.getInventory();
-        ItemStack hand = inv.getItemInMainHand();
 
         Collection<ItemStack> drops = e.getDrops();
 
-        boolean hasSilk = hand.getItemMeta()
+        boolean hasSilk = tool.getItemMeta()
                 .getEnchants().containsKey(Enchantment.SILK_TOUCH);
 
         boolean fits = doesFit(inv, drops);
@@ -86,21 +92,21 @@ public class TelepathyWrapper extends CustomEnchantment {
                 b.getWorld().dropItemNaturally(
                         b.getLocation(), i);
 
-            InventoryUtils.applyDurability(player, hand);
+            InventoryUtils.applyDurability(player, tool);
 
             return;
         }
 
         if (hasSilk) {
-            ItemStack itm;
+            ItemStack silkItem;
 
             if (b.getType().equals(Material.REDSTONE_WIRE)) {
-                itm = new ItemStack(Material.REDSTONE);
+                silkItem = new ItemStack(Material.REDSTONE);
             } else {
-                itm = new ItemStack(b.getType());
+                silkItem = new ItemStack(b.getType());
             }
 
-            String name = itm.getType().name();
+            String name = silkItem.getType().name();
 
             if (name.contains("WALL_") || name.contains("BANNER")) {
                 if (name.contains("BANNER")) {
@@ -110,11 +116,18 @@ public class TelepathyWrapper extends CustomEnchantment {
                 } else {
                     Material m = Material.getMaterial(name.replace("WALL_", ""));
 
-                    if (m != null)
+                    if (m != null) {
                         inv.addItem(new ItemStack(m));
+                    }
                 }
             } else {
-                inv.addItem(itm);
+                if (inv.firstEmpty() == -1) {
+                    if (inv.contains(silkItem)) {
+                        addToStack(player, List.of(silkItem));
+                    }
+                } else {
+                    inv.addItem(silkItem);
+                }
             }
         } else if (inv.firstEmpty() == -1) {
             ItemStack item = drops.iterator().next();
@@ -128,7 +141,7 @@ public class TelepathyWrapper extends CustomEnchantment {
             }
         }
 
-        InventoryUtils.applyDurability(player, hand);
+        InventoryUtils.applyDurability(player, tool);
     }
 
     public boolean doesFit(Inventory inv, Collection<ItemStack> drops) {

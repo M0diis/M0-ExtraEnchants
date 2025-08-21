@@ -3,6 +3,7 @@ package me.m0dii.extraenchants.listeners;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.enchants.wrappers.LavaWalkerWrapper;
+import me.m0dii.extraenchants.enchants.wrappers.SmeltWrapper;
 import me.m0dii.extraenchants.events.*;
 import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.Enchanter;
@@ -58,12 +59,9 @@ public class BlockBreak implements Listener {
             return;
         }
 
-        e.setDropItems(false);
-
         List<Enchantment> conflicts = List.of(
                 EEnchant.SMELT.getEnchantment(),
-                EEnchant.EXCAVATOR.getEnchantment(),
-                Enchantment.SILK_TOUCH
+                EEnchant.EXCAVATOR.getEnchantment()
         );
 
         boolean hasConflicts = conflicts.stream().anyMatch(enchant -> InventoryUtils.hasEnchant(hand, enchant));
@@ -72,7 +70,9 @@ public class BlockBreak implements Listener {
             return;
         }
 
-        Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, e, drops));
+        e.setDropItems(false);
+
+        Bukkit.getPluginManager().callEvent(new TelepathyEvent(p, hand, e, drops));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -103,10 +103,15 @@ public class BlockBreak implements Listener {
             return;
         }
 
-        Player p = e.getPlayer();
         Block b = e.getBlock();
 
-        ItemStack hand = e.getPlayer().getInventory().getItemInMainHand();
+        if(SmeltWrapper.dontSmelt(b.getType())) {
+            return;
+        }
+
+        Player p = e.getPlayer();
+
+        ItemStack hand = p.getInventory().getItemInMainHand();
 
         List<Enchantment> conflicts = List.of(
                 EEnchant.EXCAVATOR.getEnchantment()
@@ -318,7 +323,7 @@ public class BlockBreak implements Listener {
 
         e.setDropItems(false);
 
-        Bukkit.getPluginManager().callEvent(new TimberEvent(p, e, drops));
+        Bukkit.getPluginManager().callEvent(new TimberEvent(p, hand, e, drops));
     }
 
     private static boolean isLog(Block block) {

@@ -90,7 +90,7 @@ public class TimberWrapper extends CustomEnchantment {
                     block.block().setType(Material.AIR);
                     block.block().getWorld().playSound(block.block().getLocation(), Sound.BLOCK_WOOD_BREAK, SoundCategory.BLOCKS, 1.0f, 1.0f);
                     block.block().getWorld().spawnParticle(Particle.BLOCK, block.block().getLocation(), 10, block.block().getBlockData());
-                    Bukkit.getPluginManager().callEvent(new TelepathyEvent(block.player(), blockBreakEvent, drops));
+                    Bukkit.getPluginManager().callEvent(new TelepathyEvent(block.player(), block.tool(), blockBreakEvent, drops));
                 } else {
                     block.block().breakNaturally(block.tool());
                 }
@@ -107,6 +107,7 @@ public class TimberWrapper extends CustomEnchantment {
         }
 
         Player player = e.getPlayer();
+
         if (!Utils.allowedAt(player, e.getBlock().getLocation())) {
             return;
         }
@@ -124,7 +125,7 @@ public class TimberWrapper extends CustomEnchantment {
 
         e.getBlockBreakEvent().setCancelled(true);
 
-        ItemStack hand = player.getInventory().getItemInMainHand();
+        ItemStack hand = e.getTool();
 
         long time = System.currentTimeMillis();
 

@@ -133,7 +133,7 @@ public class ReplanterWrapper extends CustomEnchantment {
 
         if (takeSeeds(player, plant.getMaterial())) {
             if (InventoryUtils.hasEnchant(hand, EEnchant.TELEPATHY)) {
-                Bukkit.getPluginManager().callEvent(new TelepathyEvent(e.getPlayer(), e.getPlayerInteractEvent(), blockPlant.getDrops(hand)));
+                Bukkit.getPluginManager().callEvent(new TelepathyEvent(e.getPlayer(), hand, e.getPlayerInteractEvent(), blockPlant.getDrops(hand)));
             } else {
                 blockPlant.breakNaturally(hand);
             }
@@ -300,7 +300,7 @@ public class ReplanterWrapper extends CustomEnchantment {
 
         if (takeSeeds(player, plant.getMaterial())) {
             if (InventoryUtils.hasEnchant(hand, EEnchant.TELEPATHY)) {
-                Bukkit.getPluginManager().callEvent(new TelepathyEvent(e.getPlayer(), e.getBlockBreakEvent(), block.getDrops(hand)));
+                Bukkit.getPluginManager().callEvent(new TelepathyEvent(e.getPlayer(), hand, e.getBlockBreakEvent(), block.getDrops(hand)));
                 block.setType(Material.AIR);
             } else {
                 block.breakNaturally(hand);

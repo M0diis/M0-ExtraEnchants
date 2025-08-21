@@ -18,13 +18,15 @@ import java.util.Collection;
 public class TimberEvent extends Event implements Cancellable {
     private static final HandlerList HANDLERS = new HandlerList();
     private final Player player;
+    private final ItemStack tool;
     private final BlockBreakEvent blockBreakEvent;
     private final Block block;
     private final Collection<ItemStack> drops;
     private boolean isCancelled;
 
-    public TimberEvent(Player p, BlockBreakEvent e, Collection<ItemStack> drops) {
+    public TimberEvent(Player p,ItemStack tool, BlockBreakEvent e, Collection<ItemStack> drops) {
         this.player = p;
+        this.tool = tool;
         this.blockBreakEvent = e;
         this.drops = drops;
         this.block = e.getBlock();
