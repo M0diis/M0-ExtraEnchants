@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "me.m0dii"
-version = "j21-mc1.21.3-4.1.0"
+version = "j21-mc1.21.3-4.1.1"
 
 base {
     archivesName.set("M0-ExtraEnchants")
@@ -60,7 +60,7 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:2.2.1")
     implementation("org.reflections:reflections:0.10.2")
 //    implementation("com.jeff_media:MorePersistentDataTypes:2.4.0")
-    implementation(files("MorePersistentDataTypes-2.4.0.jar"))
+    implementation(files("libs/MorePersistentDataTypes-2.4.0.jar"))
 
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
@@ -74,8 +74,9 @@ val allPlugins = runPaper.downloadPluginsSpec {
     modrinth("viaversion", "5.5.0-SNAPSHOT+793")
     modrinth("viabackwards", "5.4.2")
     modrinth("luckperms", "v5.5.0-bukkit")
-
-    url("https://www.spigotmc.org/resources/placeholderapi.6245/download?version=541946") // 2.11.6
+    modrinth("placeholderapi", "2.11.6")
+    modrinth("essentialsx", "2.21.0")
+    modrinth("coreprotect", "23.0")
 }
 
 val doFirstEula: Task.() -> Unit = {
