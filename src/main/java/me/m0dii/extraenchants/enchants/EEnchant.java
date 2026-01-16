@@ -8,6 +8,7 @@ import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -229,5 +230,15 @@ public enum EEnchant {
                 .toList();
 
         return String.join("\n", lore);
+    }
+
+    public boolean ignoresBlock(Material material) {
+        List<String> ignoredMaterials = instance.getCfg()
+                .getStringList("enchants." + getConfigName() + ".ignored-blocks")
+                .stream()
+                .map(String::toUpperCase)
+                .toList();
+
+        return ignoredMaterials.contains(material.name());
     }
 }

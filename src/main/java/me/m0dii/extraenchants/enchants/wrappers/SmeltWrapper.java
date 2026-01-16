@@ -10,7 +10,6 @@ import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.pipeline.BlockBreakContext;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.event.EventHandler;
@@ -21,7 +20,6 @@ import org.bukkit.inventory.Recipe;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.stream.Stream;
 
 @SuppressWarnings("removal")
 @EnchantWrapper(name = "Smelt", maxLevel = 1)
@@ -36,13 +34,10 @@ public class SmeltWrapper extends CustomEnchantment {
             return;
         }
 
-        Block b = ctx.block();
         ItemStack tool = ctx.toolUsed();
 
         Collection<ItemStack> drops = ctx.getDrops();
         List<ItemStack> results = new ArrayList<>();
-
-        Iterator<Recipe> recipes = Bukkit.recipeIterator();
 
         boolean hasFortune = InventoryUtils.hasEnchant(tool, Enchantment.FORTUNE);
 
@@ -51,27 +46,47 @@ public class SmeltWrapper extends CustomEnchantment {
         if (hasFortune) {
             fortuneLevel = InventoryUtils.getEnchantLevel(tool, Enchantment.FORTUNE);
         }
-
-        while (recipes.hasNext() && !dontSmelt(b.getType())) {
-            Recipe recipe = recipes.next();
-
+        // Build a map from input material -> furnace result once
+        Map<Material, ItemStack> smeltMap = new HashMap<>();
+        Iterator<Recipe> recipesIter = Bukkit.recipeIterator();
+        while (recipesIter.hasNext()) {
+            Recipe recipe = recipesIter.next();
             if (!(recipe instanceof FurnaceRecipe furnaceRecipe)) {
                 continue;
             }
+            Material input = furnaceRecipe.getInput().getType();
+            // Keep the first found mapping for this input
+            smeltMap.putIfAbsent(input, furnaceRecipe.getResult());
+        }
 
-            if (furnaceRecipe.getInput().getType() != b.getType()) {
+        // Process each drop using the prebuilt map
+        for (ItemStack drop : drops) {
+            Material dropType = drop.getType();
+
+            if (dontSmelt(dropType)) {
                 continue;
             }
 
-            if (hasFortune && doDouble(b.getType().name())) {
-                int extraDrops = rnd.nextInt(fortuneLevel + 1);
+            ItemStack resultTemplate = smeltMap.get(dropType);
+            if (resultTemplate == null) {
+                continue;
+            }
 
-                for (int i = 0; i <= extraDrops; i++) {
-                    results.add(furnaceRecipe.getResult());
+            // Account for stack size and fortune-based extra outputs
+            int totalAmount = 0;
+            int dropAmount = Math.max(1, drop.getAmount());
+            for (int i = 0; i < dropAmount; i++) {
+                if (hasFortune && doDouble(dropType)) {
+                    int extraDrops = rnd.nextInt(fortuneLevel + 1);
+                    totalAmount += 1 + extraDrops;
+                } else {
+                    totalAmount += 1;
                 }
-            } else results.add(furnaceRecipe.getResult());
+            }
 
-            break;
+            ItemStack res = resultTemplate.clone();
+            res.setAmount(totalAmount);
+            results.add(res);
         }
 
         if (results.isEmpty()) {
@@ -125,20 +140,19 @@ public class SmeltWrapper extends CustomEnchantment {
         BlockBreakContext ctx = e.getContext();
 
         smeltInPlace(ctx);
-
-        List<ItemStack> results = ctx.getDrops();
-
-        for (ItemStack drop : results) {
-            if (drop == null || drop.getType().isAir()) {
-                continue;
-            }
-            ctx.block().getWorld().dropItemNaturally(ctx.block().getLocation(), drop);
-        }
     }
 
-    private static boolean doDouble(String name) {
-        return Stream.of("IRON_ORE", "GOLD_ORE", "COAL_ORE")
-                .anyMatch(name::equalsIgnoreCase);
+    private static final Set<Material> DOUBLE_SMELT_MATERIALS = EnumSet.of(
+            Material.IRON_ORE,
+            Material.DEEPSLATE_IRON_ORE,
+            Material.GOLD_ORE,
+            Material.DEEPSLATE_GOLD_ORE,
+            Material.COAL_ORE,
+            Material.DEEPSLATE_COAL_ORE
+    );
+
+    private static boolean doDouble(@NotNull Material material) {
+        return DOUBLE_SMELT_MATERIALS.contains(material);
     }
 
     private static final Set<Material> UNSMELTABLE_MATERIALS = EnumSet.of(
@@ -146,7 +160,6 @@ public class SmeltWrapper extends CustomEnchantment {
             Material.DEEPSLATE_REDSTONE_ORE,
             Material.DIAMOND_ORE,
             Material.DEEPSLATE_DIAMOND_ORE,
-            Material.GOLD_ORE,
             Material.NETHER_GOLD_ORE,
             Material.NETHER_QUARTZ_ORE,
             Material.LAPIS_ORE,

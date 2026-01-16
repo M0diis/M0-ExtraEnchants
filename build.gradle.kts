@@ -2,13 +2,13 @@ import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
     java
-    id("com.gradleup.shadow") version "8.3.5"
+    id("com.gradleup.shadow") version "9.2.2"
     id("xyz.jpenilla.run-paper") version "2.3.1"
     id("org.cyclonedx.bom") version "1.8.1"
 }
 
 group = "me.m0dii"
-version = "j21-mc1.21.3-4.1.1"
+version = "j21-mc1.21.8-4.1.2"
 
 base {
     archivesName.set("M0-ExtraEnchants")
@@ -51,7 +51,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")

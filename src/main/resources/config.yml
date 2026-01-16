@@ -555,6 +555,33 @@ enchants:
     default-conflicts: true
     conflicts: []
     enchantable-items: []
+    ignored-blocks:
+      - "COBBLESTONE"
+      - "BEDROCK",
+      - "BARRIER",
+      - "END_PORTAL_FRAME",
+      - "CHEST",
+      - "SPAWNER",
+      - "END_CRYSTAL",
+      - "END_GATEWAY",
+      - "END_PORTAL",
+      - "BEACON",
+      - "COMMAND_BLOCK",
+      - "HOPPER",
+      - "DROPPER",
+      - "DISPENSER",
+      - "FURNACE",
+      - "BLAST_FURNACE",
+      - "SMOKER",
+      - "BREWING_STAND",
+      - "ENCHANTING_TABLE",
+      - "ANVIL",
+      - "CHIPPED_ANVIL",
+      - "DAMAGED_ANVIL",
+      - "GRINDSTONE",
+      - "SMITHING_TABLE",
+      - "CARTOGRAPHY_TABLE",
+      - "FLETCHING_TABLE"
   debuffing:
     enabled: true
     trigger-chance: 10
@@ -660,6 +687,6 @@ enchant-signs:
     item-not-enchanted: "&cThis item is not enchanted."
     enchant-removed: "&4%enchant_name% enchant has been removed"
     enchant-retrieved: "&aSuccessfully retrieved enchantment."
-    
+
 debug: false
 notify-update: true

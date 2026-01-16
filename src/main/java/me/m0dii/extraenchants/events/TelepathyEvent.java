@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,7 +27,7 @@ public class TelepathyEvent extends Event implements Cancellable {
     @Nullable
     private final PlayerInteractEvent playerInteractEvent;
     private final Block block;
-    private final Collection<ItemStack> drops;
+    private final List<ItemStack> drops;
     private boolean isCancelled;
 
     public TelepathyEvent(BlockBreakContext ctx) {
@@ -39,7 +39,7 @@ public class TelepathyEvent extends Event implements Cancellable {
         this.drops = ctx.getDrops();
     }
 
-    public TelepathyEvent(Player p, ItemStack tool, PlayerInteractEvent e, Collection<ItemStack> drops) {
+    public TelepathyEvent(Player p, ItemStack tool, PlayerInteractEvent e, List<ItemStack> drops) {
         this.player = p;
         this.tool = tool;
         this.blockBreakEvent = null;

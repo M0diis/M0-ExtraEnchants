@@ -92,6 +92,9 @@ public class TelepathyWrapper extends CustomEnchantment {
                 b.getWorld().dropItemNaturally(
                         b.getLocation(), i);
 
+            // Telepathy handled the drops - clear ctx drops so pipeline won't spawn again
+//            drops.clear();
+
             InventoryUtils.applyDurability(player, tool);
 
             return;
@@ -140,6 +143,9 @@ public class TelepathyWrapper extends CustomEnchantment {
                 inv.addItem(i);
             }
         }
+
+        // Telepathy moved items to inventory — clear context drops to prevent pipeline/world from also spawning them
+//        drops.clear();
 
         InventoryUtils.applyDurability(player, tool);
     }

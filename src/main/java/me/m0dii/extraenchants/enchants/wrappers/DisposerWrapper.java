@@ -60,6 +60,7 @@ public class DisposerWrapper extends CustomEnchantment {
         }
 
         e.getContext().getEvent().setDropItems(false);
+        e.getContext().setSpawnDrops(false);
         e.getContext().setDrops(new ArrayList<>());
     }
 }

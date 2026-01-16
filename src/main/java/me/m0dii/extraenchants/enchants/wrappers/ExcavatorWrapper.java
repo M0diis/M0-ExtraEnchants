@@ -1,6 +1,5 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
-import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
@@ -10,7 +9,6 @@ import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.pipeline.BlockBreakContext;
-import me.m0dii.extraenchants.utils.pipeline.BlockBreakPipeline;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -18,7 +16,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -73,6 +70,7 @@ public class ExcavatorWrapper extends CustomEnchantment {
         }
 
         BlockBreakContext ctx = e.getContext();
+        ctx.getDrops().clear();
 
         Player p = ctx.player();
 
@@ -86,7 +84,6 @@ public class ExcavatorWrapper extends CustomEnchantment {
             for (int x = -1; x <= 1; x++) {
                 for (int z = -1; z <= 1; z++) {
                     Block b = source.getRelative(x, 0, z);
-                    if (b.equals(source)) continue;
                     destroy(p, b, ctx);
                 }
             }
@@ -94,7 +91,6 @@ public class ExcavatorWrapper extends CustomEnchantment {
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
                     Block b = source.getRelative(x, y, 0);
-                    if (b.equals(source)) continue;
                     destroy(p, b, ctx);
                 }
             }
@@ -102,7 +98,6 @@ public class ExcavatorWrapper extends CustomEnchantment {
             for (int z = -1; z <= 1; z++) {
                 for (int y = -1; y <= 1; y++) {
                     Block b = source.getRelative(0, y, z);
-                    if (b.equals(source)) continue;
                     destroy(p, b, ctx);
                 }
             }
@@ -111,33 +106,10 @@ public class ExcavatorWrapper extends CustomEnchantment {
 
     private static final Set<Material> conflicts = EnumSet.of(
             Material.BEDROCK,
-            Material.BARRIER,
-            Material.END_PORTAL_FRAME,
-            Material.CHEST,
-            Material.SPAWNER,
-            Material.END_CRYSTAL,
-            Material.END_GATEWAY,
-            Material.END_PORTAL,
-            Material.BEACON,
-            Material.COMMAND_BLOCK,
-            Material.HOPPER,
-            Material.DROPPER,
-            Material.DISPENSER,
-            Material.FURNACE,
-            Material.BLAST_FURNACE,
-            Material.SMOKER,
-            Material.BREWING_STAND,
-            Material.ENCHANTING_TABLE,
-            Material.ANVIL,
-            Material.CHIPPED_ANVIL,
-            Material.DAMAGED_ANVIL,
-            Material.GRINDSTONE,
-            Material.SMITHING_TABLE,
-            Material.CARTOGRAPHY_TABLE,
-            Material.FLETCHING_TABLE
+            Material.BARRIER
     );
 
-    private void destroy(Player p, Block b, BlockBreakContext context) {
+    private void destroy(Player p, Block b, @NotNull BlockBreakContext ctx) {
         if (!b.getType().isSolid()) {
             Messenger.debug("Block is not solid, skipping excavator.");
             return;
@@ -153,15 +125,24 @@ public class ExcavatorWrapper extends CustomEnchantment {
             return;
         }
 
-        ItemStack item = context.toolUsed();
+        if (EEnchant.EXCAVATOR.ignoresBlock(b.getType())) {
+            Messenger.debug("Block is ignored by excavator, skipping.");
+            return;
+        }
 
-        BlockBreakEvent syntheticEvent = new BlockBreakEvent(b, p);
-        BlockBreakContext syntheticCtx = new BlockBreakContext(ExtraEnchants.getInstance(), syntheticEvent, true);
-        BlockBreakPipeline pipeline = new BlockBreakPipeline(ExtraEnchants.getInstance());
-        pipeline.run(syntheticCtx);
+        ItemStack item = ctx.toolUsed();
 
-        if (!syntheticEvent.isCancelled()) {
-            b.setType(Material.AIR);
+        ctx.addDrops(b.getDrops(item));
+        b.setType(Material.AIR);
+
+        for (int x = -1; x <= 1; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -1; z <= 1; z++) {
+                    Block block = b.getRelative(x, y, z);
+                    block.getState().update();
+                    p.sendBlockChange(block.getLocation(), block.getBlockData());
+                }
+            }
         }
 
         InventoryUtils.applyDurabilityChanced(p, item, 70);

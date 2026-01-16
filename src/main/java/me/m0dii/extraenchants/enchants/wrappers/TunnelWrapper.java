@@ -20,8 +20,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.EnumSet;
 import java.util.Set;
-import java.util.stream.Stream;
 
 @SuppressWarnings("removal")
 @EnchantWrapper(name = "Tunnel", maxLevel = 3)
@@ -78,8 +78,6 @@ public class TunnelWrapper extends CustomEnchantment {
 
         BlockFace facing = p.getFacing();
 
-        Messenger.debug("Player facing: " + facing);
-
         if (level == 1) {
             Block opposite = source.getRelative(facing);
 
@@ -96,35 +94,33 @@ public class TunnelWrapper extends CustomEnchantment {
         }
     }
 
-    private void destroy(Player p, Block b, BlockBreakContext ctx) {
-        if (!b.getType().isSolid()) {
+    private static final Set<Material> CONFLICTS = EnumSet.of(Material.BEDROCK,
+            Material.BARRIER,
+            Material.END_PORTAL_FRAME,
+            Material.CHEST,
+            Material.SPAWNER,
+            Material.END_CRYSTAL,
+            Material.END_GATEWAY,
+            Material.END_PORTAL
+    );
+
+    private void destroy(@NotNull Player p, @NotNull Block block, @NotNull BlockBreakContext ctx) {
+        if (!block.getType().isSolid()) {
             Messenger.debug("Block is not solid, skipping tunnel.");
             return;
         }
 
-        if (!Utils.allowedAt(p, b.getLocation())) {
+        if (!Utils.allowedAt(p, block.getLocation())) {
             Messenger.debug("Player not allowed, skipping tunnel.");
             return;
         }
 
-        Material conflict = Stream.of(Material.BEDROCK,
-                        Material.BARRIER,
-                        Material.END_PORTAL_FRAME,
-                        Material.CHEST,
-                        Material.SPAWNER,
-                        Material.END_CRYSTAL,
-                        Material.END_GATEWAY,
-                        Material.END_PORTAL
-                )
-                .filter(b.getType()::equals)
-                .findFirst()
-                .orElse(null);
-
-        if (conflict != null) {
+        if (CONFLICTS.contains(block.getType())) {
             Messenger.debug("Block is a conflict, skipping tunnel.");
             return;
         }
 
-        b.breakNaturally(ctx.toolUsed());
+        ctx.addDrops(block.getDrops(ctx.toolUsed()));
+        block.setType(Material.AIR);
     }
 }

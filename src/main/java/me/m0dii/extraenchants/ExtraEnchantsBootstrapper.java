@@ -27,6 +27,7 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
                 if (!clazz.isAnnotationPresent(EnchantWrapper.class)) {
                     continue;
                 }
+
                 EnchantWrapper wrapper = clazz.getAnnotation(EnchantWrapper.class);
                 event.registry().register(
                         EnchantmentKeys.create(Key.key("custom:" + wrapper.name().toLowerCase().replace(" ", "_"))),

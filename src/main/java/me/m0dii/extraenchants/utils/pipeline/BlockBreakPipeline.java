@@ -18,17 +18,17 @@ public class BlockBreakPipeline {
 
     private static final Set<EEnchant> orderedSteps = new LinkedHashSet<>(
             List.of(
+                    EEnchant.EXCAVATOR,
+                    EEnchant.TUNNEL,
+                    EEnchant.VEIN_MINER,
                     EEnchant.SMELT,
                     EEnchant.REPLANTER,
+                    EEnchant.TIMBER,
                     EEnchant.TELEPATHY,
                     EEnchant.STAT_TRACK,
                     EEnchant.HASTE_MINER,
                     EEnchant.EXPERIENCE_MINER,
-                    EEnchant.VEIN_MINER,
-                    EEnchant.TUNNEL,
-                    EEnchant.EXCAVATOR,
-                    EEnchant.DISPOSER,
-                    EEnchant.TIMBER
+                    EEnchant.DISPOSER
             )
     );
 
@@ -41,6 +41,8 @@ public class BlockBreakPipeline {
     }
 
     public void run(@NotNull BlockBreakContext ctx) {
+        boolean hasAnyEnchant = false;
+
         for (EEnchant enchant : orderedSteps) {
             if (ctx.getEvent().isCancelled()) {
                 break;
@@ -49,10 +51,26 @@ public class BlockBreakPipeline {
             try {
                 if (action != null && action.shouldRun().test(ctx)) {
                     action.run().accept(ctx);
+                    hasAnyEnchant = true;
                 }
             } catch (Exception t) {
                 plugin.getLogger().warning("[BlockBreakPipeline] Step '" + enchant + "' failed: " + t.getMessage());
             }
+        }
+
+        if(!hasAnyEnchant) {
+            return; // No custom enchantments triggered, do nothing
+        }
+
+        // Spawn items if vanilla allowed OR a plugin step explicitly requested spawning plugin-controlled drops
+        if (ctx.isSpawnDrops()) {
+            dropItems(ctx);
+        }
+    }
+
+    public void dropItems(@NotNull BlockBreakContext ctx) {
+        for (var itemStack : ctx.getDrops()) {
+            ctx.block().getWorld().dropItemNaturally(ctx.block().getLocation(), itemStack);
         }
     }
 
@@ -63,24 +81,10 @@ public class BlockBreakPipeline {
                 hasEnchant(EEnchant.SMELT)
                         .and(ctx -> !SmeltWrapper.dontSmelt(ctx.block().getType())),
                 ctx -> {
+                    // Prevent vanilla drops - we will spawn ctx.getDrops() ourselves:
                     ctx.getEvent().setDropItems(false);
-
-                    if (InventoryUtils.hasEnchant(ctx.toolUsed(), EEnchant.TELEPATHY)) {
-                        SmeltWrapper.smeltInPlace(ctx);
-                    } else {
-                        Bukkit.getPluginManager().callEvent(new SmeltEvent(ctx));
-                    }
-                }
-        );
-
-        // TELEPATHY
-        register(
-                EEnchant.TELEPATHY,
-                hasEnchant(EEnchant.TELEPATHY)
-                        .and(ctx -> !ctx.getDrops().isEmpty()),
-                ctx -> {
-                    ctx.getEvent().setDropItems(false);
-                    Bukkit.getPluginManager().callEvent(new TelepathyEvent(ctx));
+                    ctx.setSpawnDrops(true); // plugin will spawn the smelted drops later
+                    Bukkit.getPluginManager().callEvent(new SmeltEvent(ctx));
                 }
         );
 
@@ -116,15 +120,24 @@ public class BlockBreakPipeline {
         register(
                 EEnchant.TUNNEL,
                 hasEnchant(EEnchant.TUNNEL),
-                ctx -> Bukkit.getPluginManager().callEvent(new TunnelEvent(ctx))
+                ctx -> {
+                    // Prevent vanilla drops - we will spawn ctx.getDrops() ourselves:
+                    ctx.getEvent().setDropItems(false);
+                    ctx.setSpawnDrops(true); // plugin will spawn the smelted drops later
+                    Bukkit.getPluginManager().callEvent(new TunnelEvent(ctx));
+                }
         );
 
         // EXCAVATOR
         register(
                 EEnchant.EXCAVATOR,
                 hasEnchant(EEnchant.EXCAVATOR)
-                        .and(ctx -> !ctx.isExcavatorSecondary()),
-                ctx -> Bukkit.getPluginManager().callEvent(new ExcavatorEvent(ctx))
+                        .and(ctx -> !ctx.isExcavatorSecondary())
+                        .and(ctx -> !EEnchant.EXCAVATOR.ignoresBlock(ctx.block().getType())),
+                ctx -> {
+                    ctx.setSpawnDrops(true);
+                    Bukkit.getPluginManager().callEvent(new ExcavatorEvent(ctx));
+                }
         );
 
         // DISPOSER
@@ -149,6 +162,19 @@ public class BlockBreakPipeline {
                         .and(ctx -> EnchantableItemTypeUtil.isAxe(ctx.toolUsed()))
                         .and(ctx -> BlockBreak.isLog(ctx.block())),
                 ctx -> Bukkit.getPluginManager().callEvent(new TimberEvent(ctx))
+        );
+
+        // TELEPATHY
+        register(
+                EEnchant.TELEPATHY,
+                hasEnchant(EEnchant.TELEPATHY)
+                        .and(ctx -> !ctx.getDrops().isEmpty()),
+                ctx -> {
+                    // Telepathy will handle items itself (inventory or world), prevent vanilla and ensure pipeline does not spawn them
+                    ctx.getEvent().setDropItems(false);
+                    ctx.setSpawnDrops(false);
+                    Bukkit.getPluginManager().callEvent(new TelepathyEvent(ctx));
+                }
         );
     }
 

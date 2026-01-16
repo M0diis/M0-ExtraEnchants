@@ -91,6 +91,7 @@ public class ExtraEnchants extends JavaPlugin {
         return true;
     }
 
+    @Override
     public void onDisable() {
         this.getLogger().info("M0-ExtraEnchants has been disabled.");
     }

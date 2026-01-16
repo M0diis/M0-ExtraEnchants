@@ -23,18 +23,16 @@ public class BlockBreakContext {
 
     private List<ItemStack> drops;
 
+    // NEW: when true the pipeline should spawn ctx.getDrops() even if event.setDropItems(false)
+    private boolean spawnDrops = false;
+
     private boolean excavatorSecondary;
 
     public BlockBreakContext(ExtraEnchants plugin, BlockBreakEvent event) {
-        this(plugin, event, false);
-    }
-
-    public BlockBreakContext(ExtraEnchants plugin, BlockBreakEvent event, boolean excavatorSecondary) {
         this.plugin = plugin;
         this.event = event;
         this.toolUsed = event.getPlayer().getInventory().getItemInMainHand();
         this.drops = new ArrayList<>(event.getBlock().getDrops(event.getPlayer().getInventory().getItemInMainHand()));
-        this.excavatorSecondary = excavatorSecondary;
     }
 
     public Player player() {

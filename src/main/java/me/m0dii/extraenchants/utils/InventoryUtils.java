@@ -1,9 +1,9 @@
 package me.m0dii.extraenchants.utils;
 
 import com.jeff_media.morepersistentdatatypes.DataType;
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.ExtraEnchants;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -26,7 +26,7 @@ public class InventoryUtils {
     public static boolean hasEnchant(ItemStack item, CustomEnchantment enchant) {
         ItemMeta itemMeta = item.getItemMeta();
 
-        if(itemMeta == null) {
+        if (itemMeta == null) {
             return false;
         }
 
@@ -44,7 +44,7 @@ public class InventoryUtils {
 
         ItemMeta itemMeta = item.getItemMeta();
 
-        if(itemMeta == null) {
+        if (itemMeta == null) {
             return false;
         }
 
@@ -62,7 +62,7 @@ public class InventoryUtils {
 
         ItemMeta itemMeta = item.getItemMeta();
 
-        if(itemMeta == null) {
+        if (itemMeta == null) {
             return false;
         }
 
@@ -81,7 +81,7 @@ public class InventoryUtils {
 
         ItemMeta itemMeta = item.getItemMeta();
 
-        if(itemMeta == null) {
+        if (itemMeta == null) {
             return 0;
         }
 
@@ -89,7 +89,7 @@ public class InventoryUtils {
 
         Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
 
-        if(current.containsKey(enchant.getEnchantment().key().asString())) {
+        if (current.containsKey(enchant.getEnchantment().key().asString())) {
             return current.get(enchant.getEnchantment().key().asString());
         }
 
@@ -104,7 +104,7 @@ public class InventoryUtils {
 
         ItemMeta itemMeta = item.getItemMeta();
 
-        if(itemMeta == null) {
+        if (itemMeta == null) {
             return 0;
         }
 
@@ -173,7 +173,7 @@ public class InventoryUtils {
     public static Map<String, Integer> getEnchantmentMapFromPDC(@Nonnull ItemStack item) {
         ItemMeta itemMeta = item.getItemMeta();
 
-        if(itemMeta == null) {
+        if (itemMeta == null) {
             return new HashMap<>();
         }
 

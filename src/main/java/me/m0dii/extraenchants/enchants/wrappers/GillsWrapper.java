@@ -3,14 +3,12 @@ package me.m0dii.extraenchants.enchants.wrappers;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.GillsEvent;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.events.GillsEvent;
 import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -56,30 +54,22 @@ public class GillsWrapper extends CustomEnchantment {
 
         PotionEffect current = p.getPotionEffect(PotionEffectType.WATER_BREATHING);
 
-        if (current != null && current.getDuration() > 1200) {
+        if (current != null && current.getDuration() > 40) {
             return;
         }
 
-        InventoryUtils.applyDurabilityChanced(p, p.getInventory().getHelmet(), 50);
+        InventoryUtils.applyDurabilityChanced(p, p.getInventory().getHelmet(), 10);
 
-        p.addPotionEffect(PotionEffectType.WATER_BREATHING.createEffect(3600, 0));
+        p.addPotionEffect(PotionEffectType.WATER_BREATHING.createEffect(80, 0));
     }
 
     @EventHandler
     public void onPlayerMoveGills(final PlayerMoveEvent e) {
         Player p = e.getPlayer();
 
-        Block block = p.getLocation().getBlock();
-
-        if (!block.isLiquid() || !block.getType().equals(Material.WATER)) {
-            p.removePotionEffect(PotionEffectType.WATER_BREATHING);
-
-            return;
-        }
-
         ItemStack helmet = p.getInventory().getHelmet();
 
-        if (helmet == null) {
+        if (helmet == null || helmet.getType().isAir()) {
             return;
         }
 
@@ -91,7 +81,7 @@ public class GillsWrapper extends CustomEnchantment {
     }
 
     @EventHandler
-    public void onArmorChangeBatVision(final PlayerArmorChangeEvent e) {
+    public void onArmorChangeGills(final PlayerArmorChangeEvent e) {
         Player p = e.getPlayer();
 
         if (e.getSlotType() != PlayerArmorChangeEvent.SlotType.HEAD) {

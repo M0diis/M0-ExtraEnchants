@@ -80,6 +80,10 @@ public class TimberWrapper extends CustomEnchantment {
         breakTask = Bukkit.getServer().getScheduler().runTaskTimer(ExtraEnchants.getInstance(), () -> {
             List<BlockLocation> toBreak = pendingToBreak.stream()
                     .filter(block -> System.currentTimeMillis() - block.time() >= 100)
+                    .filter(block -> !block.block().getType().isAir())
+                    .filter(block -> Utils.allowedAt(block.player(), block.block().getLocation()))
+                    .filter(block -> block.block().getType() != Material.WATER
+                            && block.block().getType() != Material.BUBBLE_COLUMN)
                     .sorted(Comparator.comparingLong(BlockLocation::time))
                     .toList();
 
