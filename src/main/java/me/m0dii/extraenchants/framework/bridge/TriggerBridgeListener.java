@@ -3,7 +3,6 @@ package me.m0dii.extraenchants.framework.bridge;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.framework.runtime.CustomEnchantFramework;
 import me.m0dii.extraenchants.framework.runtime.TriggerType;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -24,6 +23,7 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 
@@ -34,7 +34,7 @@ import java.util.UUID;
 public class TriggerBridgeListener implements Listener {
     private final ExtraEnchants plugin;
     private final CustomEnchantFramework framework;
-    private final Map<String, Long> debounce = new HashMap<>();
+    private final Map<UUID, Map<TriggerType, Long>> debounce = new HashMap<>();
 
     public TriggerBridgeListener(ExtraEnchants plugin, CustomEnchantFramework framework) {
         this.plugin = plugin;
@@ -148,6 +148,12 @@ public class TriggerBridgeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
+        if (event.isAsynchronous()) {
+            plugin.getScheduler().runNextTick(task ->
+                    executeHandTrigger(TriggerType.ON_CHAT, event, player, player, null, player.getLocation()));
+            return;
+        }
+
         executeHandTrigger(TriggerType.ON_CHAT, event, player, player, null, player.getLocation());
     }
 
@@ -201,8 +207,13 @@ public class TriggerBridgeListener implements Listener {
         Player player = event.getPlayer();
         executeHandTrigger(TriggerType.ON_UNEQUIP, event, player, player, null, player.getLocation());
 
-        Bukkit.getScheduler().runTask(plugin, () ->
+        plugin.getScheduler().runNextTick(task ->
                 executeHandTrigger(TriggerType.ON_EQUIP, event, player, player, null, player.getLocation()));
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        debounce.remove(event.getPlayer().getUniqueId());
     }
 
     private void executeHandTrigger(
@@ -237,17 +248,16 @@ public class TriggerBridgeListener implements Listener {
 
     private boolean debounced(UUID playerId, TriggerType triggerType, long intervalMillis) {
         long now = System.currentTimeMillis();
-        String key = triggerType.name() + ":" + playerId;
-        Long last = debounce.get(key);
+        Map<TriggerType, Long> playerDebounce = debounce.computeIfAbsent(playerId, ignored -> new HashMap<>());
+        Long last = playerDebounce.get(triggerType);
         if (last != null && now - last < intervalMillis) {
             return false;
         }
 
-        debounce.put(key, now);
+        playerDebounce.put(triggerType, now);
         return true;
     }
 }
-
 
 
 
