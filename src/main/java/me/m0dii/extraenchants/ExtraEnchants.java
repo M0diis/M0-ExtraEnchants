@@ -7,6 +7,8 @@ import lombok.Getter;
 import me.m0dii.extraenchants.commands.ExtraEnchantCommand;
 import me.m0dii.extraenchants.commands.UnenchantCommand;
 import me.m0dii.extraenchants.enchants.CustomEnchants;
+import me.m0dii.extraenchants.framework.bridge.TriggerBridgeListener;
+import me.m0dii.extraenchants.framework.runtime.CustomEnchantFramework;
 import me.m0dii.extraenchants.utils.Placeholders;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.data.ConfigManager;
@@ -37,12 +39,30 @@ public class ExtraEnchants extends JavaPlugin {
     @Getter
     private FoliaLib foliaLib;
 
+    @Getter
+    private CustomEnchantFramework customEnchantFramework;
+
+    @Getter
+    private boolean debugMode;
+
     public FileConfiguration getCfg() {
         return this.configManager.getConfig();
     }
 
     public PlatformScheduler getScheduler() {
         return this.foliaLib.getScheduler();
+    }
+
+    public void setDebugMode(boolean debugMode) {
+        this.debugMode = debugMode;
+    }
+
+    public void debug(String message) {
+        if (!debugMode) {
+            return;
+        }
+
+        getLogger().info("[DEBUG] " + message);
     }
 
     private Placeholders placeholders;
@@ -68,6 +88,7 @@ public class ExtraEnchants extends JavaPlugin {
 
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
+        this.debugMode = getCfg().getBoolean("debug", false);
 
         registerEvents();
         registerCommands();
@@ -83,6 +104,10 @@ public class ExtraEnchants extends JavaPlugin {
         }
 
         CustomEnchants.register(this);
+
+        this.customEnchantFramework = new CustomEnchantFramework(this);
+        this.customEnchantFramework.reload();
+        this.pm.registerEvents(new TriggerBridgeListener(this, this.customEnchantFramework), this);
     }
 
     private boolean setupEconomy() {

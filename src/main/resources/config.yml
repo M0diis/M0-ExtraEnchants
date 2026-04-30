@@ -697,3 +697,8 @@ debug-enchants:
   telepathy: false
 
 notify-update: true
+
+# Lore line format for config-driven custom enchants.
+# Placeholders: %enchant_name%, %level_roman%, %level%
+custom-enchants:
+  lore-format: "&7%enchant_name% %level_roman%"

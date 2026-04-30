@@ -63,6 +63,14 @@ public class UnenchantCommand {
             }
         });
 
+        ExtraEnchants.getInstance().getCustomEnchantFramework().removeConfigEnchants(hand)
+                .forEach(id -> {
+                    String removed = ExtraEnchants.getInstance().getCfg().getString("messages.enchant-removed");
+                    if (removed != null) {
+                        sender.sendMessage(Utils.format(removed.replace("%enchant_name%", id.toUpperCase())));
+                    }
+                });
+
         return Command.SINGLE_SUCCESS;
     }
 

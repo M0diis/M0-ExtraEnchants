@@ -9,11 +9,13 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.framework.model.CustomEnchantDefinition;
 import me.m0dii.extraenchants.utils.EnchantListGUI;
 import me.m0dii.extraenchants.utils.Enchanter;
 import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -23,6 +25,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ExtraEnchantCommand {
@@ -43,6 +46,12 @@ public class ExtraEnchantCommand {
                                     Arrays.stream(EEnchant.values())
                                             .map(EEnchant::name)
                                             .filter(name -> name.toLowerCase().startsWith(remaining))
+                                            .forEach(builder::suggest);
+
+                                    ExtraEnchants.getInstance().getCustomEnchantFramework().getDefinitions().values().stream()
+                                            .map(CustomEnchantDefinition::getId)
+                                            .map(id -> id.toUpperCase(Locale.ROOT))
+                                            .filter(name -> name.toLowerCase(Locale.ROOT).startsWith(remaining))
                                             .forEach(builder::suggest);
                                     return builder.buildFuture();
                                 })
@@ -72,6 +81,12 @@ public class ExtraEnchantCommand {
                                                     .filter(name -> name.toLowerCase().startsWith(remaining))
                                                     .forEach(builder::suggest);
 
+                                            ExtraEnchants.getInstance().getCustomEnchantFramework().getDefinitions().values().stream()
+                                                    .map(CustomEnchantDefinition::getId)
+                                                    .map(id -> id.toUpperCase(Locale.ROOT))
+                                                    .filter(name -> name.toLowerCase(Locale.ROOT).startsWith(remaining))
+                                                    .forEach(builder::suggest);
+
                                             return builder.buildFuture();
                                         })
                                         .then(Commands.argument("level", IntegerArgumentType.integer(1))
@@ -81,6 +96,17 @@ public class ExtraEnchantCommand {
                         )
                 )
                 .then(Commands.literal("reload").executes(ExtraEnchantCommand::runReloadLogic))
+                .then(Commands.literal("debug")
+                        .executes(ctx -> runDebugToggleLogic(ctx, null))
+                        .then(Commands.argument("state", StringArgumentType.word())
+                                .suggests((ctx, builder) -> {
+                                    builder.suggest("on");
+                                    builder.suggest("off");
+                                    return builder.buildFuture();
+                                })
+                                .executes(ctx -> runDebugToggleLogic(ctx, StringArgumentType.getString(ctx, "state")))
+                        )
+                )
                 .then(Commands.literal("debugitem").executes(ExtraEnchantCommand::runDebugItemLogic))
                 .build();
     }
@@ -115,7 +141,20 @@ public class ExtraEnchantCommand {
             EEnchant enchant = EEnchant.parse(enchantName);
 
             if (enchant == null) {
-                sender.sendMessage(msg("messages.enchantment-list"));
+                CustomEnchantDefinition custom = ExtraEnchants.getInstance().getCustomEnchantFramework().getDefinition(enchantName);
+                if (custom == null) {
+                    sender.sendMessage(msg("messages.enchantment-list"));
+                    return Command.SINGLE_SUCCESS;
+                }
+
+                ItemStack item = player.getInventory().getItemInMainHand();
+                if (item.getType() == Material.AIR) {
+                    sender.sendMessage(msg("messages.hold-item"));
+                    return Command.SINGLE_SUCCESS;
+                }
+
+                ExtraEnchants.getInstance().getCustomEnchantFramework().applyEnchant(item, custom.getId(), level);
+                sender.sendMessage(msg("messages.enchant-applied"));
                 return Command.SINGLE_SUCCESS;
             }
 
@@ -175,8 +214,36 @@ public class ExtraEnchantCommand {
         }
 
         ExtraEnchants.getInstance().getConfigManager().reloadConfig();
+        ExtraEnchants.getInstance().getCustomEnchantFramework().reload();
         sender.sendMessage(msg("messages.reloaded"));
 
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int runDebugToggleLogic(CommandContext<CommandSourceStack> ctx, String stateArg) {
+        CommandSender sender = ctx.getSource().getSender();
+
+        if (!sender.hasPermission("extraenchants.command.debug")) {
+            sender.sendMessage(msg("messages.no-permission"));
+            return Command.SINGLE_SUCCESS;
+        }
+
+        ExtraEnchants plugin = ExtraEnchants.getInstance();
+
+        if (stateArg == null || stateArg.isBlank()) {
+            sender.sendMessage(Utils.format("&eDebug mode is currently: &f" + (plugin.isDebugMode() ? "ON" : "OFF")));
+            return Command.SINGLE_SUCCESS;
+        }
+
+        String state = stateArg.toLowerCase(Locale.ROOT);
+        if (!state.equals("on") && !state.equals("off")) {
+            sender.sendMessage(Utils.format("&cUsage: /ee debug [on/off]"));
+            return Command.SINGLE_SUCCESS;
+        }
+
+        boolean enabled = state.equals("on");
+        plugin.setDebugMode(enabled);
+        sender.sendMessage(Utils.format("&aDebug mode set to: &f" + (enabled ? "ON" : "OFF")));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -218,11 +285,55 @@ public class ExtraEnchantCommand {
         sender.sendMessage(Utils.format("&eBlockData Compatible: &f" + item.getType().isBlock()));
         sender.sendMessage(Utils.format("&ePDC Keys:"));
         pdc.getKeys().forEach(key -> {
-            sender.sendMessage(Utils.format("&e- &f" + key + " : " + pdc.get(key, PersistentDataType.STRING)));
+            sender.sendMessage(Utils.format("&e- &f" + key + " : " + readPdcValue(pdc, key)));
         });
         sender.sendMessage(Utils.format("&7&m----------------------------------------"));
 
         return Command.SINGLE_SUCCESS;
+    }
+
+    private static String readPdcValue(PersistentDataContainer pdc, NamespacedKey key) {
+        if (pdc.has(key, PersistentDataType.STRING)) {
+            return String.valueOf(pdc.get(key, PersistentDataType.STRING));
+        }
+
+        if (pdc.has(key, PersistentDataType.INTEGER)) {
+            return String.valueOf(pdc.get(key, PersistentDataType.INTEGER));
+        }
+
+        if (pdc.has(key, PersistentDataType.LONG)) {
+            return String.valueOf(pdc.get(key, PersistentDataType.LONG));
+        }
+
+        if (pdc.has(key, PersistentDataType.DOUBLE)) {
+            return String.valueOf(pdc.get(key, PersistentDataType.DOUBLE));
+        }
+
+        if (pdc.has(key, PersistentDataType.FLOAT)) {
+            return String.valueOf(pdc.get(key, PersistentDataType.FLOAT));
+        }
+
+        if (pdc.has(key, PersistentDataType.BYTE)) {
+            return String.valueOf(pdc.get(key, PersistentDataType.BYTE));
+        }
+
+        if (pdc.has(key, PersistentDataType.SHORT)) {
+            return String.valueOf(pdc.get(key, PersistentDataType.SHORT));
+        }
+
+        if (pdc.has(key, PersistentDataType.INTEGER_ARRAY)) {
+            return Arrays.toString(pdc.get(key, PersistentDataType.INTEGER_ARRAY));
+        }
+
+        if (pdc.has(key, PersistentDataType.LONG_ARRAY)) {
+            return Arrays.toString(pdc.get(key, PersistentDataType.LONG_ARRAY));
+        }
+
+        if (pdc.has(key, PersistentDataType.BYTE_ARRAY)) {
+            return "byte[" + pdc.get(key, PersistentDataType.BYTE_ARRAY).length + "]";
+        }
+
+        return "<complex/unsupported tag>";
     }
 
     private static boolean giveBook(String enchantName, Player player, int level) {
@@ -233,7 +344,15 @@ public class ExtraEnchantCommand {
         ItemStack item = Enchanter.getBook(enchantName, level);
 
         if (item == null) {
-            return false;
+            CustomEnchantDefinition custom = ExtraEnchants.getInstance().getCustomEnchantFramework().getDefinition(enchantName);
+            if (custom == null) {
+                return false;
+            }
+
+            item = ExtraEnchants.getInstance().getCustomEnchantFramework().createBook(custom.getId(), level);
+            if (item == null) {
+                return false;
+            }
         }
 
         if (player.getInventory().firstEmpty() == -1) {

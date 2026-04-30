@@ -21,6 +21,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -104,6 +105,41 @@ public class InventoryClick implements Listener {
                     Bukkit.getPluginManager().callEvent(
                             new CombineEvent(p, e, enchantment, current.get(enchantment.getEnchantment().key().asString())));
                 });
+
+        Map<Enchantment, Integer> bookEnchants = new HashMap<>(cursor.getEnchantments());
+        if (meta instanceof EnchantmentStorageMeta storageMeta) {
+            bookEnchants.putAll(storageMeta.getStoredEnchants());
+        }
+
+        Enchantment configEnchant = bookEnchants.keySet().stream()
+                .filter(ench -> ench.getKey().getNamespace().equalsIgnoreCase("custom"))
+                .findFirst()
+                .orElse(null);
+
+        if (configEnchant == null) {
+            return;
+        }
+
+        ItemStack curr = e.getCurrentItem();
+        if (curr == null || curr.getType().isAir()) {
+            return;
+        }
+
+        String configId = configEnchant.getKey().getKey();
+        if (plugin.getCustomEnchantFramework().getDefinition(configId) == null) {
+            return;
+        }
+
+        int level = bookEnchants.getOrDefault(configEnchant, 1);
+        plugin.getCustomEnchantFramework().applyEnchant(curr, configId, level);
+        e.setCancelled(true);
+
+        if (cursor.getAmount() > 1) {
+            cursor.setAmount(cursor.getAmount() - 1);
+            e.setCursor(cursor);
+        } else {
+            e.setCursor(null);
+        }
     }
 
     @EventHandler
@@ -131,26 +167,51 @@ public class InventoryClick implements Listener {
                 return;
             }
 
-            String name = Utils.stripColor(meta.displayName());
-
-            if (name == null) {
+            Integer targetPage = meta.getPersistentDataContainer().get(EnchantListGUI.getPageKey(), org.bukkit.persistence.PersistentDataType.INTEGER);
+            if (targetPage != null) {
+                new EnchantListGUI(targetPage).open(playerClicked);
                 return;
             }
 
-            EEnchant enchant = EEnchant.parse(name);
-
-            if (enchant == null) {
+            String entry = meta.getPersistentDataContainer().get(EnchantListGUI.getEntryKey(), org.bukkit.persistence.PersistentDataType.STRING);
+            if (entry == null) {
                 return;
             }
 
-            EnchantInfoGUI gui = new EnchantInfoGUI(enchant);
+            if (entry.startsWith("enum:")) {
+                EEnchant enchant = EEnchant.parse(entry.substring("enum:".length()));
+                if (enchant == null) {
+                    return;
+                }
 
-            if(e.isShiftClick() && playerClicked.isOp()) {
-                playerClicked.getInventory().addItem(Enchanter.getBook(enchant, 1));
+                EnchantInfoGUI gui = new EnchantInfoGUI(enchant);
+
+                if(e.isShiftClick() && playerClicked.isOp()) {
+                    playerClicked.getInventory().addItem(Enchanter.getBook(enchant, 1));
+                    return;
+                }
+
+                gui.open(playerClicked);
                 return;
             }
 
-            gui.open(playerClicked);
+            if (!entry.startsWith("custom:")) {
+                return;
+            }
+
+            String id = entry.substring("custom:".length());
+            if (e.isShiftClick() && playerClicked.isOp()) {
+                ItemStack book = plugin.getCustomEnchantFramework().createBook(id, 1);
+                if (book != null) {
+                    playerClicked.getInventory().addItem(book);
+                }
+                return;
+            }
+
+            playerClicked.sendMessage(Utils.format("&7" + item.getItemMeta().getDisplayName()));
+            if (item.getItemMeta().getLore() != null) {
+                item.getItemMeta().getLore().forEach(playerClicked::sendMessage);
+            }
         }
     }
 
@@ -295,36 +356,6 @@ public class InventoryClick implements Listener {
 
         if (clickedInv.getHolder() instanceof EnchantListGUI list) {
             e.setCancelled(true);
-
-            Player p = (Player) e.getWhoClicked();
-
-            ItemStack item = e.getOldCursor();
-
-            if (item == null) {
-                return;
-            }
-
-            ItemMeta meta = item.getItemMeta();
-
-            if (meta == null) {
-                return;
-            }
-
-            String name = Utils.stripColor(meta.displayName());
-
-            if (name == null) {
-                return;
-            }
-
-            Enchantment enchant = EEnchant.toEnchant(name);
-
-            if (enchant == null) {
-                return;
-            }
-
-            EnchantInfoGUI gui = new EnchantInfoGUI(EEnchant.parse(name));
-
-            gui.open(p);
         }
     }
 

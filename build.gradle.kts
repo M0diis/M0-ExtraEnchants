@@ -59,11 +59,19 @@ dependencies {
     implementation("com.tcoded:FoliaLib:0.5.1")
     implementation("org.bstats:bstats-bukkit:2.2.1")
     implementation("org.reflections:reflections:0.10.2")
+    implementation("net.objecthunter:exp4j:0.4.8")
 //    implementation("com.jeff_media:MorePersistentDataTypes:2.4.0")
     implementation(files("libs/MorePersistentDataTypes-2.4.0.jar"))
 
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 tasks.withType<JavaCompile> {
@@ -71,7 +79,7 @@ tasks.withType<JavaCompile> {
 }
 
 val allPlugins = runPaper.downloadPluginsSpec {
-    modrinth("viaversion", "5.5.0-SNAPSHOT+793")
+    modrinth("viaversion", "5.9.0")
     modrinth("viabackwards", "5.4.2")
     modrinth("luckperms", "v5.5.0-bukkit")
     modrinth("placeholderapi", "2.11.6")

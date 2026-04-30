@@ -1,0 +1,28 @@
+id: freeze
+display-name: "&bFreeze"
+description: "&7Slow down enemies on hit."
+rarity: RARE
+max-level: 3
+enabled: true
+weight: 5
+category: CONTROL
+icon: ICE
+applicable-items:
+  - SWORD
+  - AXE
+
+triggers:
+  onAttack:
+    chance: "10 + level * 7"
+    cooldown: "4"
+    target: VICTIM
+    effects:
+      - potion:
+          type: SLOWNESS
+          duration: "40 + level * 20"
+          amplifier: "level - 1"
+      - sound: BLOCK_GLASS_BREAK
+      - particle:
+          type: SNOWFLAKE
+          count: 16
+

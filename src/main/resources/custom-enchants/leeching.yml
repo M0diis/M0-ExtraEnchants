@@ -1,0 +1,27 @@
+id: leeching
+display-name: "&cLeeching"
+description: "&7Steal health while attacking."
+rarity: EPIC
+max-level: 4
+enabled: true
+weight: 6
+category: OFFENSE
+icon: RED_DYE
+applicable-items:
+  - SWORD
+
+triggers:
+  onAttack:
+    chance: "15 + level * 5"
+    cooldown: "2"
+    target: VICTIM
+    conditions:
+      all:
+        - attacker_health > 0
+    effects:
+      - damage: "1 + level * 0.5"
+      - lifesteal: "1 + level * 0.7"
+      - particle:
+          type: HEART
+          count: 4
+
