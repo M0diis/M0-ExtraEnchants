@@ -133,7 +133,7 @@ public class EntityDamage implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageTurtleShell(final EntityDamageByEntityEvent e) {
-        if (EEnchant.COLD_STEEL.isDisabled()) {
+        if (EEnchant.TURTLE_SHELL.isDisabled()) {
             return;
         }
 
@@ -146,7 +146,7 @@ public class EntityDamage implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageArmorBreaker(final EntityDamageByEntityEvent e) {
-        if (EEnchant.COLD_STEEL.isDisabled()) {
+        if (EEnchant.ARMOR_BREAKER.isDisabled()) {
             return;
         }
 

@@ -23,6 +23,7 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.logging.Level;
 
 public class ExtraEnchants extends JavaPlugin {
     @Getter
@@ -121,7 +122,7 @@ public class ExtraEnchants extends JavaPlugin {
                         Bukkit.getLogger().info("Registered listener: " + listener.getClass().getSimpleName());
                     } catch (IllegalAccessException | InstantiationException |
                              NoSuchMethodException | InvocationTargetException ex) {
-                        ex.printStackTrace();
+                        getLogger().log(Level.SEVERE, "Failed to register listener: " + clazz.getName(), ex);
                     }
                 });
     }

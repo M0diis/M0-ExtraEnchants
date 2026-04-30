@@ -14,6 +14,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 public class CustomEnchants {
     public static void register(ExtraEnchants plugin) {
@@ -55,7 +56,7 @@ public class CustomEnchants {
                         plugin.getLogger().info("Registered listener for enchant: " + enchantment.getName());
                     } catch (NoSuchMethodException | IllegalAccessException | InstantiationException |
                              InvocationTargetException ex) {
-                        ex.printStackTrace();
+                        plugin.getLogger().log(Level.SEVERE, "Failed to register enchant wrapper: " + clazz.getName(), ex);
                     }
                 });
     }

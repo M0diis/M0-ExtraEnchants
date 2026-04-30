@@ -15,7 +15,6 @@ import me.m0dii.extraenchants.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,7 +26,9 @@ import java.util.Arrays;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ExtraEnchantCommand {
-    private static final FileConfiguration cfg = ExtraEnchants.getInstance().getCfg();
+    private static String msg(String path) {
+        return Utils.format(ExtraEnchants.getInstance().getCfg().getString(path));
+    }
 
     public static LiteralCommandNode<CommandSourceStack> createCommand() {
         return Commands.literal("extraenchant")
@@ -89,7 +90,7 @@ public class ExtraEnchantCommand {
 
         if (sender instanceof Player player) {
             if (!player.hasPermission("extraenchants.command.list")) {
-                player.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
+                player.sendMessage(msg("messages.no-permission"));
                 return Command.SINGLE_SUCCESS;
             }
 
@@ -107,33 +108,33 @@ public class ExtraEnchantCommand {
 
         if (sender instanceof Player player) {
             if (!player.hasPermission("extraenchants.command.apply")) {
-                player.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
+                player.sendMessage(msg("messages.no-permission"));
                 return Command.SINGLE_SUCCESS;
             }
 
             EEnchant enchant = EEnchant.parse(enchantName);
 
             if (enchant == null) {
-                sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
+                sender.sendMessage(msg("messages.enchantment-list"));
                 return Command.SINGLE_SUCCESS;
             }
 
             Enchantment enchantment = enchant.getEnchantment();
 
             if (enchantment == null) {
-                sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
+                sender.sendMessage(msg("messages.enchantment-list"));
                 return Command.SINGLE_SUCCESS;
             }
 
             ItemStack item = player.getInventory().getItemInMainHand();
 
             if (item.getType() == Material.AIR) {
-                sender.sendMessage(Utils.format(cfg.getString("messages.hold-item")));
+                sender.sendMessage(msg("messages.hold-item"));
                 return Command.SINGLE_SUCCESS;
             }
 
             Enchanter.applyEnchant(item, enchant, level, false);
-            sender.sendMessage(Utils.format(cfg.getString("messages.enchant-applied")));
+            sender.sendMessage(msg("messages.enchant-applied"));
         }
 
         return Command.SINGLE_SUCCESS;
@@ -146,14 +147,14 @@ public class ExtraEnchantCommand {
         int level = IntegerArgumentType.getInteger(ctx, "level");
 
         if (!sender.hasPermission("extraenchants.command.give")) {
-            sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
+            sender.sendMessage(msg("messages.no-permission"));
             return Command.SINGLE_SUCCESS;
         }
 
         Player target = Bukkit.getPlayer(playerName);
 
         if (target == null) {
-            sender.sendMessage(Utils.format(cfg.getString("messages.player-not-found")));
+            sender.sendMessage(msg("messages.player-not-found"));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -161,7 +162,7 @@ public class ExtraEnchantCommand {
             return Command.SINGLE_SUCCESS;
         }
 
-        sender.sendMessage(Utils.format(cfg.getString("messages.enchantment-list")));
+        sender.sendMessage(msg("messages.enchantment-list"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -169,12 +170,12 @@ public class ExtraEnchantCommand {
         CommandSender sender = ctx.getSource().getSender();
 
         if (!sender.hasPermission("extraenchants.command.reload")) {
-            sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
+            sender.sendMessage(msg("messages.no-permission"));
             return Command.SINGLE_SUCCESS;
         }
 
         ExtraEnchants.getInstance().getConfigManager().reloadConfig();
-        sender.sendMessage(Utils.format(cfg.getString("messages.reloaded")));
+        sender.sendMessage(msg("messages.reloaded"));
 
         return Command.SINGLE_SUCCESS;
     }
@@ -183,7 +184,7 @@ public class ExtraEnchantCommand {
         CommandSender sender = ctx.getSource().getSender();
 
         if (!sender.hasPermission("extraenchants.command.debugitem")) {
-            sender.sendMessage(Utils.format(cfg.getString("messages.no-permission")));
+            sender.sendMessage(msg("messages.no-permission"));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -214,7 +215,7 @@ public class ExtraEnchantCommand {
         sender.sendMessage(Utils.format("&eEnchantments: &f" + item.getEnchantments()));
         sender.sendMessage(Utils.format("&eItem Flags: &f" + meta.getItemFlags()));
         sender.sendMessage(Utils.format("&eItem Type: &f" + item.getType().name()));
-        sender.sendMessage(Utils.format("&eItem Data: &f" + item.getData()));
+        sender.sendMessage(Utils.format("&eBlockData Compatible: &f" + item.getType().isBlock()));
         sender.sendMessage(Utils.format("&ePDC Keys:"));
         pdc.getKeys().forEach(key -> {
             sender.sendMessage(Utils.format("&e- &f" + key + " : " + pdc.get(key, PersistentDataType.STRING)));

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 
 public class BlockBreakPipeline {
 
@@ -84,7 +85,7 @@ public class BlockBreakPipeline {
             } catch (Exception t) {
                 plugin.getLogger().warning("[BlockBreakPipeline] Step '" + enchant + "' failed: " + t.getMessage());
                 if (debug) {
-                    t.printStackTrace();
+                    plugin.getLogger().log(Level.WARNING, "[BlockBreakPipeline] Stacktrace for failed step '" + enchant + "'", t);
                 }
             }
         }

@@ -160,7 +160,7 @@ public class SignEnchantInteract implements Listener {
 
         String firstLine = Utils.stripColor(sign.getSide(Side.FRONT).line(0));
 
-        if (firstLine.equalsIgnoreCase(plugin.getCfg().getString("enchant-signs.first-line-format"))) {
+        if (firstLine.equalsIgnoreCase(plugin.getCfg().getString("enchant-signs.enchant-first-line-format"))) {
             handleEnchantLogic(sign, player);
         }
 
