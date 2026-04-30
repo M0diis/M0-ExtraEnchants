@@ -27,14 +27,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TriggerBridgeListener implements Listener {
     private final ExtraEnchants plugin;
     private final CustomEnchantFramework framework;
-    private final Map<UUID, Map<TriggerType, Long>> debounce = new HashMap<>();
+    private final Map<UUID, Map<TriggerType, Long>> debounce = new ConcurrentHashMap<>();
 
     public TriggerBridgeListener(ExtraEnchants plugin, CustomEnchantFramework framework) {
         this.plugin = plugin;
@@ -148,8 +148,9 @@ public class TriggerBridgeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
+        Location location = player.getLocation().clone();
         plugin.getScheduler().runNextTick(task ->
-                executeHandTrigger(TriggerType.ON_CHAT, event, player, player, null, player.getLocation()));
+                executeHandTrigger(TriggerType.ON_CHAT, null, player, player, null, location));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -202,8 +203,9 @@ public class TriggerBridgeListener implements Listener {
         Player player = event.getPlayer();
         executeHandTrigger(TriggerType.ON_UNEQUIP, event, player, player, null, player.getLocation());
 
+        Location location = player.getLocation().clone();
         plugin.getScheduler().runNextTick(task ->
-                executeHandTrigger(TriggerType.ON_EQUIP, event, player, player, null, player.getLocation()));
+                executeHandTrigger(TriggerType.ON_EQUIP, null, player, player, null, location));
     }
 
     @EventHandler
@@ -219,6 +221,10 @@ public class TriggerBridgeListener implements Listener {
             LivingEntity victim,
             Location location
     ) {
+        if (owner == null || !owner.isOnline()) {
+            return;
+        }
+
         framework.executeForItem(
                 triggerType,
                 event,
@@ -243,7 +249,7 @@ public class TriggerBridgeListener implements Listener {
 
     private boolean debounced(UUID playerId, TriggerType triggerType, long intervalMillis) {
         long now = System.currentTimeMillis();
-        Map<TriggerType, Long> playerDebounce = debounce.computeIfAbsent(playerId, ignored -> new HashMap<>());
+        Map<TriggerType, Long> playerDebounce = debounce.computeIfAbsent(playerId, ignored -> new ConcurrentHashMap<>());
         Long last = playerDebounce.get(triggerType);
         if (last != null && now - last < intervalMillis) {
             return false;
@@ -253,6 +259,4 @@ public class TriggerBridgeListener implements Listener {
         return true;
     }
 }
-
-
 
