@@ -148,13 +148,8 @@ public class TriggerBridgeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
-        if (event.isAsynchronous()) {
-            plugin.getScheduler().runNextTick(task ->
-                    executeHandTrigger(TriggerType.ON_CHAT, event, player, player, null, player.getLocation()));
-            return;
-        }
-
-        executeHandTrigger(TriggerType.ON_CHAT, event, player, player, null, player.getLocation());
+        plugin.getScheduler().runNextTick(task ->
+                executeHandTrigger(TriggerType.ON_CHAT, event, player, player, null, player.getLocation()));
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -258,7 +253,6 @@ public class TriggerBridgeListener implements Listener {
         return true;
     }
 }
-
 
 
 

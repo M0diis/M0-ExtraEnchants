@@ -134,7 +134,6 @@ public class ExtraEnchants extends JavaPlugin {
             this.placeholders.unregister();
             this.placeholders = null;
         }
-        RESIDENCE_ENABLED = false;
         instance = null;
         this.getLogger().info("M0-ExtraEnchants has been disabled.");
     }
