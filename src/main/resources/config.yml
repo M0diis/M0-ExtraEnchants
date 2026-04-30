@@ -557,30 +557,30 @@ enchants:
     enchantable-items: []
     ignored-blocks:
       - "COBBLESTONE"
-      - "BEDROCK",
-      - "BARRIER",
-      - "END_PORTAL_FRAME",
-      - "CHEST",
-      - "SPAWNER",
-      - "END_CRYSTAL",
-      - "END_GATEWAY",
-      - "END_PORTAL",
-      - "BEACON",
-      - "COMMAND_BLOCK",
-      - "HOPPER",
-      - "DROPPER",
-      - "DISPENSER",
-      - "FURNACE",
-      - "BLAST_FURNACE",
-      - "SMOKER",
-      - "BREWING_STAND",
-      - "ENCHANTING_TABLE",
-      - "ANVIL",
-      - "CHIPPED_ANVIL",
-      - "DAMAGED_ANVIL",
-      - "GRINDSTONE",
-      - "SMITHING_TABLE",
-      - "CARTOGRAPHY_TABLE",
+      - "BEDROCK"
+      - "BARRIER"
+      - "END_PORTAL_FRAME"
+      - "CHEST"
+      - "SPAWNER"
+      - "END_CRYSTAL"
+      - "END_GATEWAY"
+      - "END_PORTAL"
+      - "BEACON"
+      - "COMMAND_BLOCK"
+      - "HOPPER"
+      - "DROPPER"
+      - "DISPENSER"
+      - "FURNACE"
+      - "BLAST_FURNACE"
+      - "SMOKER"
+      - "BREWING_STAND"
+      - "ENCHANTING_TABLE"
+      - "ANVIL"
+      - "CHIPPED_ANVIL"
+      - "DAMAGED_ANVIL"
+      - "GRINDSTONE"
+      - "SMITHING_TABLE"
+      - "CARTOGRAPHY_TABLE"
       - "FLETCHING_TABLE"
   debuffing:
     enabled: true
@@ -687,6 +687,13 @@ enchant-signs:
     item-not-enchanted: "&cThis item is not enchanted."
     enchant-removed: "&4%enchant_name% enchant has been removed"
     enchant-retrieved: "&aSuccessfully retrieved enchantment."
-
+# General debug flag for Messenger.debug() calls
 debug: false
+
+# Specific debug flags for detailed logging
+debug-enchants:
+  pipeline: false
+  timber: false
+  telepathy: false
+
 notify-update: true

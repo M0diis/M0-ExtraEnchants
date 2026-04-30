@@ -15,7 +15,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CustomCombine implements Listener {
 
@@ -102,8 +105,9 @@ public class CustomCombine implements Listener {
 
                     if (meta.getLore() != null) {
                         for (String l : meta.getLore()) {
-                            if (!l.contains(oldEnchant.getName()))
+                            if (!l.contains(oldEnchant.getName())) {
                                 lore.add(l);
+                            }
                         }
 
                         meta.setLore(lore);

@@ -1,5 +1,6 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
@@ -62,13 +63,21 @@ public class TelepathyWrapper extends CustomEnchantment {
 
     @EventHandler
     public void onTelepathy(final TelepathyEvent e) {
+        boolean debug = ExtraEnchants.getInstance().getConfig().getBoolean("debug-enchants.telepathy", false);
+
         if (!Utils.shouldTrigger(EEnchant.TELEPATHY)) {
+            if (debug) {
+                ExtraEnchants.getInstance().getLogger().info("[TELEPATHY] Trigger check failed");
+            }
             return;
         }
 
         ItemStack tool = e.getTool();
 
-        if(tool.getItemMeta() == null) {
+        if (tool.getItemMeta() == null) {
+            if (debug) {
+                ExtraEnchants.getInstance().getLogger().info("[TELEPATHY] Tool has no meta");
+            }
             return;
         }
 
@@ -78,14 +87,26 @@ public class TelepathyWrapper extends CustomEnchantment {
 
         Collection<ItemStack> drops = e.getDrops();
 
+        if (debug) {
+            ExtraEnchants.getInstance().getLogger().info("[TELEPATHY] Processing block: " + b.getType());
+            ExtraEnchants.getInstance().getLogger().info("[TELEPATHY] Drops count: " + drops.size());
+            drops.forEach(drop -> ExtraEnchants.getInstance().getLogger().info("[TELEPATHY]   - " + drop.getType() + " x" + drop.getAmount()));
+        }
+
         boolean hasSilk = tool.getItemMeta()
                 .getEnchants().containsKey(Enchantment.SILK_TOUCH);
 
         boolean fits = doesFit(inv, drops);
 
+        if (debug) {
+            ExtraEnchants.getInstance().getLogger().info("[TELEPATHY] Has silk touch: " + hasSilk);
+            ExtraEnchants.getInstance().getLogger().info("[TELEPATHY] Items fit in inventory: " + fits);
+        }
+
         if (b.getType().equals(Material.SPAWNER)
-                || b.getType().name().toUpperCase().contains("SPAWNER"))
+                || b.getType().name().toUpperCase().contains("SPAWNER")) {
             return;
+        }
 
         if (!fits) {
             for (ItemStack i : drops)
@@ -144,6 +165,10 @@ public class TelepathyWrapper extends CustomEnchantment {
             }
         }
 
+        if (debug) {
+            ExtraEnchants.getInstance().getLogger().info("[TELEPATHY] Successfully added items to inventory");
+        }
+
         // Telepathy moved items to inventory — clear context drops to prevent pipeline/world from also spawning them
 //        drops.clear();
 
@@ -152,8 +177,9 @@ public class TelepathyWrapper extends CustomEnchantment {
 
     public boolean doesFit(Inventory inv, Collection<ItemStack> drops) {
         for (ItemStack i : inv.getStorageContents())
-            if (i == null)
+            if (i == null) {
                 return true;
+            }
 
         return hasSpaceForItem(drops, inv);
     }
@@ -184,8 +210,9 @@ public class TelepathyWrapper extends CustomEnchantment {
             ItemStack item = iter.next();
 
             for (ItemStack it : inv.getStorageContents()) {
-                if (it != null && it.equals(item) && (it.getAmount() < 64))
+                if (it != null && it.equals(item) && (it.getAmount() < 64)) {
                     return true;
+                }
             }
         }
 

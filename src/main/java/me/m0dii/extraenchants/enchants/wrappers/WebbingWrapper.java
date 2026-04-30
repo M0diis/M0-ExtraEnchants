@@ -3,12 +3,11 @@ package me.m0dii.extraenchants.enchants.wrappers;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
-import me.m0dii.extraenchants.events.WebbingEvent;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.events.WebbingEvent;
 import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -93,7 +92,7 @@ public class WebbingWrapper extends CustomEnchantment {
 
         feet.getBlock().setType(Material.COBWEB);
 
-        Bukkit.getScheduler().runTaskLater(ExtraEnchants.getInstance(), () -> {
+        ExtraEnchants.getInstance().getScheduler().runLater(() -> {
             if (feet.getBlock().getType() == Material.COBWEB) {
                 feet.getBlock().setType(Material.AIR);
                 webs.remove(feet.getBlock());

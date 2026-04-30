@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "me.m0dii"
-version = "j21-mc1.21.8-4.1.2"
+version = "j21-mc1.21.11-4.1.4"
 
 base {
     archivesName.set("M0-ExtraEnchants")
@@ -22,11 +22,9 @@ tasks.processResources {
 }
 
 tasks.shadowJar {
-    listOf("org.bstats", "com.jeff_media").forEach {
+    listOf("org.bstats", "com.jeff_media", "com.tcoded").forEach {
         relocate(it, "me.m0dii.libs.$it")
     }
-
-    minimize()
 
     archiveFileName.set("M0-ExtraEnchants-${project.version}.jar")
 }
@@ -44,19 +42,21 @@ repositories {
         "https://repo.papermc.io/repository/maven-public/",
         "https://hub.spigotmc.org/nexus/content/repositories/snapshots/",
         "https://repo.jeff-media.com/public/",
-        "https://repo.extendedclip.com/releases/"
+        "https://repo.extendedclip.com/releases/",
+        "https://repo.tcoded.com/releases"
     ).forEach { repoUrl ->
         maven { url = uri(repoUrl) }
     }
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
-    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
     compileOnly(files("libs/Residence5.0.1.5.jar"))
 
+    implementation("com.tcoded:FoliaLib:0.5.1")
     implementation("org.bstats:bstats-bukkit:2.2.1")
     implementation("org.reflections:reflections:0.10.2")
 //    implementation("com.jeff_media:MorePersistentDataTypes:2.4.0")

@@ -83,7 +83,7 @@ public class ReplanterWrapper extends CustomEnchantment {
     );
 
     private void init() {
-        Bukkit.getScheduler().runTaskTimer(ExtraEnchants.getInstance(), () -> {
+        ExtraEnchants.getInstance().getScheduler().runTimer(() -> {
             List<ReplantLocation> toReplant = pendingToReplant.stream()
                     .filter(replant -> System.currentTimeMillis() - replant.getTime() >= 3000)
                     .toList();

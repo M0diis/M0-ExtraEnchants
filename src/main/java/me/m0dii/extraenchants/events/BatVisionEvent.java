@@ -1,6 +1,7 @@
 package me.m0dii.extraenchants.events;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -14,6 +15,7 @@ public class BatVisionEvent extends Event implements Cancellable {
     private final Player player;
     @Getter
     private final PlayerMoveEvent playerMoveEvent;
+    @Setter
     private boolean isCancelled;
 
     public BatVisionEvent(Player p, PlayerMoveEvent e) {
@@ -27,10 +29,6 @@ public class BatVisionEvent extends Event implements Cancellable {
 
     public boolean isCancelled() {
         return this.isCancelled;
-    }
-
-    public void setCancelled(boolean isCancelled) {
-        this.isCancelled = isCancelled;
     }
 
     public @NotNull HandlerList getHandlers() {

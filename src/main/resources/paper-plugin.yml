@@ -3,7 +3,8 @@ bootstrapper: me.m0dii.extraenchants.ExtraEnchantsBootstrapper
 name: M0-ExtraEnchants
 author: M0dii
 version: ${version}
-api-version: 1.21.3
+folia-supported: true
+api-version: 1.21.8
 commands:
   extraenchant:
     permission: extraenchants.command.enchant

@@ -51,7 +51,7 @@ public class EnchantItem implements Listener {
 
         e.getEnchantsToAdd().put(eenchant.getEnchantment(), 1);
 
-        plugin.getServer().getScheduler().runTask(plugin, () -> {
+        ExtraEnchants.getInstance().getScheduler().runNextTick((task) -> {
             ItemStack result = e.getInventory().getItem(0);
 
             if (result == null) {

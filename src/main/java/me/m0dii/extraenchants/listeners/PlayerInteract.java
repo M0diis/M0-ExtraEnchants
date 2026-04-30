@@ -65,7 +65,7 @@ public class PlayerInteract implements Listener {
     }
 
     private void updateGrindstone(@NotNull Inventory inventory) {
-        this.plugin.getServer().getScheduler().runTask(plugin, () -> {
+        this.plugin.getScheduler().runNextTick((task) -> {
             ItemStack result = inventory.getItem(2);
 
             if (result == null || result.getType().isAir()) return;

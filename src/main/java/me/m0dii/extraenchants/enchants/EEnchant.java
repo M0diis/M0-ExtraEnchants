@@ -6,7 +6,7 @@ import lombok.Setter;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.Utils;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -196,7 +196,7 @@ public enum EEnchant {
                 .stream()
                 .map(EnchantableItemTypeUtil.ItemType::parse)
                 .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Enchantment> getCustomConflicts() {
@@ -217,6 +217,7 @@ public enum EEnchant {
 
                     return parsed.getEnchantment();
                 })
+                .filter(Objects::nonNull)
                 .toList();
     }
 

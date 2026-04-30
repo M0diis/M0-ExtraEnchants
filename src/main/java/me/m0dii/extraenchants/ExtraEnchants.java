@@ -1,5 +1,7 @@
 package me.m0dii.extraenchants;
 
+import com.tcoded.folialib.FoliaLib;
+import com.tcoded.folialib.impl.PlatformScheduler;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import lombok.Getter;
 import me.m0dii.extraenchants.commands.ExtraEnchantCommand;
@@ -31,8 +33,15 @@ public class ExtraEnchants extends JavaPlugin {
     @Getter
     private Economy economy = null;
 
+    @Getter
+    private FoliaLib foliaLib;
+
     public FileConfiguration getCfg() {
         return this.configManager.getConfig();
+    }
+
+    public PlatformScheduler getScheduler() {
+        return this.foliaLib.getScheduler();
     }
 
     private Placeholders placeholders;
@@ -42,6 +51,8 @@ public class ExtraEnchants extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        this.foliaLib = new FoliaLib(this);
 
         this.configManager = new ConfigManager(this);
 

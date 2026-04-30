@@ -1,5 +1,7 @@
 package me.m0dii.extraenchants.enchants.wrappers;
 
+import com.tcoded.folialib.wrapper.task.WrappedTask;
+import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
@@ -9,6 +11,7 @@ import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Messenger;
 import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.pipeline.BlockBreakContext;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -16,19 +19,39 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.EnumSet;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("removal")
 @EnchantWrapper(name = "Excavator", maxLevel = 1)
 public class ExcavatorWrapper extends CustomEnchantment {
 
+    // Track blocks being broken by EXCAVATOR to prevent re-triggering (with timestamps)
+    private static final Map<Block, Long> excavatorBreaking = Collections.synchronizedMap(new HashMap<>());
+    private static WrappedTask cleanupTask;
+
     public ExcavatorWrapper(final String name, final int lvl, EEnchant enchant) {
         super(name, lvl, enchant);
+        initCleanupTask();
+    }
+
+    private void initCleanupTask() {
+        // Start a single global cleanup task that runs every second
+        if (cleanupTask == null) {
+            cleanupTask = ExtraEnchants.getInstance().getScheduler().runTimer(
+                    () -> {
+                        long now = System.currentTimeMillis();
+                        // Remove blocks that were marked more than 250ms ago
+                        excavatorBreaking.entrySet().removeIf(entry -> now - entry.getValue() > 250);
+                    },
+                    20L, // Start after 1 second
+                    20L  // Run every 1 second
+            );
+        }
     }
 
     @Override
@@ -42,13 +65,7 @@ public class ExcavatorWrapper extends CustomEnchantment {
             return true;
         }
 
-        if (!enchant.defaultConflictsEnabled()) {
-            return false;
-        }
-
-        return Enchantment.SILK_TOUCH.equals(enchantment)
-                || EEnchant.SMELT.equals(enchantment)
-                || EEnchant.TELEPATHY.equals(enchantment);
+        return false;
     }
 
     @Override
@@ -70,11 +87,17 @@ public class ExcavatorWrapper extends CustomEnchantment {
         }
 
         BlockBreakContext ctx = e.getContext();
+        Block source = ctx.block();
+
+        // Skip if this block is being broken by EXCAVATOR itself (secondary break)
+        if (excavatorBreaking.containsKey(source)) {
+            Messenger.debug("Skipping secondary excavator break.");
+            return;
+        }
+
         ctx.getDrops().clear();
 
         Player p = ctx.player();
-
-        Block source = ctx.block();
 
         float pitch = p.getLocation().getPitch();
 
@@ -132,19 +155,29 @@ public class ExcavatorWrapper extends CustomEnchantment {
 
         ItemStack item = ctx.toolUsed();
 
-        ctx.addDrops(b.getDrops(item));
-        b.setType(Material.AIR);
+        // Mark this block as being broken by EXCAVATOR to prevent re-triggering
+        excavatorBreaking.put(b, System.currentTimeMillis());
 
-        for (int x = -1; x <= 1; x++) {
-            for (int y = -1; y <= 1; y++) {
-                for (int z = -1; z <= 1; z++) {
-                    Block block = b.getRelative(x, y, z);
-                    block.getState().update();
-                    p.sendBlockChange(block.getLocation(), block.getBlockData());
+        // Create and fire a BlockBreakEvent so other plugins (CoreProtect, etc.) can see it
+        BlockBreakEvent breakEvent = new BlockBreakEvent(b, p);
+        Bukkit.getPluginManager().callEvent(breakEvent);
+
+        if (!breakEvent.isCancelled()) {
+            b.setType(Material.AIR);
+
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    for (int z = -1; z <= 1; z++) {
+                        Block block = b.getRelative(x, y, z);
+                        block.getState().update();
+                        p.sendBlockChange(block.getLocation(), block.getBlockData());
+                    }
                 }
             }
-        }
 
-        InventoryUtils.applyDurabilityChanced(p, item, 70);
+            InventoryUtils.applyDurabilityChanced(p, item, 70);
+        }
+        // No per-block cleanup task needed - global task handles it
     }
 }
+

@@ -7,7 +7,6 @@ import me.m0dii.extraenchants.enchants.EnchantWrapper;
 import me.m0dii.extraenchants.utils.EnchantableItemTypeUtil;
 import me.m0dii.extraenchants.utils.InventoryUtils;
 import me.m0dii.extraenchants.utils.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -129,8 +128,7 @@ public class LavaWalkerWrapper extends CustomEnchantment {
     }
 
     private void removeBlockLater(final Block current, final Material previous) {
-        Bukkit.getScheduler().runTaskLater(ExtraEnchants.getInstance(), () -> {
-
+        ExtraEnchants.getInstance().getScheduler().runLater(() -> {
             lavaWalkerBlocks.remove(current);
 
             current.setType(previous);

@@ -42,29 +42,78 @@ public class BlockBreakPipeline {
 
     public void run(@NotNull BlockBreakContext ctx) {
         boolean hasAnyEnchant = false;
+        boolean debug = plugin.getConfig().getBoolean("debug-enchants.pipeline", false);
+
+        if (debug) {
+            plugin.getLogger().info("=== BlockBreakPipeline Debug ===");
+            plugin.getLogger().info("Block: " + ctx.block().getType() + " at " + ctx.block().getLocation());
+            plugin.getLogger().info("Tool: " + ctx.toolUsed().getType());
+            plugin.getLogger().info("Initial drops count: " + ctx.getDrops().size());
+            plugin.getLogger().info("Initial spawnDrops: " + ctx.isSpawnDrops());
+            plugin.getLogger().info("Event dropItems: " + ctx.getEvent().isDropItems());
+        }
 
         for (EEnchant enchant : orderedSteps) {
             if (ctx.getEvent().isCancelled()) {
+                if (debug) {
+                    plugin.getLogger().info("Pipeline stopped - event cancelled at: " + enchant);
+                }
                 break;
             }
             BlockBreakAction action = registry.get(enchant);
             try {
                 if (action != null && action.shouldRun().test(ctx)) {
+                    if (debug) {
+                        plugin.getLogger().info(">>> Running: " + enchant);
+                        plugin.getLogger().info("    Before - Drops: " + ctx.getDrops().size()
+                            + ", SpawnDrops: " + ctx.isSpawnDrops()
+                            + ", EventDropItems: " + ctx.getEvent().isDropItems()
+                            + ", EventCancelled: " + ctx.getEvent().isCancelled());
+                    }
+
                     action.run().accept(ctx);
                     hasAnyEnchant = true;
+
+                    if (debug) {
+                        plugin.getLogger().info("    After  - Drops: " + ctx.getDrops().size()
+                            + ", SpawnDrops: " + ctx.isSpawnDrops()
+                            + ", EventDropItems: " + ctx.getEvent().isDropItems()
+                            + ", EventCancelled: " + ctx.getEvent().isCancelled());
+                    }
                 }
             } catch (Exception t) {
                 plugin.getLogger().warning("[BlockBreakPipeline] Step '" + enchant + "' failed: " + t.getMessage());
+                if (debug) {
+                    t.printStackTrace();
+                }
             }
         }
 
         if(!hasAnyEnchant) {
+            if (debug) {
+                plugin.getLogger().info("No custom enchantments triggered");
+            }
             return; // No custom enchantments triggered, do nothing
+        }
+
+        if (debug) {
+            plugin.getLogger().info("Final - SpawnDrops: " + ctx.isSpawnDrops() + ", Drops count: " + ctx.getDrops().size());
         }
 
         // Spawn items if vanilla allowed OR a plugin step explicitly requested spawning plugin-controlled drops
         if (ctx.isSpawnDrops()) {
+            if (debug) {
+                plugin.getLogger().info("Spawning " + ctx.getDrops().size() + " drops from pipeline");
+            }
             dropItems(ctx);
+        } else {
+            if (debug) {
+                plugin.getLogger().info("Not spawning drops (spawnDrops=false)");
+            }
+        }
+
+        if (debug) {
+            plugin.getLogger().info("=== End Pipeline Debug ===");
         }
     }
 

@@ -3,6 +3,7 @@ name: M0-ExtraEnchants
 author: M0dii
 version: ${version}
 api-version: 1.21.8
+folia-supported: true
 softdepend: [Residence, Vault, PlaceholderAPI]
 commands:
   extraenchant:

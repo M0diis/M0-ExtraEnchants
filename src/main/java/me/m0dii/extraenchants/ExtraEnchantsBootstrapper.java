@@ -20,7 +20,7 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
 
     @Override
     public void bootstrap(BootstrapContext context) {
-        context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.freeze().newHandler(event -> {
+        context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.compose().newHandler(event -> {
             Reflections reflections = new Reflections("me.m0dii.extraenchants.enchants.wrappers");
             Set<Class<? extends CustomEnchantment>> enchantClasses = reflections.getSubTypesOf(CustomEnchantment.class);
             for (Class<? extends CustomEnchantment> clazz : enchantClasses) {
