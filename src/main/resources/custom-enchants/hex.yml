@@ -1,0 +1,31 @@
+id: hex
+display-name: "&8Hex"
+description: "&7Afflicts enemies with weakness and slowness."
+rarity: RARE
+max-level: 4
+enabled: true
+show-in-list: true
+weight: 8
+category: CONTROL
+icon: FERMENTED_SPIDER_EYE
+applicable-items:
+  - SWORD
+
+triggers:
+  onAttack:
+    chance: "20 + level * 6"
+    cooldown: "4"
+    target: VICTIM
+    effects:
+      - potion:
+          type: WEAKNESS
+          duration: "40 + level * 20"
+          amplifier: "0"
+      - potion:
+          type: SLOWNESS
+          duration: "30 + level * 15"
+          amplifier: "0"
+      - particle:
+          type: SMOKE
+          count: 10
+

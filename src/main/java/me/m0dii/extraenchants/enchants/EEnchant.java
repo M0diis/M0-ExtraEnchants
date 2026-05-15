@@ -123,6 +123,10 @@ public enum EEnchant {
         return !instance.getCfg().getBoolean("enchants." + getConfigName() + ".enabled", true);
     }
 
+    public boolean isVisibleInList() {
+        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".show-in-list", true);
+    }
+
     public int getEnchantChance() {
         return instance.getCfg().getInt("enchants." + getConfigName() + ".table-chance", -1);
     }

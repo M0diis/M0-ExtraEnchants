@@ -1,0 +1,30 @@
+id: thunderclap
+display-name: "&bThunderclap"
+description: "&7Strikes nearby enemies with a burst of shock on hit."
+rarity: RARE
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 6
+category: OFFENSE
+icon: LIGHTNING_ROD
+applicable-items:
+  - SWORD
+  - AXE
+
+triggers:
+  onAttack:
+    chance: "12 + level * 6"
+    cooldown: "6"
+    target: ENEMIES
+    radius: "3 + level"
+    conditions:
+      all:
+        - region_allowed
+    effects:
+      - damage: "0.8 + level * 0.5"
+      - particle:
+          type: ELECTRIC_SPARK
+          count: 24
+      - sound: ENTITY_LIGHTNING_BOLT_IMPACT
+

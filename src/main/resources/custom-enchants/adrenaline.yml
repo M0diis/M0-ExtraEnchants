@@ -1,0 +1,34 @@
+id: adrenaline
+display-name: "&cAdrenaline"
+description: "&7Low-health defense trigger that boosts survival."
+rarity: EPIC
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 5
+category: DEFENSE
+icon: RABBIT_FOOT
+applicable-items:
+  - HELMET
+  - CHESTPLATE
+  - LEGGINGS
+  - BOOTS
+
+triggers:
+  onDamaged:
+    chance: "20 + level * 10"
+    cooldown: "10"
+    target: SELF
+    conditions:
+      all:
+        - victim_health <= 8
+    effects:
+      - heal: "0.8 + level * 0.6"
+      - potion:
+          type: SPEED
+          duration: "40 + level * 10"
+          amplifier: "0"
+      - particle:
+          type: HEART
+          count: 8
+

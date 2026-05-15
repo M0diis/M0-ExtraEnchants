@@ -1,6 +1,7 @@
 enchants:
   antithorns:
-    enabled: true # Enable/Disable the enchantment
+    enabled: true
+    show-in-list: true # Enable/Disable the enchantment
     trigger-chance: -1 # Chance of triggering the enchantment. -1 for disabled
     table-chance: -1 # Chance of getting this enchant on a table, -1 for disabled
     enchanted-item-lore-name: '&7Anti Thorns %level%' # The lore name of the enchantment
@@ -29,6 +30,7 @@ enchants:
       - THORNS
   telepathy:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Telepathy %level%'
@@ -56,6 +58,7 @@ enchants:
       - TOOLS
   plow:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Plow %level%'
@@ -79,6 +82,7 @@ enchants:
       - HOE
   lavawalker:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Lava Walker %level%'
@@ -101,6 +105,7 @@ enchants:
       duration: 4 # How long the obsidian will stay in seconds
   bonded:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Bonded %level%'
@@ -120,6 +125,7 @@ enchants:
     enchantable-items: []
   smelt:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Smelt %level%'
@@ -139,6 +145,7 @@ enchants:
     enchantable-items: []
   hasteminer:
     enabled: true
+    show-in-list: true
     trigger-chance: 10
     table-chance: -1
     enchanted-item-lore-name: '&7Haste Miner %level%'
@@ -158,6 +165,7 @@ enchants:
     enchantable-items: []
   veinminer:
     enabled: true
+    show-in-list: true
     trigger-chance: 10
     table-chance: -1
     enchanted-item-lore-name: '&7Vein Miner %level%'
@@ -178,6 +186,7 @@ enchants:
     enchantable-items: []
   experienceminer:
     enabled: true
+    show-in-list: true
     trigger-chance: 10
     table-chance: -1
     enchanted-item-lore-name: '&7Experience Miner %level%'
@@ -198,6 +207,7 @@ enchants:
     enchantable-items: []
   lifesteal:
     enabled: true
+    show-in-list: true
     trigger-chance: 10
     table-chance: -1
     enchanted-item-lore-name: '&7Lifesteal %level%'
@@ -218,6 +228,7 @@ enchants:
     enchantable-items: []
   tunnel:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Tunnel %level%'
@@ -237,6 +248,7 @@ enchants:
     enchantable-items: []
   berserk:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Berserk %level%'
@@ -257,6 +269,7 @@ enchants:
     enchantable-items: []
   disposer:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Disposer %level%'
@@ -276,6 +289,7 @@ enchants:
     enchantable-items: []
   coldsteel:
     enabled: true
+    show-in-list: true
     trigger-chance: 5
     table-chance: 10
     enchanted-item-lore-name: '&7Cold Steel %level%'
@@ -296,6 +310,7 @@ enchants:
     enchantable-items: []
   withering:
     enabled: true
+    show-in-list: true
     trigger-chance: 1
     table-chance: -1
     enchanted-item-lore-name: '&7Withering %level%'
@@ -315,6 +330,7 @@ enchants:
     enchantable-items: []
   armorbreaker:
     enabled: true
+    show-in-list: true
     trigger-chance: 5
     table-chance: -1
     enchanted-item-lore-name: '&7Armor Breaker %level%'
@@ -334,6 +350,7 @@ enchants:
     enchantable-items: []
   barbarian:
     enabled: true
+    show-in-list: true
     trigger-chance: 5
     table-chance: -1
     enchanted-item-lore-name: '&7Barbarian %level%'
@@ -353,6 +370,7 @@ enchants:
     enchantable-items: []
   deathsiphon:
     enabled: true
+    show-in-list: true
     trigger-chance: 25
     table-chance: -1
     enchanted-item-lore-name: '&7Death Siphon %level%'
@@ -375,6 +393,7 @@ enchants:
       player-only: true
   batvision:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Bat Vision %level%'
@@ -394,6 +413,7 @@ enchants:
     enchantable-items: []
   gills:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Gills %level%'
@@ -413,6 +433,7 @@ enchants:
     enchantable-items: []
   assassin:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Assassin %level%'
@@ -434,6 +455,7 @@ enchants:
       player-only: false
   turtleshell:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Turtle Shell %level%'
@@ -454,6 +476,7 @@ enchants:
     enchantable-items: []
   reinforced:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Reinforced %level%'
@@ -477,6 +500,7 @@ enchants:
     enchantable-items: []
   webbing:
     enabled: true
+    show-in-list: true
     trigger-chance: 1
     table-chance: -1
     enchanted-item-lore-name: '&7Webbing %level%'
@@ -500,6 +524,7 @@ enchants:
       player-only: true
   replanter:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Replanter %level%'
@@ -519,6 +544,7 @@ enchants:
     enchantable-items: []
   timber:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Timber %level%'
@@ -538,6 +564,7 @@ enchants:
     enchantable-items: []
   excavator:
     enabled: true
+    show-in-list: true
     trigger-chance: -1
     table-chance: -1
     enchanted-item-lore-name: '&7Excavator %level%'
@@ -584,6 +611,7 @@ enchants:
       - "FLETCHING_TABLE"
   debuffing:
     enabled: true
+    show-in-list: true
     trigger-chance: 10
     table-chance: -1
     enchanted-item-lore-name: '&7Debuffing %level%'
@@ -605,6 +633,7 @@ enchants:
     enchantable-items: []
   essence-drain:
     enabled: true
+    show-in-list: true
     trigger-chance: 10
     table-chance: -1
     enchanted-item-lore-name: '&7Essence Drain %level%'

@@ -1,0 +1,28 @@
+id: duskcloak
+display-name: "&8Duskcloak"
+description: "&7Sneaking grants a short invisibility veil."
+rarity: EPIC
+max-level: 2
+enabled: true
+show-in-list: true
+weight: 5
+category: STEALTH
+icon: BLACK_DYE
+applicable-items:
+  - SWORD
+
+triggers:
+  onSneak:
+    chance: "100"
+    cooldown: "12"
+    target: SELF
+    effects:
+      - potion:
+          type: INVISIBILITY
+          duration: "30 + level * 20"
+          amplifier: "0"
+      - particle:
+          type: SMOKE
+          count: 6
+      - sound: ENTITY_ENDERMAN_AMBIENT
+

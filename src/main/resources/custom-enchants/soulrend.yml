@@ -1,0 +1,31 @@
+id: soulrend
+display-name: "&5Soulrend"
+description: "&7Deals more damage to weakened targets and siphons life."
+rarity: EPIC
+max-level: 4
+enabled: true
+show-in-list: true
+weight: 7
+category: OFFENSE
+icon: GHAST_TEAR
+applicable-items:
+  - SWORD
+  - AXE
+
+triggers:
+  onAttack:
+    chance: "18 + level * 7"
+    cooldown: "3"
+    target: VICTIM
+    conditions:
+      all:
+        - victim_health <= victim_max_health * 0.5
+        - region_allowed
+    effects:
+      - damage: "1 + level * 0.6"
+      - lifesteal: "0.8 + level * 0.5"
+      - particle:
+          type: SOUL
+          count: 12
+      - sound: ENTITY_WITHER_HURT
+

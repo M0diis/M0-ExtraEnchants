@@ -76,6 +76,26 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
             copyDefaultIfMissing(dir, "venom.yml");
             copyDefaultIfMissing(dir, "leeching.yml");
             copyDefaultIfMissing(dir, "freeze.yml");
+            copyDefaultIfMissing(dir, "soulrend.yml");
+            copyDefaultIfMissing(dir, "thunderclap.yml");
+            copyDefaultIfMissing(dir, "executioner.yml");
+            copyDefaultIfMissing(dir, "hex.yml");
+            copyDefaultIfMissing(dir, "bloodrush.yml");
+            copyDefaultIfMissing(dir, "momentum.yml");
+            copyDefaultIfMissing(dir, "windstep.yml");
+            copyDefaultIfMissing(dir, "foothold.yml");
+            copyDefaultIfMissing(dir, "adrenaline.yml");
+            copyDefaultIfMissing(dir, "warding.yml");
+            copyDefaultIfMissing(dir, "retaliate.yml");
+            copyDefaultIfMissing(dir, "bulwark.yml");
+            copyDefaultIfMissing(dir, "overcharge.yml");
+            copyDefaultIfMissing(dir, "quarry.yml");
+            copyDefaultIfMissing(dir, "prospect.yml");
+            copyDefaultIfMissing(dir, "overgrowth.yml");
+            copyDefaultIfMissing(dir, "anglerluck.yml");
+            copyDefaultIfMissing(dir, "battletrance.yml");
+            copyDefaultIfMissing(dir, "skirmisher.yml");
+            copyDefaultIfMissing(dir, "duskcloak.yml");
 
             try (var files = Files.list(dir)) {
                 files.filter(path -> path.getFileName().toString().endsWith(".yml"))

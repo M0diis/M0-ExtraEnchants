@@ -12,6 +12,7 @@ public class CustomEnchantDefinition {
     private String rarity = "COMMON";
     private int maxLevel = 1;
     private boolean enabled = true;
+    private boolean showInList = true;
     private int weight = 0;
     private String category = "GENERAL";
     private String icon = "ENCHANTED_BOOK";
@@ -67,6 +68,14 @@ public class CustomEnchantDefinition {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public boolean isShowInList() {
+        return showInList;
+    }
+
+    public void setShowInList(boolean showInList) {
+        this.showInList = showInList;
     }
 
     public int getWeight() {

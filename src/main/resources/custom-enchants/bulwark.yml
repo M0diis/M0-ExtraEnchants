@@ -1,0 +1,29 @@
+id: bulwark
+display-name: "&1Bulwark"
+description: "&7Builds stacks while being hit, then grants a defensive pulse."
+rarity: EPIC
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 5
+category: DEFENSE
+icon: IRON_CHESTPLATE
+applicable-items:
+  - CHESTPLATE
+
+triggers:
+  onDamaged:
+    chance: "100"
+    cooldown: "3"
+    target: SELF
+    effects:
+      - stack_add:
+          amount: "1"
+          duration: "140 + level * 20"
+      - potion:
+          type: DAMAGE_RESISTANCE
+          duration: "10 + stack * 8 + level * 4"
+          amplifier: "0"
+      - sound: ITEM_SHIELD_BLOCK
+
+

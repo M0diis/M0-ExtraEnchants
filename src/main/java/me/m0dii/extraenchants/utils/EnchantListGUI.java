@@ -70,6 +70,7 @@ public class EnchantListGUI implements InventoryHolder {
 
         Arrays.stream(EEnchant.values())
                 .filter(e -> !e.isDisabled())
+                .filter(EEnchant::isVisibleInList)
                 .forEach(e -> {
                     ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
                     ItemMeta meta = item.getItemMeta();
@@ -93,6 +94,7 @@ public class EnchantListGUI implements InventoryHolder {
 
         plugin.getCustomEnchantFramework().getDefinitions().values().stream()
                 .filter(CustomEnchantDefinition::isEnabled)
+                .filter(CustomEnchantDefinition::isShowInList)
                 .forEach(definition -> {
                     ItemStack item = new ItemStack(Material.ENCHANTED_BOOK);
                     ItemMeta meta = item.getItemMeta();

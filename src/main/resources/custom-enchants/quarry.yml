@@ -1,0 +1,29 @@
+id: quarry
+display-name: "&7Quarry"
+description: "&7Breaking blocks can grant haste and mining payout."
+rarity: UNCOMMON
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 9
+category: MINING
+icon: IRON_PICKAXE
+applicable-items:
+  - PICKAXE
+
+triggers:
+  onBlockBreak:
+    chance: "16 + level * 8"
+    cooldown: "3"
+    target: SELF
+    effects:
+      - potion:
+          type: FAST_DIGGING
+          duration: "30 + level * 10"
+          amplifier: "0"
+      - deposit: "1 + level"
+      - particle:
+          type: CRIT
+          count: 8
+
+

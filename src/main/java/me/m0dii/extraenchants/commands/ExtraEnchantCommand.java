@@ -214,6 +214,7 @@ public class ExtraEnchantCommand {
         }
 
         ExtraEnchants.getInstance().getConfigManager().reloadConfig();
+        ExtraEnchants.getInstance().setDebugMode(ExtraEnchants.getInstance().getCfg().getBoolean("debug", false));
         ExtraEnchants.getInstance().getCustomEnchantFramework().reload();
         sender.sendMessage(msg("messages.reloaded"));
 

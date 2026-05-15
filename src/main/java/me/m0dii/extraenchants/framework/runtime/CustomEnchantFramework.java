@@ -726,6 +726,26 @@ public class CustomEnchantFramework {
         copyDefaultIfMissing("custom-enchants/venom.yml");
         copyDefaultIfMissing("custom-enchants/leeching.yml");
         copyDefaultIfMissing("custom-enchants/freeze.yml");
+        copyDefaultIfMissing("custom-enchants/soulrend.yml");
+        copyDefaultIfMissing("custom-enchants/thunderclap.yml");
+        copyDefaultIfMissing("custom-enchants/executioner.yml");
+        copyDefaultIfMissing("custom-enchants/hex.yml");
+        copyDefaultIfMissing("custom-enchants/bloodrush.yml");
+        copyDefaultIfMissing("custom-enchants/momentum.yml");
+        copyDefaultIfMissing("custom-enchants/windstep.yml");
+        copyDefaultIfMissing("custom-enchants/foothold.yml");
+        copyDefaultIfMissing("custom-enchants/adrenaline.yml");
+        copyDefaultIfMissing("custom-enchants/warding.yml");
+        copyDefaultIfMissing("custom-enchants/retaliate.yml");
+        copyDefaultIfMissing("custom-enchants/bulwark.yml");
+        copyDefaultIfMissing("custom-enchants/overcharge.yml");
+        copyDefaultIfMissing("custom-enchants/quarry.yml");
+        copyDefaultIfMissing("custom-enchants/prospect.yml");
+        copyDefaultIfMissing("custom-enchants/overgrowth.yml");
+        copyDefaultIfMissing("custom-enchants/anglerluck.yml");
+        copyDefaultIfMissing("custom-enchants/battletrance.yml");
+        copyDefaultIfMissing("custom-enchants/skirmisher.yml");
+        copyDefaultIfMissing("custom-enchants/duskcloak.yml");
     }
 
     private void copyDefaultIfMissing(String resourcePath) {

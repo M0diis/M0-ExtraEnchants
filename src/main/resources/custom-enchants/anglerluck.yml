@@ -1,0 +1,26 @@
+id: anglerluck
+display-name: "&3Angler's Luck"
+description: "&7Fishing grants bonus payouts and occasional regen."
+rarity: RARE
+max-level: 4
+enabled: true
+show-in-list: true
+weight: 8
+category: FISHING
+icon: FISHING_ROD
+applicable-items:
+  - FISHING_ROD
+
+triggers:
+  onFish:
+    chance: "100"
+    cooldown: "2"
+    target: SELF
+    effects:
+      - deposit: "1 + level * 1.2"
+      - potion:
+          type: REGENERATION
+          duration: "20 + level * 10"
+          amplifier: "0"
+      - message: "&bAngler's Luck: &a+$%level%"
+

@@ -1,0 +1,28 @@
+id: windstep
+display-name: "&fWindstep"
+description: "&7Sprinting grants brief speed bursts."
+rarity: UNCOMMON
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 10
+category: MOBILITY
+icon: WHITE_WOOL
+applicable-items:
+  - SWORD
+  - AXE
+
+triggers:
+  onSprint:
+    chance: "100"
+    cooldown: "4"
+    target: SELF
+    effects:
+      - potion:
+          type: SPEED
+          duration: "20 + level * 10"
+          amplifier: "0"
+      - particle:
+          type: CLOUD
+          count: 10
+

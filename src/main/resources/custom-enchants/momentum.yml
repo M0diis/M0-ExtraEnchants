@@ -1,0 +1,37 @@
+id: momentum
+display-name: "&aMomentum"
+description: "&7Moving charges your next hit with bonus damage."
+rarity: RARE
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 8
+category: UTILITY
+icon: FEATHER
+applicable-items:
+  - SWORD
+  - AXE
+
+triggers:
+  onMove:
+    chance: "100"
+    cooldown: "1"
+    target: SELF
+    effects:
+      - stack_add:
+          amount: "1"
+          duration: "80 + level * 20"
+
+  onAttack:
+    chance: "100"
+    target: VICTIM
+    conditions:
+      all:
+        - stack_at_least: 2
+    effects:
+      - damage: "0.6 + stack * 0.25 + level * 0.2"
+      - stack_clear: true
+      - particle:
+          type: SWEEP_ATTACK
+          count: 6
+

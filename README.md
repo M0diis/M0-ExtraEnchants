@@ -38,13 +38,15 @@ You can now create custom enchants without writing Java code.
 
 Create files in `plugins/M0-ExtraEnchants/custom-enchants/*.yml` (example files are generated on first startup):
 
-- `venom.yml`
-- `lifesteal.yml`
-- `freeze.yml`
+- `venom.yml`, `leeching.yml`, `freeze.yml`
+- `soulrend.yml`, `thunderclap.yml`, `executioner.yml`, `hex.yml`, `bloodrush.yml`
+- `momentum.yml`, `windstep.yml`, `foothold.yml`, `adrenaline.yml`, `warding.yml`
+- `retaliate.yml`, `bulwark.yml`, `overcharge.yml`, `quarry.yml`, `prospect.yml`
+- `overgrowth.yml`, `anglerluck.yml`, `battletrance.yml`, `skirmisher.yml`, `duskcloak.yml`
 
 Supported out of the box:
 
-- metadata (`id`, `display-name`, `description`, `rarity`, `max-level`, `enabled`, `category`, `icon`)
+- metadata (`id`, `display-name`, `description`, `rarity`, `max-level`, `enabled`, `show-in-list`, `category`, `icon`)
 - trigger pipeline (`chance`, `cooldown`, `global-cooldown`, `delay`, `repeat`, `repeat-interval`, `conditions`, `chain-triggers`, `effects`)
 - trigger bridge (`onAttack`, `onDamaged`, `onKill`, `onDeath`, `onBlockBreak`, `onMine`, `onInteract`, `onRightClick`, `onLeftClick`, `onConsume`, `onShoot`, `onProjectileHit`, `onFish`, `onChat`, `onMove`, `onJump`, `onFall`, `onSneak`, `onSprint`, `onEquip`, `onUnequip`)
 - targets (`SELF`, `ATTACKER`, `VICTIM`, `PLAYERS`, `MONSTERS`, `ANIMALS`, `ALL_ENTITIES`, `NEARBY_ENTITIES`, `ENEMIES`)

@@ -1,0 +1,27 @@
+id: bloodrush
+display-name: "&cBloodrush"
+description: "&7Killing blows grant a brief burst of speed and healing."
+rarity: EPIC
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 6
+category: OFFENSE
+icon: REDSTONE
+applicable-items:
+  - SWORD
+  - AXE
+
+triggers:
+  onKill:
+    chance: "100"
+    cooldown: "2"
+    target: SELF
+    effects:
+      - heal: "0.8 + level * 0.6"
+      - potion:
+          type: SPEED
+          duration: "40 + level * 20"
+          amplifier: "0"
+      - sound: ENTITY_PLAYER_LEVELUP
+

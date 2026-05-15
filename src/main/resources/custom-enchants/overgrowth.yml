@@ -1,0 +1,26 @@
+id: overgrowth
+display-name: "&2Overgrowth"
+description: "&7Interacting with crops emits a restorative nature pulse."
+rarity: UNCOMMON
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 9
+category: FARMING
+icon: WHEAT
+applicable-items:
+  - HOE
+
+triggers:
+  onInteract:
+    chance: "20 + level * 10"
+    cooldown: "5"
+    target: PLAYERS
+    radius: "3 + level"
+    effects:
+      - heal: "0.5 + level * 0.4"
+      - particle:
+          type: HAPPY_VILLAGER
+          count: 16
+      - sound: ITEM_BONE_MEAL_USE
+

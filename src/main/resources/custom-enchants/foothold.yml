@@ -1,0 +1,28 @@
+id: foothold
+display-name: "&7Foothold"
+description: "&7Mitigates rough falls with a brief resistance pulse."
+rarity: RARE
+max-level: 2
+enabled: true
+show-in-list: true
+weight: 7
+category: DEFENSE
+icon: COBBLESTONE
+applicable-items:
+  - SWORD
+  - AXE
+
+triggers:
+  onFall:
+    chance: "100"
+    cooldown: "8"
+    target: SELF
+    effects:
+      - potion:
+          type: DAMAGE_RESISTANCE
+          duration: "30 + level * 10"
+          amplifier: "0"
+      - heal: "0.5 + level * 0.4"
+      - sound: BLOCK_STONE_PLACE
+
+

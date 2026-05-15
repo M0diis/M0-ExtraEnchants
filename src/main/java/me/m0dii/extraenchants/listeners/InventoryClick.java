@@ -339,6 +339,10 @@ public class InventoryClick implements Listener {
 
         ItemStack clicked = e.getOldCursor();
 
+        if (clicked == null || clicked.getType().isAir()) {
+            return;
+        }
+
         if (!clicked.getType().equals(Material.PAPER)) {
             return;
         }

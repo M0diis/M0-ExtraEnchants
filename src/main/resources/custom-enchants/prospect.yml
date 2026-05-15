@@ -1,0 +1,26 @@
+id: prospect
+display-name: "&6Prospect"
+description: "&7Occasionally rewards bonus coin while mining."
+rarity: RARE
+max-level: 5
+enabled: true
+show-in-list: true
+weight: 8
+category: MINING
+icon: RAW_GOLD
+applicable-items:
+  - PICKAXE
+
+triggers:
+  onBlockBreak:
+    chance: "8 + level * 4"
+    cooldown: "1"
+    target: SELF
+    conditions:
+      all:
+        - region_allowed
+    effects:
+      - deposit: "2 + level * 1.5"
+      - message: "&6Prospect: &a+$%level%"
+      - sound: ENTITY_EXPERIENCE_ORB_PICKUP
+

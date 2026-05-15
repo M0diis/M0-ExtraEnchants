@@ -1,0 +1,30 @@
+id: overcharge
+display-name: "&eOvercharge"
+description: "&7Empowers projectiles to shock targets on impact."
+rarity: RARE
+max-level: 4
+enabled: true
+show-in-list: true
+weight: 7
+category: RANGED
+icon: SPECTRAL_ARROW
+applicable-items:
+  - BOW
+  - CROSSBOW
+
+triggers:
+  onProjectileHit:
+    chance: "14 + level * 5"
+    cooldown: "3"
+    target: VICTIM
+    effects:
+      - true-damage: "0.6 + level * 0.4"
+      - potion:
+          type: SLOWNESS
+          duration: "20 + level * 10"
+          amplifier: "0"
+      - particle:
+          type: ELECTRIC_SPARK
+          count: 12
+      - sound: BLOCK_RESPAWN_ANCHOR_CHARGE
+

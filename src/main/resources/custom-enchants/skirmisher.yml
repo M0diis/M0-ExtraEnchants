@@ -1,0 +1,30 @@
+id: skirmisher
+display-name: "&eSkirmisher"
+description: "&7Sprint attacks strike harder and faster."
+rarity: RARE
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 7
+category: OFFENSE
+icon: GOLDEN_SWORD
+applicable-items:
+  - SWORD
+  - AXE
+
+triggers:
+  onAttack:
+    chance: "100"
+    cooldown: "2"
+    target: VICTIM
+    conditions:
+      all:
+        - attacker_sprinting
+    effects:
+      - damage: "1 + level * 0.5"
+      - potion:
+          type: SPEED
+          duration: "20 + level * 5"
+          amplifier: "0"
+      - sound: ENTITY_PLAYER_ATTACK_SWEEP
+

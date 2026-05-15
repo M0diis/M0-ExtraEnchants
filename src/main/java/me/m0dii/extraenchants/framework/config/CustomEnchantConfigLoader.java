@@ -1,6 +1,7 @@
 package me.m0dii.extraenchants.framework.config;
 
 import me.m0dii.extraenchants.ExtraEnchants;
+import me.m0dii.extraenchants.enchants.EEnchant;
 import me.m0dii.extraenchants.framework.model.CustomEnchantDefinition;
 import me.m0dii.extraenchants.framework.model.EffectDefinition;
 import me.m0dii.extraenchants.framework.model.TriggerDefinition;
@@ -8,10 +9,13 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 public class CustomEnchantConfigLoader {
     private final ExtraEnchants plugin;
@@ -24,6 +28,9 @@ public class CustomEnchantConfigLoader {
 
     public Map<String, CustomEnchantDefinition> load(File directory) {
         Map<String, CustomEnchantDefinition> loaded = new HashMap<>();
+        Set<String> wrapperIds = Arrays.stream(EEnchant.values())
+                .map(EEnchant::getConfigName)
+                .collect(Collectors.toSet());
 
         if (!directory.exists() && !directory.mkdirs()) {
             return loaded;
@@ -39,11 +46,25 @@ public class CustomEnchantConfigLoader {
                 YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
                 String id = yml.getString("id", file.getName().replace(".yml", ""));
                 CustomEnchantDefinition definition = new CustomEnchantDefinition(id.toLowerCase());
+
+                if (wrapperIds.contains(definition.getId())) {
+                    plugin.getLogger().warning("Skipping custom enchant '" + definition.getId() + "' from " + file.getName()
+                            + " because that id is reserved by a wrapper enchant");
+                    continue;
+                }
+
+                if (loaded.containsKey(definition.getId())) {
+                    plugin.getLogger().warning("Skipping duplicate custom enchant id '" + definition.getId() + "' from "
+                            + file.getName() + " (already loaded from another file)");
+                    continue;
+                }
+
                 definition.setDisplayName(yml.getString("display-name", id));
                 definition.setDescription(yml.getString("description", ""));
                 definition.setRarity(yml.getString("rarity", "COMMON"));
                 definition.setMaxLevel(Math.max(1, yml.getInt("max-level", 1)));
                 definition.setEnabled(yml.getBoolean("enabled", true));
+                definition.setShowInList(yml.getBoolean("show-in-list", true));
                 definition.setWeight(yml.getInt("weight", yml.getInt("spawn-chance", 0)));
                 definition.setIcon(yml.getString("icon", "ENCHANTED_BOOK"));
                 definition.setCategory(yml.getString("category", "GENERAL"));

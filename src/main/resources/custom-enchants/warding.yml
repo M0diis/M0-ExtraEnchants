@@ -1,0 +1,31 @@
+id: warding
+display-name: "&9Warding"
+description: "&7Armor enchant that grants temporary resistance when hit."
+rarity: RARE
+max-level: 4
+enabled: true
+show-in-list: true
+weight: 9
+category: DEFENSE
+icon: SHIELD
+applicable-items:
+  - HELMET
+  - CHESTPLATE
+  - LEGGINGS
+  - BOOTS
+
+triggers:
+  onDamaged:
+    chance: "10 + level * 5"
+    cooldown: "5"
+    target: SELF
+    conditions:
+      all:
+        - region_allowed
+    effects:
+      - potion:
+          type: DAMAGE_RESISTANCE
+          duration: "20 + level * 10"
+          amplifier: "0"
+      - sound: ITEM_SHIELD_BLOCK
+

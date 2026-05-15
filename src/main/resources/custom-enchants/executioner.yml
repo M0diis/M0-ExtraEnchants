@@ -1,0 +1,32 @@
+id: executioner
+display-name: "&4Executioner"
+description: "&7Finishes low-health enemies with true damage."
+rarity: LEGENDARY
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 4
+category: OFFENSE
+icon: IRON_AXE
+applicable-items:
+  - AXE
+  - SWORD
+conflicts-with:
+  - soulrend
+
+triggers:
+  onAttack:
+    chance: "8 + level * 4"
+    cooldown: "5"
+    target: VICTIM
+    conditions:
+      all:
+        - victim_health <= 5 + level
+        - region_allowed
+    effects:
+      - true-damage: "1 + level * 0.8"
+      - particle:
+          type: CRIT
+          count: 16
+      - sound: ENTITY_PLAYER_ATTACK_CRIT
+

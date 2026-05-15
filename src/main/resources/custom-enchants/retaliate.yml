@@ -1,0 +1,28 @@
+id: retaliate
+display-name: "&6Retaliate"
+description: "&7Reflects a burst of damage back to attackers."
+rarity: EPIC
+max-level: 3
+enabled: true
+show-in-list: true
+weight: 6
+category: DEFENSE
+icon: BLAZE_POWDER
+applicable-items:
+  - HELMET
+  - CHESTPLATE
+  - LEGGINGS
+  - BOOTS
+
+triggers:
+  onDamaged:
+    chance: "12 + level * 6"
+    cooldown: "4"
+    target: ATTACKER
+    effects:
+      - damage: "0.8 + level * 0.7"
+      - particle:
+          type: CRIT
+          count: 10
+      - sound: ENTITY_PLAYER_ATTACK_STRONG
+

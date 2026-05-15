@@ -34,7 +34,13 @@ public class InventoryUtils {
 
         Map<String, Integer> current = pdc.getOrDefault(enchantKey, DataType.asMap(DataType.STRING, DataType.INTEGER), new HashMap<>());
 
-        return itemMeta.getEnchants().containsKey(enchant) || current.containsKey(enchant.translationKey());
+        String namespaced = enchant.getKey().asString();
+        String translation = enchant.translationKey();
+
+        return itemMeta.getEnchants().containsKey(enchant)
+                || current.containsKey(namespaced)
+                || current.containsKey(translation)
+                || current.containsKey("custom:" + translation);
     }
 
     public static boolean hasEnchant(ItemStack item, Enchantment enchant) {
