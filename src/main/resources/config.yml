@@ -719,6 +719,10 @@ enchant-signs:
 # General debug flag for Messenger.debug() calls
 debug: false
 
+# Enables the custom-enchants/*.yml framework (books, triggers, execution, list entries).
+# Set to false to disable config-driven enchants globally.
+config-driven-enchants: true
+
 # Specific debug flags for detailed logging
 debug-enchants:
   pipeline: false

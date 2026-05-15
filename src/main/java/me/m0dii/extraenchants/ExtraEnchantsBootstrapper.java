@@ -32,7 +32,11 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
         Map<String, BootstrapEnchant> enchants = new LinkedHashMap<>();
 
         loadWrapperEnchants(enchants);
-        loadConfigDrivenEnchants(context, enchants);
+        if (isConfigDrivenEnabled(context)) {
+            loadConfigDrivenEnchants(context, enchants);
+        } else {
+            context.getLogger().info("Config-driven enchants are disabled (config-driven-enchants=false)");
+        }
 
         context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.compose().newHandler(event -> {
             for (BootstrapEnchant enchant : enchants.values()) {
@@ -50,6 +54,16 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
                 );
             }
         }));
+    }
+
+    private boolean isConfigDrivenEnabled(BootstrapContext context) {
+        Path configPath = context.getDataDirectory().resolve("config.yml");
+        if (!Files.exists(configPath)) {
+            return true;
+        }
+
+        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(configPath.toFile());
+        return yaml.getBoolean("config-driven-enchants", true);
     }
 
     private void loadWrapperEnchants(Map<String, BootstrapEnchant> enchants) {

@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "me.m0dii"
-version = "j21-mc1.21.11-4.1.4"
+version = "j21-mc1.21.11-5.0.0"
 
 base {
     archivesName.set("M0-ExtraEnchants")

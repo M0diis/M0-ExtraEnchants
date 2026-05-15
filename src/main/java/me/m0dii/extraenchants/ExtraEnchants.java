@@ -10,7 +10,6 @@ import me.m0dii.extraenchants.enchants.CustomEnchants;
 import me.m0dii.extraenchants.framework.bridge.TriggerBridgeListener;
 import me.m0dii.extraenchants.framework.runtime.CustomEnchantFramework;
 import me.m0dii.extraenchants.utils.Placeholders;
-import me.m0dii.extraenchants.utils.Utils;
 import me.m0dii.extraenchants.utils.data.ConfigManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -22,8 +21,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.reflections.Reflections;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -92,8 +94,7 @@ public class ExtraEnchants extends JavaPlugin {
 
         registerEvents();
         registerCommands();
-
-        Utils.copy(getResource("config.yml"), new File(getDataFolder(), "config_default.yml"));
+        syncConfigDefaultBackup();
 
         if (!setupEconomy()) {
             getLogger().severe("Vault not found, disabling economy features.");
@@ -163,5 +164,20 @@ public class ExtraEnchants extends JavaPlugin {
                     commands.registrar().register(ExtraEnchantCommand.createCommand(), List.of("extraenchant", "ee"));
                     commands.registrar().register(UnenchantCommand.createCommand(), List.of("unenchant", "disenchant", "ue"));
                 });
+    }
+
+    private void syncConfigDefaultBackup() {
+        File source = new File(getDataFolder(), "config.yml");
+        File backup = new File(getDataFolder(), "config.yml_default");
+
+        if (!source.exists()) {
+            return;
+        }
+
+        try {
+            Files.copy(source.toPath(), backup.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            getLogger().log(Level.WARNING, "Failed to refresh config.yml_default backup", ex);
+        }
     }
 }

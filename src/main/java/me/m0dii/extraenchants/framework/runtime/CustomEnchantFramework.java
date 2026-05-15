@@ -69,6 +69,15 @@ public class CustomEnchantFramework {
     }
 
     public void reload() {
+        if (!isConfigDrivenEnabled()) {
+            this.definitions = new HashMap<>();
+            this.triggerRegistry.rebuild(definitions.values());
+            this.cooldownService.clear();
+            this.activationCounts.clear();
+            plugin.getLogger().info("Config-driven enchants are disabled (config-driven-enchants=false)");
+            return;
+        }
+
         saveDefaultExamples();
         ConditionParser conditionParser = new ConditionParser(conditionRegistry, formulaEngine);
         CustomEnchantConfigLoader loader = new CustomEnchantConfigLoader(plugin, conditionParser);
@@ -84,10 +93,18 @@ public class CustomEnchantFramework {
     }
 
     public CustomEnchantDefinition getDefinition(String id) {
+        if (!isConfigDrivenEnabled()) {
+            return null;
+        }
+
         return definitions.get(id.toLowerCase());
     }
 
     public void applyEnchant(ItemStack item, String enchantId, int level) {
+        if (!isConfigDrivenEnabled()) {
+            return;
+        }
+
         if (item == null || item.getType().isAir()) {
             return;
         }
@@ -126,6 +143,10 @@ public class CustomEnchantFramework {
     }
 
     public ItemStack createBook(String enchantId, int level) {
+        if (!isConfigDrivenEnabled()) {
+            return null;
+        }
+
         CustomEnchantDefinition definition = getDefinition(enchantId);
         if (definition == null) {
             return null;
@@ -157,6 +178,10 @@ public class CustomEnchantFramework {
     }
 
     public List<String> removeConfigEnchants(ItemStack item) {
+        if (!isConfigDrivenEnabled()) {
+            return List.of();
+        }
+
         if (item == null || item.getType().isAir()) {
             return List.of();
         }
@@ -211,6 +236,10 @@ public class CustomEnchantFramework {
             int level,
             String enchantId
     ) {
+        if (!isConfigDrivenEnabled()) {
+            return;
+        }
+
         CustomEnchantDefinition single = getDefinition(enchantId);
         if (single == null || !single.isEnabled()) {
             debug("Skip trigger " + triggerType + " for enchant=" + enchantId + " (missing or disabled)");
@@ -236,6 +265,10 @@ public class CustomEnchantFramework {
             Location location,
             ItemStack item
     ) {
+        if (!isConfigDrivenEnabled()) {
+            return;
+        }
+
         if (item == null || owner == null) {
             return;
         }
@@ -255,6 +288,10 @@ public class CustomEnchantFramework {
             LivingEntity victim,
             Location location
     ) {
+        if (!isConfigDrivenEnabled()) {
+            return;
+        }
+
         if (owner == null) {
             return;
         }
@@ -796,6 +833,10 @@ public class CustomEnchantFramework {
 
     private void debug(String message) {
         plugin.debug("[CustomEnchantFramework] " + message);
+    }
+
+    private boolean isConfigDrivenEnabled() {
+        return plugin.getCfg().getBoolean("config-driven-enchants", true);
     }
 }
 
