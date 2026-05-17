@@ -67,6 +67,11 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+    testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.46.0")
+    testImplementation("org.mockito:mockito-core:5.12.0")
+    testImplementation("me.clip:placeholderapi:2.11.6")
+    testImplementation("com.github.MilkBowl:VaultAPI:1.7.1")
+    testImplementation(files("libs/Residence5.0.1.5.jar"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
