@@ -5,3 +5,6 @@ build
 copy_over.bat
 
 run
+/test-harness/
+graphify-out
+config.json

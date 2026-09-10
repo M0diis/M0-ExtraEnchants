@@ -31,6 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -233,6 +234,31 @@ public class ReplanterWrapper extends CustomEnchantment {
         return true;
     }
 
+    private boolean takeSeeds(@NotNull Player player, @NotNull Material material, @NotNull List<ItemStack> drops) {
+        if (takeSeeds(player, material)) {
+            return true;
+        }
+
+        Material seedType = fineBlockToSeeds(material);
+
+        for (Iterator<ItemStack> it = drops.iterator(); it.hasNext();) {
+            ItemStack drop = it.next();
+            if (drop.getType() != seedType || drop.getAmount() <= 0) {
+                continue;
+            }
+
+            if (drop.getAmount() == 1) {
+                it.remove();
+            } else {
+                drop.setAmount(drop.getAmount() - 1);
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
     @Getter
     static class ReplantLocation {
         private final Block block;
@@ -288,14 +314,11 @@ public class ReplanterWrapper extends CustomEnchantment {
             return;
         }
 
-        ItemStack hand = player.getInventory().getItemInMainHand();
-
-        if (takeSeeds(player, plant.getMaterial())) {
-            block.breakNaturally(hand);
-
+        if (takeSeeds(player, plant.getMaterial(), ctx.getDrops())) {
+            // Let the original block break complete, but keep drops in the pipeline so Telepathy can consume them.
+            ctx.getEvent().setDropItems(false);
+            ctx.setSpawnDrops(true);
             pendingToReplant.add(new ReplantLocation(block, plant));
-
-            InventoryUtils.applyDurability(ctx.player(), hand);
         }
     }
 }

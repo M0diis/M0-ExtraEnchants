@@ -17,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -37,10 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class PriorityWrappersBehaviorMockBukkitTest {
 
@@ -198,6 +196,53 @@ class PriorityWrappersBehaviorMockBukkitTest {
         assertEquals(Material.COBBLESTONE, context.getDrops().getFirst().getType());
     }
 
+    @Test
+    void replanterBreakUsesSeedFromDropsAndKeepsPipelineDropsForTelepathy() throws Exception {
+        ItemStack tool = new ItemStack(Material.DIAMOND_HOE);
+        tool.addUnsafeEnchantment(EEnchant.REPLANTER.getEnchantment(), 1);
+        tool.addUnsafeEnchantment(EEnchant.TELEPATHY.getEnchantment(), 1);
+
+        Block crop = Mockito.mock(Block.class);
+        Mockito.when(crop.getType()).thenReturn(Material.WHEAT);
+        Mockito.when(crop.getLocation()).thenReturn(new Location(world, 0, 64, 0));
+
+        Ageable ageable = Mockito.mock(Ageable.class);
+        Mockito.when(ageable.getAge()).thenReturn(7);
+        Mockito.when(ageable.getMaximumAge()).thenReturn(7);
+        Mockito.when(ageable.getMaterial()).thenReturn(Material.WHEAT);
+        Mockito.when(crop.getBlockData()).thenReturn(ageable);
+
+        BlockBreakEvent breakEvent = Mockito.mock(BlockBreakEvent.class);
+        Mockito.when(breakEvent.isCancelled()).thenReturn(false);
+
+        List<ItemStack> drops = new ArrayList<>(List.of(
+                new ItemStack(Material.WHEAT, 1),
+                new ItemStack(Material.WHEAT_SEEDS, 1)
+        ));
+
+        BlockBreakContext context = Mockito.mock(BlockBreakContext.class);
+        Mockito.when(context.getEvent()).thenReturn(breakEvent);
+        Mockito.when(context.toolUsed()).thenReturn(tool);
+        Mockito.when(context.block()).thenReturn(crop);
+        Mockito.when(context.player()).thenReturn(player);
+        Mockito.when(context.getDrops()).thenReturn(drops);
+
+        ReplanterWrapper wrapper = new ReplanterWrapper("Replanter", 1, EEnchant.REPLANTER);
+        wrapper.onBlockBreak(new ReplanterBreakEvent(context));
+
+        Mockito.verify(breakEvent).setDropItems(false);
+        Mockito.verify(context).setSpawnDrops(true);
+        assertEquals(1, drops.size());
+        assertEquals(Material.WHEAT, drops.getFirst().getType());
+
+        Field pendingField = ReplanterWrapper.class.getDeclaredField("pendingToReplant");
+        pendingField.setAccessible(true);
+
+        @SuppressWarnings("unchecked")
+        List<?> pending = (List<?>) pendingField.get(wrapper);
+        assertEquals(1, pending.size());
+    }
+
     private BlockBreakContext contextFor(Material blockType, ItemStack tool, List<ItemStack> drops) {
         Block block = world.getBlockAt(0, 64, 0);
         block.setType(blockType);
@@ -225,4 +270,3 @@ class PriorityWrappersBehaviorMockBukkitTest {
     }
 
 }
-

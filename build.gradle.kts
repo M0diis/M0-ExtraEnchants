@@ -8,7 +8,11 @@ plugins {
 }
 
 group = "me.m0dii"
-version = "j21-mc1.21.11-5.0.0"
+val targetMinecraftVersion = "26.3-pre-2"
+val targetPaperApiVersion = "26.3-pre-2.build.0-alpha"
+val targetJavaVersion = 25
+
+version = "j25-mc26.3-pre-2-5.0.0"
 
 base {
     archivesName.set("M0-ExtraEnchants")
@@ -50,7 +54,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:$targetPaperApiVersion")
 
     compileOnly("me.clip:placeholderapi:2.11.6")
     compileOnly("com.github.MilkBowl:VaultAPI:1.7.1")
@@ -63,8 +67,8 @@ dependencies {
 //    implementation("com.jeff_media:MorePersistentDataTypes:2.4.0")
     implementation(files("libs/MorePersistentDataTypes-2.4.0.jar"))
 
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly("org.projectlombok:lombok:1.18.48")
+    annotationProcessor("org.projectlombok:lombok:1.18.48")
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
     testImplementation("org.mockbukkit.mockbukkit:mockbukkit-v1.21:4.46.0")
@@ -106,6 +110,7 @@ tasks {
         11 to setOf("1.9.4", "1.10.2", "1.11.2"),
         17 to setOf("1.12.2", "1.13.2", "1.14.4", "1.15.2", "1.16.5", "1.17.1", "1.18.2", "1.19.4", "1.20.4"),
         21 to setOf("1.20.6", "1.21.8"),
+        targetJavaVersion to setOf(targetMinecraftVersion),
     )
 
     runVersions.forEach { (javaVersion, minecraftVersions) ->
@@ -116,7 +121,7 @@ tasks {
 
     runServer {
         runDirectory(file("run/latest"))
-        minecraftVersion("1.21.8")
+        minecraftVersion(targetMinecraftVersion)
 
         downloadPlugins.from(allPlugins)
 
@@ -146,5 +151,5 @@ fun TaskContainerScope.createVersionedRun(
 }
 
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
 }

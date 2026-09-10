@@ -19,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Animals;
@@ -650,10 +651,9 @@ public class CustomEnchantFramework {
         });
 
         effectRegistry.register("sound", (context, targets, value) -> {
-            Sound sound;
-            try {
-                sound = Sound.valueOf(String.valueOf(value));
-            } catch (IllegalArgumentException ex) {
+            NamespacedKey soundKey = NamespacedKey.fromString(String.valueOf(value).toLowerCase(Locale.ROOT));
+            Sound sound = soundKey == null ? null : Registry.SOUNDS.get(soundKey);
+            if (sound == null) {
                 return;
             }
 
