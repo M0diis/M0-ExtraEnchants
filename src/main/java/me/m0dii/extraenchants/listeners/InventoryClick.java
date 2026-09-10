@@ -395,11 +395,14 @@ public class InventoryClick implements Listener {
         for (Map.Entry<String, Integer> entry : current.entrySet()) {
             String enchantName = entry.getKey();
 
+            if (enchantName == null || enchantName.startsWith("custom:")) {
+                continue;
+            }
+
             EEnchant enchant = EEnchant.parse(enchantName);
 
             if (enchant == null) {
-                Messenger.debug("Failed to parse enchant.");
-                return;
+                continue;
             }
 
             if (InventoryUtils.hasEnchant(item, enchant)) {

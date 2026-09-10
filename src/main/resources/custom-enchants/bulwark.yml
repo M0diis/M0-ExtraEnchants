@@ -1,4 +1,5 @@
 id: bulwark
+schema-version: 1
 display-name: "&1Bulwark"
 description: "&7Builds stacks while being hit, then grants a defensive pulse."
 rarity: EPIC

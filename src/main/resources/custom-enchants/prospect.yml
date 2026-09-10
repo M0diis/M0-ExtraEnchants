@@ -1,4 +1,5 @@
 id: prospect
+schema-version: 1
 display-name: "&6Prospect"
 description: "&7Occasionally rewards bonus coin while mining."
 rarity: RARE

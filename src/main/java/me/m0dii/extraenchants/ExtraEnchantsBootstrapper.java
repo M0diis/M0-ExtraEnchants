@@ -2,27 +2,43 @@ package me.m0dii.extraenchants;
 
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
+import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.data.EnchantmentRegistryEntry;
 import io.papermc.paper.registry.event.RegistryEvents;
 import io.papermc.paper.registry.keys.EnchantmentKeys;
-import io.papermc.paper.registry.keys.tags.ItemTypeTagKeys;
+import io.papermc.paper.registry.set.RegistryKeySet;
+import io.papermc.paper.registry.set.RegistrySet;
 import me.m0dii.extraenchants.enchants.CustomEnchantment;
 import me.m0dii.extraenchants.enchants.EnchantWrapper;
+import me.m0dii.extraenchants.framework.config.ConditionParser;
+import me.m0dii.extraenchants.framework.config.CustomEnchantConfigLoader;
+import me.m0dii.extraenchants.framework.config.CustomEnchantLoadResult;
+import me.m0dii.extraenchants.framework.model.ItemApplicability;
+import me.m0dii.extraenchants.framework.registry.ConditionRegistry;
+import me.m0dii.extraenchants.framework.runtime.Exp4jFormulaEngine;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.Registry;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.EquipmentSlotGroup;
+import org.bukkit.inventory.ItemType;
 import org.reflections.Reflections;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("ALL")
 public class ExtraEnchantsBootstrapper implements PluginBootstrap {
@@ -40,11 +56,21 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
 
         context.getLifecycleManager().registerEventHandler(RegistryEvents.ENCHANTMENT.compose().newHandler(event -> {
             for (BootstrapEnchant enchant : enchants.values()) {
+                Set<ItemType> supportedValues = resolveSupportedItems(context, event, enchant);
+
+                if (supportedValues.isEmpty()) {
+                    context.getLogger().warn("No item types resolved for custom enchant " + enchant.key()
+                            + "; falling back to swords");
+                    supportedValues.addAll(explicitItems(ItemApplicability.SWORD));
+                }
+
+                RegistryKeySet<ItemType> supportedItems = RegistrySet.keySetFromValues(RegistryKey.ITEM, supportedValues);
+
                 event.registry().register(
                         EnchantmentKeys.create(Key.key(enchant.key())),
                         b -> b.description(formatEnchantDescription(enchant.displayName()))
                                 .maxLevel(enchant.maxLevel())
-                                .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.SWORDS))
+                                .supportedItems(supportedItems)
                                 .weight(enchant.weight())
                                 .anvilCost(1)
                                 .minimumCost(EnchantmentRegistryEntry.EnchantmentCost.of(1, 1))
@@ -54,6 +80,62 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
                 );
             }
         }));
+    }
+
+    private Set<ItemType> resolveSupportedItems(
+            BootstrapContext context,
+            io.papermc.paper.registry.event.RegistryComposeEvent<org.bukkit.enchantments.Enchantment, EnchantmentRegistryEntry.Builder> event,
+            BootstrapEnchant enchant
+    ) {
+        Set<ItemType> supportedValues = new LinkedHashSet<>();
+        for (ItemApplicability applicability : enchant.applicableItems()) {
+            if (applicability.getTagKey() == null) {
+                supportedValues.addAll(explicitItems(applicability));
+                continue;
+            }
+
+            try {
+                Set<ItemType> resolved = event.getOrCreateTag(applicability.getTagKey())
+                        .resolve(Registry.ITEM)
+                        .stream()
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
+                if (resolved.isEmpty()) {
+                    context.getLogger().warn("Item tag " + applicability.name() + " resolved no values for "
+                            + enchant.key() + "; using explicit compatibility values");
+                    resolved.addAll(explicitItems(applicability));
+                }
+                supportedValues.addAll(resolved);
+            } catch (IllegalStateException | LinkageError ex) {
+                // This also keeps the 26.3-compiled plugin bootable on a
+                // 26.2 smoke server, whose registry does not bind 26.3 tags.
+                context.getLogger().warn("Item tag " + applicability.name() + " is unavailable for "
+                        + enchant.key() + "; using explicit compatibility values");
+                supportedValues.addAll(explicitItems(applicability));
+            }
+        }
+        return supportedValues;
+    }
+
+    private Set<ItemType> explicitItems(ItemApplicability applicability) {
+        Set<ItemType> items = new LinkedHashSet<>();
+        for (Field field : ItemType.class.getFields()) {
+            if (!Modifier.isStatic(field.getModifiers())
+                    || !ItemType.class.isAssignableFrom(field.getType())
+                    || !applicability.matchesName(field.getName())) {
+                continue;
+            }
+
+            try {
+                Object value = field.get(null);
+                if (value instanceof ItemType itemType) {
+                    items.add(itemType);
+                }
+            } catch (IllegalAccessException | LinkageError ignored) {
+                // A version-specific item constant is optional for the
+                // compatibility fallback and is skipped when unavailable.
+            }
+        }
+        return items;
     }
 
     private boolean isConfigDrivenEnabled(BootstrapContext context) {
@@ -77,7 +159,13 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
 
             EnchantWrapper wrapper = clazz.getAnnotation(EnchantWrapper.class);
             String key = toNamespacedKey(wrapper.name());
-            enchants.put(key, new BootstrapEnchant(key, wrapper.name(), wrapper.maxLevel(), 10));
+            enchants.put(key, new BootstrapEnchant(
+                    key,
+                    wrapper.name(),
+                    wrapper.maxLevel(),
+                    10,
+                    List.of(ItemApplicability.SWORD)
+            ));
         }
     }
 
@@ -111,20 +199,37 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
             copyDefaultIfMissing(dir, "skirmisher.yml");
             copyDefaultIfMissing(dir, "duskcloak.yml");
 
-            try (var files = Files.list(dir)) {
-                files.filter(path -> path.getFileName().toString().endsWith(".yml"))
-                        .forEach(path -> {
-                            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(path.toFile());
-                            String id = yaml.getString("id", path.getFileName().toString().replace(".yml", ""));
-                            String displayName = yaml.getString("display-name", id);
-                            int maxLevel = Math.max(1, yaml.getInt("max-level", 1));
-                            int weight = Math.max(1, yaml.getInt("weight", yaml.getInt("spawn-chance", 10)));
-                            String key = toNamespacedKey(id);
-
-                            // Wrapper-based entries have priority for backwards compatibility.
-                            enchants.putIfAbsent(key, new BootstrapEnchant(key, displayName, maxLevel, weight));
-                        });
+            CustomEnchantConfigLoader loader = new CustomEnchantConfigLoader(
+                    null, new ConditionParser(new ConditionRegistry(), new Exp4jFormulaEngine()));
+            CustomEnchantLoadResult result = loader.loadResult(dir.toFile());
+            result.getIssues().forEach(issue -> {
+                if (issue.isError()) {
+                    context.getLogger().error(issue.format());
+                } else {
+                    context.getLogger().warn(issue.format());
+                }
+            });
+            if (!result.isCommitted()) {
+                context.getLogger().error("Custom-enchant bootstrap registration rejected because configuration is invalid");
+                return;
             }
+
+            result.getDefinitions().values().stream()
+                    .sorted(Comparator.comparing(definition -> definition.getId().toLowerCase()))
+                    .forEach(definition -> {
+                        List<ItemApplicability> applicableItems = definition.getApplicableItems().stream()
+                                .map(ItemApplicability::parse)
+                                .flatMap(java.util.Optional::stream)
+                                .toList();
+                        // Wrapper-based entries have priority for backwards compatibility.
+                        enchants.putIfAbsent(toNamespacedKey(definition.getId()), new BootstrapEnchant(
+                                toNamespacedKey(definition.getId()),
+                                definition.getDisplayName(),
+                                definition.getMaxLevel(),
+                                Math.max(1, definition.getWeight()),
+                                applicableItems
+                        ));
+                    });
         } catch (IOException ex) {
             context.getLogger().error("Failed to read config-driven enchants for bootstrap registration", ex);
         }
@@ -157,6 +262,12 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
         return LegacyComponentSerializer.legacyAmpersand().deserialize(raw);
     }
 
-    private record BootstrapEnchant(String key, String displayName, int maxLevel, int weight) {
+    private record BootstrapEnchant(
+            String key,
+            String displayName,
+            int maxLevel,
+            int weight,
+            List<ItemApplicability> applicableItems
+    ) {
     }
 }

@@ -1,4 +1,5 @@
 id: soulrend
+schema-version: 1
 display-name: "&5Soulrend"
 description: "&7Deals more damage to weakened targets and siphons life."
 rarity: EPIC

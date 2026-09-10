@@ -1,4 +1,5 @@
 id: retaliate
+schema-version: 1
 display-name: "&6Retaliate"
 description: "&7Reflects a burst of damage back to attackers."
 rarity: EPIC

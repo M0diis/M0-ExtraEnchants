@@ -1,4 +1,5 @@
 id: leeching
+schema-version: 1
 display-name: "&cLeeching"
 description: "&7Steal health while attacking."
 rarity: EPIC

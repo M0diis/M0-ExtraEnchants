@@ -131,6 +131,9 @@ public class ExtraEnchants extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (this.customEnchantFramework != null) {
+            this.customEnchantFramework.shutdown();
+        }
         if (this.placeholders != null) {
             this.placeholders.unregister();
             this.placeholders = null;

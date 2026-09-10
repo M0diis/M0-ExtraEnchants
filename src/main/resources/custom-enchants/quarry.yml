@@ -1,4 +1,5 @@
 id: quarry
+schema-version: 1
 display-name: "&7Quarry"
 description: "&7Breaking blocks can grant haste and mining payout."
 rarity: UNCOMMON

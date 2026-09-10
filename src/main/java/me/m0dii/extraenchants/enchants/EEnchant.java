@@ -53,8 +53,6 @@ public enum EEnchant {
     ESSENCE_DRAIN,
     DEBUFFING;
 
-    private final ExtraEnchants instance = ExtraEnchants.getInstance();
-
     @Setter
     @Getter
     private Enchantment enchantment;
@@ -116,43 +114,45 @@ public enum EEnchant {
     }
 
     public int getTriggerChance() {
-        return instance.getCfg().getInt("enchants." + getConfigName() + ".trigger-chance", -1);
+        return ExtraEnchants.getInstance().getCfg().getInt("enchants." + getConfigName() + ".trigger-chance", -1);
     }
 
     public boolean isDisabled() {
-        return !instance.getCfg().getBoolean("enchants." + getConfigName() + ".enabled", true);
+        return !ExtraEnchants.getInstance().getCfg().getBoolean("enchants." + getConfigName() + ".enabled", true);
     }
 
     public boolean isVisibleInList() {
-        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".show-in-list", true);
+        return ExtraEnchants.getInstance().getCfg().getBoolean("enchants." + getConfigName() + ".show-in-list", true);
     }
 
     public int getEnchantChance() {
-        return instance.getCfg().getInt("enchants." + getConfigName() + ".table-chance", -1);
+        return ExtraEnchants.getInstance().getCfg().getInt("enchants." + getConfigName() + ".table-chance", -1);
     }
 
     public boolean isCursed() {
-        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".cursed", false);
+        return ExtraEnchants.getInstance().getCfg().getBoolean("enchants." + getConfigName() + ".cursed", false);
     }
 
     public boolean isTreasure() {
-        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".treasure", false);
+        return ExtraEnchants.getInstance().getCfg().getBoolean("enchants." + getConfigName() + ".treasure", false);
     }
 
     public int getDuration() {
-        return instance.getCfg().getInt("enchants." + getConfigName() + ".extra.duration", 0);
+        return ExtraEnchants.getInstance().getCfg().getInt("enchants." + getConfigName() + ".extra.duration", 0);
     }
 
     public boolean isPlayerOnly() {
-        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".extra.player-only", false);
+        return ExtraEnchants.getInstance().getCfg().getBoolean("enchants." + getConfigName() + ".extra.player-only", false);
     }
 
     public EnchantmentRarity getRarity() {
-        return EnchantmentRarity.valueOf(instance.getCfg().getString("enchants." + getConfigName() + ".rarity", "COMMON").toUpperCase());
+        return EnchantmentRarity.valueOf(ExtraEnchants.getInstance().getCfg()
+                .getString("enchants." + getConfigName() + ".rarity", "COMMON").toUpperCase());
     }
 
     public String getDisplayInLore(int level, boolean formatted) {
-        String name = instance.getCfg().getString("enchants." + getConfigName() + ".enchanted-item-lore-name", getDisplayName())
+        String name = ExtraEnchants.getInstance().getCfg()
+                .getString("enchants." + getConfigName() + ".enchanted-item-lore-name", getDisplayName())
                 .replace("%level%", Utils.arabicToRoman(level));
 
         return formatted ? ChatColor.translateAlternateColorCodes('&', name) : name;
@@ -163,7 +163,7 @@ public enum EEnchant {
     }
 
     public boolean defaultConflictsEnabled() {
-        return instance.getCfg().getBoolean("enchants." + getConfigName() + ".default-conflicts");
+        return ExtraEnchants.getInstance().getCfg().getBoolean("enchants." + getConfigName() + ".default-conflicts");
     }
 
     public boolean canEnchantItem(@Nullable ItemStack item) {
@@ -196,7 +196,7 @@ public enum EEnchant {
     }
 
     public List<EnchantableItemTypeUtil.ItemType> getEnchantableTypes() {
-        return instance.getCfg().getStringList("enchants." + getConfigName() + ".enchantable-items")
+        return ExtraEnchants.getInstance().getCfg().getStringList("enchants." + getConfigName() + ".enchantable-items")
                 .stream()
                 .map(EnchantableItemTypeUtil.ItemType::parse)
                 .filter(Objects::nonNull)
@@ -204,7 +204,7 @@ public enum EEnchant {
     }
 
     public List<Enchantment> getCustomConflicts() {
-        return instance.getCfg().getStringList("enchants." + getConfigName() + ".conflicts")
+        return ExtraEnchants.getInstance().getCfg().getStringList("enchants." + getConfigName() + ".conflicts")
                 .stream()
                 .map(s -> {
                     Enchantment byName = Enchantment.getByName(s.toUpperCase());
@@ -226,7 +226,8 @@ public enum EEnchant {
     }
 
     public String getLore() {
-        List<String> lore = instance.getCfg().getStringList(String.format("enchants.%s.lore", getConfigName()))
+        List<String> lore = ExtraEnchants.getInstance().getCfg()
+                .getStringList(String.format("enchants.%s.lore", getConfigName()))
                 .stream()
                 .map(l -> l.replace("%level%", "<lygis>")
                         .replace("%duration%", getDuration() + "")
@@ -238,7 +239,7 @@ public enum EEnchant {
     }
 
     public boolean ignoresBlock(Material material) {
-        List<String> ignoredMaterials = instance.getCfg()
+        List<String> ignoredMaterials = ExtraEnchants.getInstance().getCfg()
                 .getStringList("enchants." + getConfigName() + ".ignored-blocks")
                 .stream()
                 .map(String::toUpperCase)

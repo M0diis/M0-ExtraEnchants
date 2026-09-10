@@ -1,4 +1,5 @@
 id: overgrowth
+schema-version: 1
 display-name: "&2Overgrowth"
 description: "&7Interacting with crops emits a restorative nature pulse."
 rarity: UNCOMMON

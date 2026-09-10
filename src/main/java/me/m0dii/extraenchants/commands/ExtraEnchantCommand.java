@@ -9,6 +9,8 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.enchants.EEnchant;
+import me.m0dii.extraenchants.framework.config.ConfigValidationIssue;
+import me.m0dii.extraenchants.framework.config.CustomEnchantLoadResult;
 import me.m0dii.extraenchants.framework.model.CustomEnchantDefinition;
 import me.m0dii.extraenchants.utils.EnchantListGUI;
 import me.m0dii.extraenchants.utils.Enchanter;
@@ -96,6 +98,7 @@ public class ExtraEnchantCommand {
                         )
                 )
                 .then(Commands.literal("reload").executes(ExtraEnchantCommand::runReloadLogic))
+                .then(Commands.literal("validate").executes(ExtraEnchantCommand::runValidateLogic))
                 .then(Commands.literal("debug")
                         .executes(ctx -> runDebugToggleLogic(ctx, null))
                         .then(Commands.argument("state", StringArgumentType.word())
@@ -150,6 +153,11 @@ public class ExtraEnchantCommand {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (item.getType() == Material.AIR) {
                     sender.sendMessage(msg("messages.hold-item"));
+                    return Command.SINGLE_SUCCESS;
+                }
+
+                if (!ExtraEnchants.getInstance().getCustomEnchantFramework().isApplicable(item, custom.getId())) {
+                    sender.sendMessage(msg("enchant-signs.messages.cannot-enchant-item"));
                     return Command.SINGLE_SUCCESS;
                 }
 
@@ -215,10 +223,51 @@ public class ExtraEnchantCommand {
 
         ExtraEnchants.getInstance().getConfigManager().reloadConfig();
         ExtraEnchants.getInstance().setDebugMode(ExtraEnchants.getInstance().getCfg().getBoolean("debug", false));
-        ExtraEnchants.getInstance().getCustomEnchantFramework().reload();
-        sender.sendMessage(msg("messages.reloaded"));
+        ExtraEnchants plugin = ExtraEnchants.getInstance();
+        plugin.getCustomEnchantFramework().reload();
+        CustomEnchantLoadResult result = plugin.getCustomEnchantFramework().getLastLoadResult();
+        if (result.isCommitted()) {
+            sender.sendMessage(msg("messages.reloaded"));
+        } else {
+            sender.sendMessage(Utils.format("&cCustom-enchant reload rejected; the previous configuration is still active."));
+            sendValidationSummary(sender, result);
+        }
 
         return Command.SINGLE_SUCCESS;
+    }
+
+    private static int runValidateLogic(CommandContext<CommandSourceStack> ctx) {
+        CommandSender sender = ctx.getSource().getSender();
+        if (!sender.hasPermission("extraenchants.command.validate")) {
+            sender.sendMessage(msg("messages.no-permission"));
+            return Command.SINGLE_SUCCESS;
+        }
+
+        CustomEnchantLoadResult result = ExtraEnchants.getInstance()
+                .getCustomEnchantFramework().validateConfiguration();
+        sender.sendMessage(Utils.format("&eValidated &f" + result.getFilesRead()
+                + " &ecustom-enchant file(s): &f" + result.getDefinitionCount()
+                + " &edefinition(s), &c" + result.getErrorCount()
+                + " &cerror(s), &6" + result.getWarningCount() + " &6warning(s)."));
+        sendValidationSummary(sender, result);
+        if (result.isValid()) {
+            sender.sendMessage(Utils.format("&aConfiguration is valid and can be reloaded atomically."));
+        } else {
+            sender.sendMessage(Utils.format("&cConfiguration is invalid; no runtime state was changed."));
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static void sendValidationSummary(CommandSender sender, CustomEnchantLoadResult result) {
+        int shown = 0;
+        for (ConfigValidationIssue issue : result.getIssues()) {
+            if (shown++ >= 20) {
+                sender.sendMessage(Utils.format("&7... and " + (result.getIssues().size() - 20) + " more issue(s)."));
+                break;
+            }
+            String color = issue.isError() ? "&c" : "&6";
+            sender.sendMessage(Utils.format(color + issue.format()));
+        }
     }
 
     private static int runDebugToggleLogic(CommandContext<CommandSourceStack> ctx, String stateArg) {
@@ -269,6 +318,10 @@ public class ExtraEnchantCommand {
         }
 
         ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            sender.sendMessage(Utils.format("&cThis item has no readable metadata."));
+            return Command.SINGLE_SUCCESS;
+        }
         PersistentDataContainer pdc = meta.getPersistentDataContainer();
 
         sender.sendMessage(Utils.format("&7&m----------------------------------------"));

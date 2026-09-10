@@ -45,7 +45,7 @@ public class EnchantableItemTypeUtil {
     }
 
     public static boolean isBow(@NotNull ItemStack item) {
-        return item.getType().name().toUpperCase().contains("BOW");
+        return item.getType().name().toUpperCase().endsWith("_BOW");
     }
 
     public static boolean isArmor(@NotNull ItemStack item) {

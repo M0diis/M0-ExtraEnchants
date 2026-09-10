@@ -1,4 +1,5 @@
 id: adrenaline
+schema-version: 1
 display-name: "&cAdrenaline"
 description: "&7Low-health defense trigger that boosts survival."
 rarity: EPIC

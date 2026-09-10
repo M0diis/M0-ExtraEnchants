@@ -1,4 +1,5 @@
 id: overcharge
+schema-version: 1
 display-name: "&eOvercharge"
 description: "&7Empowers projectiles to shock targets on impact."
 rarity: RARE

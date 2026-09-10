@@ -1,4 +1,5 @@
 id: freeze
+schema-version: 1
 display-name: "&bFreeze"
 description: "&7Slow down enemies on hit."
 rarity: RARE

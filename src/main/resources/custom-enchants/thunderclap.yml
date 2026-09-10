@@ -1,4 +1,5 @@
 id: thunderclap
+schema-version: 1
 display-name: "&bThunderclap"
 description: "&7Strikes nearby enemies with a burst of shock on hit."
 rarity: RARE

@@ -1,4 +1,5 @@
 id: hex
+schema-version: 1
 display-name: "&8Hex"
 description: "&7Afflicts enemies with weakness and slowness."
 rarity: RARE

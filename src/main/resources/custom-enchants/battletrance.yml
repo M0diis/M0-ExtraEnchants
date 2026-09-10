@@ -1,4 +1,5 @@
 id: battletrance
+schema-version: 1
 display-name: "&dBattletrance"
 description: "&7Consecutive hits increase power until reset."
 rarity: EPIC

@@ -1,4 +1,5 @@
 id: executioner
+schema-version: 1
 display-name: "&4Executioner"
 description: "&7Finishes low-health enemies with true damage."
 rarity: LEGENDARY

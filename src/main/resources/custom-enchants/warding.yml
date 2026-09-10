@@ -1,4 +1,5 @@
 id: warding
+schema-version: 1
 display-name: "&9Warding"
 description: "&7Armor enchant that grants temporary resistance when hit."
 rarity: RARE

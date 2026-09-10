@@ -1,4 +1,5 @@
 id: anglerluck
+schema-version: 1
 display-name: "&3Angler's Luck"
 description: "&7Fishing grants bonus payouts and occasional regen."
 rarity: RARE

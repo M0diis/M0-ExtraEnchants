@@ -1,4 +1,5 @@
 id: momentum
+schema-version: 1
 display-name: "&aMomentum"
 description: "&7Moving charges your next hit with bonus damage."
 rarity: RARE

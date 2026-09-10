@@ -1,4 +1,5 @@
 id: duskcloak
+schema-version: 1
 display-name: "&8Duskcloak"
 description: "&7Sneaking grants a short invisibility veil."
 rarity: EPIC

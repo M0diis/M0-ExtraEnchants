@@ -3,7 +3,7 @@ import xyz.jpenilla.runpaper.task.RunServer
 plugins {
     java
     id("com.gradleup.shadow") version "9.2.2"
-    id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("xyz.jpenilla.run-paper") version "3.0.2"
     id("org.cyclonedx.bom") version "1.8.1"
 }
 
@@ -11,6 +11,8 @@ group = "me.m0dii"
 val targetMinecraftVersion = "26.3-pre-2"
 val targetPaperApiVersion = "26.3-pre-2.build.0-alpha"
 val targetJavaVersion = 25
+val integrationMinecraftVersion = providers.gradleProperty("integrationMinecraftVersion")
+    .orElse("26.2")
 
 version = "j25-mc26.3-pre-2-5.0.0"
 
@@ -96,8 +98,22 @@ val allPlugins = runPaper.downloadPluginsSpec {
     modrinth("coreprotect", "23.0")
 }
 
+val integrationPlugins = runPaper.downloadPluginsSpec {
+    // Mineflayer currently connects with the 26.1 client protocol through ViaVersion.
+    modrinth("viaversion", "5.11.0")
+    modrinth("viabackwards", "5.11.0")
+}
+
 val doFirstEula: Task.() -> Unit = {
     val eulaFile = file("run/latest/eula.txt")
+    eulaFile.parentFile.mkdirs()
+    if (!eulaFile.exists()) {
+        eulaFile.writeText("eula=true")
+    }
+}
+
+val doFirstIntegrationEula: Task.() -> Unit = {
+    val eulaFile = file("build/run-integration/eula.txt")
     eulaFile.parentFile.mkdirs()
     if (!eulaFile.exists()) {
         eulaFile.writeText("eula=true")
@@ -126,6 +142,22 @@ tasks {
         downloadPlugins.from(allPlugins)
 
         doFirst(doFirstEula)
+    }
+
+    register<RunServer>("runIntegrationServer") {
+        group = "verification"
+        description = "Runs an isolated M0-ExtraEnchants Paper integration server."
+        dependsOn(shadowJar)
+        pluginJars.from(shadowJar.flatMap { it.archiveFile })
+        minecraftVersion(integrationMinecraftVersion.get())
+        runDirectory(file("build/run-integration"))
+        downloadPlugins.from(integrationPlugins)
+        doFirst(doFirstIntegrationEula)
+        javaLauncher.set(
+            project.javaToolchains.launcherFor {
+                languageVersion.set(JavaLanguageVersion.of(targetJavaVersion))
+            }
+        )
     }
 }
 

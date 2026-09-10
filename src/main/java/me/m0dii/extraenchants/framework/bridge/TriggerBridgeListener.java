@@ -3,6 +3,7 @@ package me.m0dii.extraenchants.framework.bridge;
 import me.m0dii.extraenchants.ExtraEnchants;
 import me.m0dii.extraenchants.framework.runtime.CustomEnchantFramework;
 import me.m0dii.extraenchants.framework.runtime.TriggerType;
+import io.papermc.paper.event.entity.EntityEquipmentChangedEvent;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,17 +16,20 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
 import java.util.UUID;
@@ -57,9 +61,19 @@ public class TriggerBridgeListener implements Listener {
                 attacker.getLocation(),
                 attacker.getInventory().getItemInMainHand()
         );
+    }
 
-        if (event.getEntity() instanceof Player damagedPlayer) {
-            executeArmorTrigger(TriggerType.ON_DAMAGED, event, damagedPlayer, attacker, damagedPlayer, damagedPlayer.getLocation());
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDamaged(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        LivingEntity attacker = damageAttacker(event);
+        executeArmorTrigger(TriggerType.ON_DAMAGED, event, player, attacker, player, player.getLocation());
+
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            executeHandTrigger(TriggerType.ON_FALL, event, player, player, null, player.getLocation());
         }
     }
 
@@ -81,18 +95,9 @@ public class TriggerBridgeListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onDeath(EntityDamageEvent event) {
-        if (!(event.getEntity() instanceof Player player)) {
-            return;
-        }
-
-        if (player.getHealth() - event.getFinalDamage() > 0D) {
-            return;
-        }
-
-        LivingEntity attacker = event instanceof EntityDamageByEntityEvent byEntity && byEntity.getDamager() instanceof LivingEntity living
-                ? living
-                : null;
+    public void onDeath(PlayerDeathEvent event) {
+        Player player = event.getEntity();
+        LivingEntity attacker = deathAttacker(event);
         executeArmorTrigger(TriggerType.ON_DEATH, event, player, attacker, player, player.getLocation());
     }
 
@@ -111,12 +116,14 @@ public class TriggerBridgeListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onConsume(FoodLevelChangeEvent event) {
-        if (!(event.getEntity() instanceof Player player)) {
+    public void onConsume(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
+        ItemStack consumedItem = event.getItem();
+        if (consumedItem == null || consumedItem.getType().isAir()) {
             return;
         }
 
-        executeHandTrigger(TriggerType.ON_CONSUME, event, player, player, null, player.getLocation());
+        executeItemTrigger(TriggerType.ON_CONSUME, event, player, player, null, player.getLocation(), consumedItem);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -149,8 +156,8 @@ public class TriggerBridgeListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         Location location = player.getLocation().clone();
-        plugin.getScheduler().runNextTick(task ->
-                executeHandTrigger(TriggerType.ON_CHAT, null, player, player, null, location));
+        plugin.getScheduler().runAtLocationLater(location, task ->
+                executeHandTrigger(TriggerType.ON_CHAT, null, player, player, null, location), 1L);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -173,9 +180,6 @@ public class TriggerBridgeListener implements Listener {
             executeHandTrigger(TriggerType.ON_JUMP, event, player, player, null, to);
         }
 
-        if (from.getY() - to.getY() > 1.5D && debounced(player.getUniqueId(), TriggerType.ON_FALL, 400L)) {
-            executeHandTrigger(TriggerType.ON_FALL, event, player, player, null, to);
-        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -201,16 +205,72 @@ public class TriggerBridgeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onItemSwitch(PlayerItemHeldEvent event) {
         Player player = event.getPlayer();
-        executeHandTrigger(TriggerType.ON_UNEQUIP, event, player, player, null, player.getLocation());
+        ItemStack previousItem = player.getInventory().getItem(event.getPreviousSlot());
+        executeItemTrigger(TriggerType.ON_UNEQUIP, event, player, player, null, player.getLocation(), previousItem);
 
         Location location = player.getLocation().clone();
-        plugin.getScheduler().runNextTick(task ->
-                executeHandTrigger(TriggerType.ON_EQUIP, null, player, player, null, location));
+        plugin.getScheduler().runAtLocationLater(location, task ->
+                executeItemTrigger(
+                        TriggerType.ON_EQUIP,
+                        null,
+                        player,
+                        player,
+                        null,
+                        location,
+                        player.getInventory().getItemInMainHand()
+                ), 1L);
+    }
+
+    /**
+     * Paper emits this after a living entity's equipment has actually changed.
+     * The old held-item listener above remains responsible for the main-hand
+     * slot, preserving its pre/post-switch timing semantics.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onEquipmentChanged(EntityEquipmentChangedEvent event) {
+        if (!(event.getEntity() instanceof Player player)) {
+            return;
+        }
+
+        Location location = player.getLocation().clone();
+        for (Map.Entry<EquipmentSlot, EntityEquipmentChangedEvent.EquipmentChange> entry
+                : event.getEquipmentChanges().entrySet()) {
+            // PlayerItemHeldEvent already supplies the main-hand transition.
+            if (entry.getKey() == EquipmentSlot.HAND) {
+                continue;
+            }
+
+            EntityEquipmentChangedEvent.EquipmentChange change = entry.getValue();
+            if (change == null) {
+                continue;
+            }
+
+            executeItemTrigger(
+                    TriggerType.ON_UNEQUIP,
+                    event,
+                    player,
+                    player,
+                    null,
+                    location,
+                    change.oldItem()
+            );
+            executeItemTrigger(
+                    TriggerType.ON_EQUIP,
+                    event,
+                    player,
+                    player,
+                    null,
+                    location,
+                    change.newItem()
+            );
+        }
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
-        debounce.remove(event.getPlayer().getUniqueId());
+        UUID playerId = event.getPlayer().getUniqueId();
+        debounce.remove(playerId);
+        framework.clearPlayer(playerId);
     }
 
     private void executeHandTrigger(
@@ -236,6 +296,26 @@ public class TriggerBridgeListener implements Listener {
         );
     }
 
+    private void executeItemTrigger(
+            TriggerType triggerType,
+            org.bukkit.event.Event event,
+            Player owner,
+            LivingEntity attacker,
+            LivingEntity victim,
+            Location location,
+            ItemStack item
+    ) {
+        if (item == null || item.getType().isAir()) {
+            return;
+        }
+
+        if (owner == null || !owner.isOnline()) {
+            return;
+        }
+
+        framework.executeForItem(triggerType, event, owner, attacker, victim, location, item);
+    }
+
     private void executeArmorTrigger(
             TriggerType triggerType,
             org.bukkit.event.Event event,
@@ -257,6 +337,52 @@ public class TriggerBridgeListener implements Listener {
 
         playerDebounce.put(triggerType, now);
         return true;
+    }
+
+    private LivingEntity deathAttacker(PlayerDeathEvent event) {
+        if (event.getDamageSource() != null) {
+            LivingEntity causing = livingEntity(event.getDamageSource().getCausingEntity());
+            if (causing != null) {
+                return causing;
+            }
+
+            LivingEntity direct = livingEntity(event.getDamageSource().getDirectEntity());
+            if (direct != null) {
+                return direct;
+            }
+        }
+
+        return event.getEntity().getKiller();
+    }
+
+    private LivingEntity damageAttacker(EntityDamageEvent event) {
+        if (event instanceof EntityDamageByEntityEvent byEntity) {
+            if (byEntity.getDamager() instanceof LivingEntity living) {
+                return living;
+            }
+            if (byEntity.getDamager() instanceof Projectile projectile
+                    && projectile.getShooter() instanceof LivingEntity living) {
+                return living;
+            }
+        }
+
+        if (event.getDamageSource() != null) {
+            LivingEntity causing = livingEntity(event.getDamageSource().getCausingEntity());
+            if (causing != null) {
+                return causing;
+            }
+
+            LivingEntity direct = livingEntity(event.getDamageSource().getDirectEntity());
+            if (direct != null) {
+                return direct;
+            }
+        }
+
+        return null;
+    }
+
+    private LivingEntity livingEntity(org.bukkit.entity.Entity entity) {
+        return entity instanceof LivingEntity living ? living : null;
     }
 }
 

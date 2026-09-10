@@ -1,4 +1,5 @@
 .gradle
+/.gradle-home/
 .idea
 build
 
@@ -6,5 +7,6 @@ copy_over.bat
 
 run
 /test-harness/
+/build/run-integration/
 graphify-out
 config.json

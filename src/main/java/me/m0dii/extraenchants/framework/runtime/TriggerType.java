@@ -1,6 +1,7 @@
 package me.m0dii.extraenchants.framework.runtime;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 public enum TriggerType {
     ON_ATTACK,
@@ -35,7 +36,7 @@ public enum TriggerType {
                 .replaceAll("([a-z])([A-Z])", "$1_$2")
                 .replace('-', '_')
                 .replace(' ', '_')
-                .toUpperCase();
+                .toUpperCase(Locale.ROOT);
 
         if (!normalized.startsWith("ON_") && !normalized.equals("CUSTOM")) {
             normalized = "ON_" + normalized;

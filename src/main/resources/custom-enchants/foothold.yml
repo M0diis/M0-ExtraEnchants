@@ -1,4 +1,5 @@
 id: foothold
+schema-version: 1
 display-name: "&7Foothold"
 description: "&7Mitigates rough falls with a brief resistance pulse."
 rarity: RARE

@@ -1,4 +1,5 @@
 id: venom
+schema-version: 1
 display-name: "&2Venom"
 description: "&7Poisons enemies on hit."
 rarity: RARE
@@ -39,7 +40,7 @@ triggers:
           amount: "1"
           duration: "200"
       - particle:
-          type: SPELL_MOB
+          type: ENTITY_EFFECT
           count: 12
       - sound: ENTITY_SPIDER_HURT
       - command: "say %victim% was poisoned by %attacker%"

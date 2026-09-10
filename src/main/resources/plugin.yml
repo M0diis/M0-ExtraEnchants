@@ -14,3 +14,7 @@ commands:
     permission: extraenchants.command.unenchant
     description: Unenchant command.
     aliases: [unench, unen, ue]
+permissions:
+  extraenchants.command.validate:
+    description: Validate custom enchant configuration.
+    default: op

@@ -1,4 +1,5 @@
 id: windstep
+schema-version: 1
 display-name: "&fWindstep"
 description: "&7Sprinting grants brief speed bursts."
 rarity: UNCOMMON

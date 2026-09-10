@@ -57,6 +57,7 @@ Supported out of the box:
 Example config file:
 
 ```yaml
+schema-version: 1
 id: venom
 display-name: "&2Venom"
 description: "&7Poisons enemies on hit."
@@ -98,7 +99,7 @@ triggers:
           amount: "1"
           duration: "200"
       - particle:
-          type: SPELL_MOB
+          type: ENTITY_EFFECT
           count: 12
       - sound: ENTITY_SPIDER_HURT
       - command: "say %victim% was poisoned by %attacker%"
@@ -121,6 +122,16 @@ You can apply config enchants with:
 And reload everything with:
 
 `/ee reload`
+
+Validate the complete custom-enchant directory without changing the active
+runtime configuration:
+
+`/ee validate`
+
+The isolated integration server is available through `runIntegrationServer`.
+It defaults to the currently published Paper 26.2 server line; when a 26.3
+server build is published, run it with
+`-PintegrationMinecraftVersion=26.3-pre-2`.
 
 ### Dev-builds
 
