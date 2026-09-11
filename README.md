@@ -19,7 +19,7 @@ Extra enchants to provide more game variety.
 ### Development
 Building is quite simple.
 
-To build M0-ExtraEnchants for Paper/Minecraft 26.3, you need JDK 25 or higher and Gradle installed on your system.
+To build M0-ExtraEnchants for Paper/Minecraft 26.2, you need JDK 25 or higher and Gradle installed on your system.
 
 Clone the repository or download the source code from releases.  
 Run `gradlew shadowjar` to build the jar.  
@@ -128,10 +128,8 @@ runtime configuration:
 
 `/ee validate`
 
-The isolated integration server is available through `runIntegrationServer`.
-It defaults to the currently published Paper 26.2 server line; when a 26.3
-server build is published, run it with
-`-PintegrationMinecraftVersion=26.3-pre-2`.
+The isolated integration server is available through `runIntegrationServer` and
+targets the stable Paper 26.2 server line by default.
 
 ### Dev-builds
 

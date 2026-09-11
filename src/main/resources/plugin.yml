@@ -2,7 +2,7 @@ main: me.m0dii.extraenchants.ExtraEnchants
 name: M0-ExtraEnchants
 author: M0dii
 version: ${version}
-api-version: '26.3'
+api-version: '26.2'
 folia-supported: true
 softdepend: [Residence, Vault, PlaceholderAPI]
 commands:

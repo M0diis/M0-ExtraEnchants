@@ -8,13 +8,13 @@ plugins {
 }
 
 group = "me.m0dii"
-val targetMinecraftVersion = "26.3-pre-2"
-val targetPaperApiVersion = "26.3-pre-2.build.0-alpha"
+val targetMinecraftVersion = "26.2"
+val targetPaperApiVersion = "26.2.build.123-stable"
 val targetJavaVersion = 25
 val integrationMinecraftVersion = providers.gradleProperty("integrationMinecraftVersion")
     .orElse("26.2")
 
-version = "j25-mc26.3-pre-2-5.0.0"
+version = "j25-mc26.2-5.0.0"
 
 base {
     archivesName.set("M0-ExtraEnchants")

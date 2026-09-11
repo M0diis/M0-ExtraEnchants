@@ -106,8 +106,8 @@ public class ExtraEnchantsBootstrapper implements PluginBootstrap {
                 }
                 supportedValues.addAll(resolved);
             } catch (IllegalStateException | LinkageError ex) {
-                // This also keeps the 26.3-compiled plugin bootable on a
-                // 26.2 smoke server, whose registry does not bind 26.3 tags.
+                // Keep bootstrap resilient when a registry does not expose a
+                // configured item tag in a test fixture or server context.
                 context.getLogger().warn("Item tag " + applicability.name() + " is unavailable for "
                         + enchant.key() + "; using explicit compatibility values");
                 supportedValues.addAll(explicitItems(applicability));

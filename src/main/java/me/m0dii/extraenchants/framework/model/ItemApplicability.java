@@ -234,8 +234,7 @@ public enum ItemApplicability {
             Field field = ItemTypeTagKeys.class.getField(fieldName);
             return (TagKey<ItemType>) field.get(null);
         } catch (ReflectiveOperationException | LinkageError ignored) {
-            // Older MockBukkit/Paper test fixtures do not know newer 26.3 tags.
-            // The production 26.3 runtime resolves every tag above.
+            // Some MockBukkit/Paper test fixtures do not expose every item tag.
             return null;
         }
     }
