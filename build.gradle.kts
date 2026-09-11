@@ -14,7 +14,7 @@ val targetJavaVersion = 25
 val integrationMinecraftVersion = providers.gradleProperty("integrationMinecraftVersion")
     .orElse("26.2")
 
-version = "j25-mc26.2-5.0.0"
+version = "j25-mc26.2-5.0.1"
 
 base {
     archivesName.set("M0-ExtraEnchants")
